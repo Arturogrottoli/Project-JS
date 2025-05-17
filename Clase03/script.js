@@ -143,5 +143,34 @@ const nombres = ["Ana", "Luis", "Pedro"];
 const saludos = nombres.map(nombre => `Hola ${nombre}`);
 console.log("Saludos:", saludos);
 
+// ✅ 3.5 Actividad práctica
+// Consigna: Crear un algoritmo utilizando funciones con entrada de datos, procesamiento y salida
 
+// 🟢 Parte 1 - Crear una función que solicite los datos de entrada
+// (Uso de función tradicional + prompt)
+function solicitarDatos() {
+    const nombre = prompt("¿Cuál es tu nombre?");
+    const edad = parseInt(prompt("¿Cuál es tu edad?"));
+    return { nombre, edad };
+  }
+  
+  // 🟢 Parte 2 - Crear una función que procese la información obtenida
+  // (Uso de función flecha + condiciones lógicas)
+  const procesarEdad = (edad) => {
+    if (edad < 18) return "menor de edad";
+    if (edad >= 18 && edad < 60) return "adulto";
+    return "adulto mayor";
+  };
+  
+  // 🟢 Parte 3 - Crear una función para mostrar el resultado final
+  // (Uso de función anónima + console.log)
+  const mostrarResultado = function (usuario, categoria) {
+    console.log(`Hola ${usuario}, sos ${categoria}.`);
+  };
+  
+  // 🟢 Llamadas en orden: entrada → procesamiento → salida
+  const datos = solicitarDatos();
+  const categoria = procesarEdad(datos.edad);
+  mostrarResultado(datos.nombre, categoria);
+  
 
