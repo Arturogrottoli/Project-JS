@@ -343,23 +343,24 @@ const productosExtra = [
 // a) Lista completa
 console.log("Lista de productos:");
 for (let i = 0; i < productosExtra.length; i++) {
-  console.log(`${productosExtra[i].nombre} - Stock: ${productosExtra[i].stock}`);
+  console.log(`${productosExtra[i].nombre}, stock: ${productosExtra[i].stock}`);
 }
 
-// b) Total stock
-let totalStock = 0;
+// b) Sumar total stock
+let stockTotalExtra = 0;
 for (let i = 0; i < productosExtra.length; i++) {
-  totalStock += productosExtra[i].stock;
+  stockTotalExtra += productosExtra[i].stock;
 }
-console.log("Total stock disponible:", totalStock);
+console.log("Stock total disponible:", stockTotalExtra);
 
-// c) Productos con stock < 10
+// c) Productos con stock menor a 10
 console.log("Productos con stock menor a 10:");
 for (let i = 0; i < productosExtra.length; i++) {
   if (productosExtra[i].stock < 10) {
-    console.log(productosExtra[i].nombre);
+    console.log(`${productosExtra[i].nombre}, stock: ${productosExtra[i].stock}`);
   }
 }
+
 
 // ======================
 // 🔔 EJERCICIO EXTRA 2
