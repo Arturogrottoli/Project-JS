@@ -1,12 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Funciones Constructoras y LocalStorage</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    input, button { padding: 5px; margin: 5px; }
+    ul { list-style-type: none; padding: 0; }
+    li { margin: 5px 0; }
+    button.eliminar { margin-left: 10px; color: white; background-color: red; border: none; padding: 3px 6px; cursor: pointer; }
+  </style>
 </head>
 <body>
-    
-    <script src="script.js"></script>
+
+  <h1>Gestor de Productos</h1>
+
+  <form id="formProducto">
+    <input type="text" id="nombre" placeholder="Nombre del producto" required />
+    <input type="number" id="precio" placeholder="Precio" required min="0" />
+    <button type="submit">Agregar Producto</button>
+  </form>
+
+  <h2>Lista de Productos</h2>
+  <ul id="listaProductos"></ul>
+
+  <script src="funciones.js"></script>
+  <script>
+    // Variables y funciones del JS externo que definimos antes:
+    // La función constructora Producto, y las funciones agregarProducto, mostrarProductos, eliminarProducto.
+
+    // Selección elementos DOM
+    const form = document.getElementById("formProducto");
+    const ulLista = document.getElementById("listaProductos");
+
+    // Función para renderizar la lista en el UL
+    function renderizarLista() {
+      ulLista.innerHTML = "";
+      if (listaProductos.length === 0) {
+        ulLista.innerHTML = "<li>No hay productos guardados.</li>";
+        return;
+      }
+      listaProductos.forEach((prod, index) => {
+        const li = document.createElement("li");
+        li.textContent = `${prod.nombre} - $${prod.precio}`;
+        // Botón eliminar
+        const btnEliminar = document.createElement("button");
+        btnEliminar.textContent = "Eliminar";
+        btnEliminar.className = "eliminar";
+        btnEliminar.addEventListener("click", () => {
+          eliminarProducto(prod.nombre);
+          renderizarLista();
+        });
+        li.appendChild(btnEliminar);
+        ulLista.appendChild(li);
+      });
+    }
+
+    // Modificamos las funciones para actualizar la interfaz también:
+
+    function agregarProducto(nombre, precio) {
+      const producto = new Producto(nombre, precio);
+      listaProductos.push(producto);
+      localStorage.setItem("productos", JSON.stringify(listaProductos));
+      console.log(`Producto agregado: ${nombre} - $${precio}`);
+      renderizarLista();
+    }
+
+    function eliminarProducto(nombre) {
+      listaProductos = listaProductos.filter(prod => prod.nombre !== nombre);
+      localStorage.setItem("productos", JSON.stringify(listaProductos));
+      console.log(`Producto eliminado: ${nombre}`);
+    }
+
+    // Carga inicial desde localStorage
+    listaProductos = JSON.parse(localStorage.getItem("productos")) || [];
+    renderizarLista();
+
+    // Evento submit del form
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById("nombre").value.trim();
+      const precio = parseFloat(document.getElementById("precio").value);
+      if (nombre && !isNaN(precio) && precio >= 0) {
+        agregarProducto(nombre, precio);
+        form.reset();
+      } else {
+        alert("Por favor, completa ambos campos correctamente.");
+      }
+    });
+  </script>
 </body>
 </html>
