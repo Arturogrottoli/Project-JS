@@ -227,3 +227,76 @@ mostrarProductos();
 
 eliminarProducto("Camiseta");
 mostrarProductos();
+
+
+// ===============================
+// 5.6 Ejercicio propuesto (integrador)
+// ===============================
+
+// Consigna:
+// Crear una función constructora llamada Libro que reciba título y autor.
+// Luego, permitir al usuario agregar libros a una lista guardada en localStorage,
+// mostrar todos los libros y eliminar uno por título.
+
+// Pista: usar métodos similares a los de Producto y agregar funciones específicas para mostrar y eliminar libros.
+
+
+// ===============================
+// Ejemplo adicional: Función constructora con validación
+// ===============================
+
+// Agregamos una verificación al constructor para evitar crear objetos inválidos
+
+function Estudiante(nombre, nota) {
+  if (!nombre || nota < 0 || nota > 10) {
+    console.warn("Datos inválidos para el estudiante.");
+    return;
+  }
+  this.nombre = nombre;
+  this.nota = nota;
+}
+
+Estudiante.prototype.aprobado = function () {
+  return this.nota >= 6;
+};
+
+const est1 = new Estudiante("Ana", 8);
+const est2 = new Estudiante("Luis", 5);
+const est3 = new Estudiante("", 11); // no se crea correctamente
+
+console.log("Estudiante 1 aprobado:", est1.aprobado()); // true
+console.log("Estudiante 2 aprobado:", est2.aprobado()); // false
+
+
+// ===============================
+// Un poco más de teoría
+// ===============================
+
+// 🧠 Buenas prácticas con funciones constructoras:
+// - Validar los parámetros dentro del constructor.
+// - Usar prototype para métodos que comparten todos los objetos.
+// - No mezclar lógica de negocio dentro del constructor (crear métodos externos).
+
+// 📌 Sobre localStorage:
+// - Ideal para guardar configuraciones, preferencias o datos temporales del usuario.
+// - Los datos permanecen incluso si el navegador se cierra o se reinicia el dispositivo.
+// - No es seguro para guardar información sensible (no está cifrada).
+
+// ✅ Consejo: siempre verificar que el dato existe antes de hacer JSON.parse, para evitar errores.
+
+
+// ===============================
+// 5.7 Ejercicios extra
+// ===============================
+
+// Ejercicio 1:
+// Crear una función constructora Mascota con nombre y tipo ("perro", "gato", etc).
+// Agregar un método saludar que diga "Hola, soy [nombre] y soy un [tipo]".
+
+// Ejercicio 2:
+// Guardar un array de mascotas en localStorage, mostrarlo en consola, agregar una nueva y volver a mostrarlo.
+
+// Ejercicio 3:
+// Crear un sistema de tareas pendientes donde cada tarea tenga nombre y estado (pendiente o completada).
+// Guardar las tareas en localStorage, listar solo las pendientes y permitir marcarlas como completadas.
+
