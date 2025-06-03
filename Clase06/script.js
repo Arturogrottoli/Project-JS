@@ -6,179 +6,146 @@
 // 6.1 FUNCIONES DE ORDEN SUPERIOR
 // ==========================================
 
-// ¿Qué es una función de orden superior?
-// Es una función que puede:
-// - Recibir otra función como argumento.
-// - Retornar otra función como resultado.
+const numeros = [1, 2, 3, 4, 5];
 
-// Este tipo de funciones permite escribir código más flexible, reutilizable y expresivo.
-// Se utilizan para operaciones como transformación de arrays, búsqueda, filtrado y más.
-
-// Ventajas:
-// - Mayor reutilización del código
-// - Abstracción de comportamientos
-// - Facilita la programación funcional
-
-// Ejemplo 1: función como argumento
-function saludar(nombre) {
-  return `Hola, ${nombre}`;
+function porCadaUno(arr, fn) {
+  for (const el of arr) {
+    fn(el);
+  }
 }
 
-function procesarEntradaUsuario(callback) {
-  const nombre = "María";
-  console.log(callback(nombre));
-}
-
-procesarEntradaUsuario(saludar); // "Hola, María"
-
-// Ejemplo 2: función que retorna otra función
-function multiplicador(factor) {
-  return function(numero) {
-    return numero * factor;
-  };
-}
-
-const porDos = multiplicador(2);
-console.log(porDos(5)); // 10
-
-const porCinco = multiplicador(5);
-console.log(porCinco(3)); // 15
+porCadaUno(numeros, (n) => console.log(n));
 
 // ==========================================
 // 6.2 MÉTODOS DE BÚSQUEDA
 // ==========================================
 
-// Estos métodos permiten buscar elementos o verificar condiciones en arrays.
-// Son funciones de orden superior que aceptan callbacks para definir la lógica.
-
-// find(): Devuelve el primer elemento que cumple la condición.
-const numeros = [1, 4, 8, 12, 17, 20];
-const primeroMayorA10 = numeros.find(n => n > 10); // 12
-
-// some(): Retorna true si al menos un elemento cumple.
-const hayPares = numeros.some(n => n % 2 === 0); // true
-
-// every(): Retorna true si todos los elementos cumplen.
-const todosMayoresQueCero = numeros.every(n => n > 0); // true
-
-console.log({ primeroMayorA10, hayPares, todosMayoresQueCero });
-
-// Ejemplo con objetos:
-const usuarios = [
-  { nombre: "Ana", activo: true },
-  { nombre: "Pedro", activo: false },
-  { nombre: "Lucía", activo: true }
+const cursos = [
+  { nombre: "JavaScript", precio: 15000 },
+  { nombre: "ReactJS", precio: 22000 },
+  { nombre: "Angular", precio: 18000 }
 ];
 
-const inactivo = usuarios.find(u => u.activo === false);
-console.log("Primer usuario inactivo:", inactivo);
+const resultado = cursos.find((el) => el.nombre === "ReactJS");
+console.log(resultado);
+
+const existe = cursos.some((el) => el.nombre === "VueJS");
+console.log("¿Existe VueJS?", existe);
 
 // ==========================================
 // 6.3 MÉTODOS DE TRANSFORMACIÓN
 // ==========================================
 
-// Estos métodos transforman arrays sin modificar el original.
-// También aceptan funciones como argumento (callbacks).
+const lista = [1, 2, 3, 4, 5];
+const porDos = lista.map((n) => n * 2);
+console.log("Lista original:", lista);
+console.log("Lista por dos:", porDos);
 
-// map(): Aplica una transformación a cada elemento y devuelve un nuevo array.
-const nombres = ["Lucas", "Sofía", "Marta"];
-const nombresEnMayus = nombres.map(n => n.toUpperCase());
-console.log("Mayúsculas:", nombresEnMayus);
-
-// filter(): Retorna un nuevo array con los elementos que cumplen la condición.
-const nombresConA = nombres.filter(n => n.includes("a") || n.includes("A"));
-console.log("Con 'a':", nombresConA);
-
-// reduce(): Reduce el array a un único valor (número, objeto, string, etc.).
-const valores = [5, 10, 20];
-const total = valores.reduce((acc, n) => acc + n, 0); // 35
-console.log("Suma total:", total);
-
-// forEach(): Ejecuta una acción por cada elemento, sin retornar nada.
-nombres.forEach(n => console.log("Hola", n));
-
-// Estos métodos permiten evitar el uso de ciclos como for y while, haciendo el código más legible.
+const mayorQueDos = lista.filter((n) => n > 2);
+console.log("Mayores que 2:", mayorQueDos);
 
 // ==========================================
 // 6.4 EJEMPLOS AVANZADOS
 // ==========================================
 
-// Combinando métodos para tareas más complejas.
-
-// Ejemplo 1: contar ocurrencias de letras
-const letras = ["a", "b", "a", "c", "b", "a"];
-const conteo = letras.reduce((acc, letra) => {
-  acc[letra] = (acc[letra] || 0) + 1;
-  return acc;
-}, {});
-console.log("Conteo de letras:", conteo);
-
-// Ejemplo 2: agrupar elementos por categoría
 const productos = [
-  { nombre: "Jugo", categoria: "Bebida" },
-  { nombre: "Agua", categoria: "Bebida" },
-  { nombre: "Pizza", categoria: "Comida" }
+  { nombre: "Mouse", precio: 5000 },
+  { nombre: "Teclado", precio: 8000 },
+  { nombre: "Monitor", precio: 30000 },
+  { nombre: "Auriculares", precio: 10000 }
 ];
 
-const agrupados = productos.reduce((acc, prod) => {
-  if (!acc[prod.categoria]) acc[prod.categoria] = [];
-  acc[prod.categoria].push(prod.nombre);
-  return acc;
-}, {});
-console.log("Agrupados por categoría:", agrupados);
+const nombreProducto = prompt("Buscar producto:");
+const resultadoBusqueda = productos.find(p => p.nombre.toLowerCase() === nombreProducto.toLowerCase());
+if (resultadoBusqueda) {
+  alert(`Producto encontrado: ${resultadoBusqueda.nombre} - $${resultadoBusqueda.precio}`);
+} else {
+  alert("Producto no encontrado.");
+}
 
-// Ejemplo 3: combinar métodos
-const personas = [
-  { nombre: "Carlos", edad: 30 },
-  { nombre: "Lucía", edad: 20 },
-  { nombre: "Juan", edad: 25 }
+const palabraClave = prompt("Filtrar productos por palabra:");
+const filtrados = productos.filter(p => p.nombre.toLowerCase().includes(palabraClave.toLowerCase()));
+console.log("Filtrados:", filtrados);
+
+const productosConIVA = productos.map(p => ({
+  nombre: p.nombre,
+  precio: (p.precio * 1.21).toFixed(2)
+}));
+console.log("Con IVA:", productosConIVA);
+
+// ==========================================
+// EJEMPLOS ADICIONALES
+// ==========================================
+
+const productosExtra = [
+  { nombre: "Lapicera azul", precio: 120 },
+  { nombre: "Cuaderno grande", precio: 450 },
+  { nombre: "Resaltador amarillo", precio: 180 }
 ];
 
-const nombresMayores25 = personas
-  .filter(p => p.edad > 25)
-  .map(p => p.nombre);
-console.log("Mayores de 25:", nombresMayores25);
+const busqueda = productosExtra.find(p => p.nombre.toLowerCase().includes("cuaderno"));
+console.log("Producto encontrado:", busqueda);
+
+const productosConIVAExtra = productosExtra.map(p => ({
+  nombre: p.nombre,
+  precio: (p.precio * 1.21).toFixed(2)
+}));
+console.log("Productos con IVA:", productosConIVAExtra);
+
+const baratos = productosExtra.filter(p => p.precio < 200);
+console.log("Productos baratos:", baratos);
 
 // ==========================================
 // 6.5 ACTIVIDAD PRÁCTICA
 // ==========================================
 
-const estudiantes = [
-  { nombre: "Carlos", nota: 8 },
-  { nombre: "Laura", nota: 5 },
-  { nombre: "Pedro", nota: 9 },
-  { nombre: "Lucía", nota: 3 }
+// Actividad práctica: Usando funciones de orden superior
+
+// CONSIGNA:
+// Con el array de productos creado vamos a realizar las siguientes funcionalidades:
+// - Buscar un producto (con `find`)
+// - Filtrar productos por nombre o precio
+// - Aplicar IVA con `map`
+//
+// Sugerencia: usar prompt() para ingresar búsqueda y mostrar resultados por console.log o alert
+
+const productosActividad = [
+  { nombre: "Mouse", precio: 5000 },
+  { nombre: "Teclado", precio: 8000 },
+  { nombre: "Monitor", precio: 30000 },
+  { nombre: "Auriculares", precio: 10000 }
 ];
 
-// A. Filtrar estudiantes aprobados (nota >= 6)
-const aprobados = estudiantes.filter(e => e.nota >= 6);
-console.log("Aprobados:", aprobados);
+// Buscar producto por nombre exacto
+const nombreBuscar = prompt("Ingresá el nombre del producto a buscar:");
+const productoEncontrado = productosActividad.find(p => p.nombre.toLowerCase() === nombreBuscar.toLowerCase());
+if (productoEncontrado) {
+  alert(`Producto encontrado: ${productoEncontrado.nombre} - $${productoEncontrado.precio}`);
+} else {
+  alert("Producto no encontrado.");
+}
 
-// B. Calcular promedio de notas
-const promedio = estudiantes.reduce((acc, e) => acc + e.nota, 0) / estudiantes.length;
-console.log("Promedio de notas:", promedio.toFixed(2));
+// Filtrar productos por palabra clave
+const palabra = prompt("Ingresá una palabra para filtrar productos:");
+const filtradosActividad = productosActividad.filter(p => p.nombre.toLowerCase().includes(palabra.toLowerCase()));
+console.log("Productos filtrados:", filtradosActividad);
 
-// C. Obtener array de nombres en mayúsculas
-const nombresEnMayusculas = estudiantes.map(e => e.nombre.toUpperCase());
-console.log("Nombres en mayúsculas:", nombresEnMayusculas);
+// Agregar IVA (21%) con map
+const productosConIVAActividad = productosActividad.map(p => ({
+  nombre: p.nombre,
+  precio: (p.precio * 1.21).toFixed(2)
+}));
+console.log("Productos con IVA:", productosConIVAActividad);
 
-// D. Buscar el primer estudiante con nota perfecta
-const notaPerfecta = estudiantes.find(e => e.nota === 10);
-console.log("Nota perfecta:", notaPerfecta || "Ninguno");
-
-// E. ¿Todos aprobaron?
-const todosAprobados = estudiantes.every(e => e.nota >= 6);
-console.log("Todos aprobaron:", todosAprobados);
+// -----------------------------------------------
+// EXPLICACIÓN:
+// 1. Se usa `find()` para buscar por nombre ingresado por el usuario.
+// 2. `filter()` permite mostrar todos los productos que contengan cierta palabra.
+// 3. `map()` crea un nuevo array con los precios actualizados (sumando IVA).
+//
+// Este ejercicio combina tres funciones de orden superior muy comunes en desarrollo real.
 
 // ==========================================
 // 6.6 RECURSOS COMPLEMENTARIOS
 // ==========================================
-// Documentación oficial y material de apoyo para profundizar:
-// - https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Functions
-// - https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array
-// - Libro: "Eloquent JavaScript" - Capítulos 3 (Funciones) y 5 (Funciones de orden superior)
-// - Curso gratuito: JavaScript Functional Programming (FreeCodeCamp)
-// - Videos recomendados:
-//   * "Funciones de orden superior en JavaScript - Fazt"
-//   * "JavaScript Array Methods Tutorial – map(), filter(), reduce() – YouTube"
-// - Playground interactivo: https://jsfiddle.net o https://codepen.io
+// (Aquí podés agregar PDFs, links o material extra)
