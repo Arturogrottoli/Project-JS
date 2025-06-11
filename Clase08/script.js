@@ -1,1 +1,0 @@
-console.log("clase 8")
