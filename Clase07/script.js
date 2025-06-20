@@ -3,17 +3,20 @@
 // Cada etiqueta HTML es un nodo que puede ser accedido y manipulado con JavaScript.
 // Esto permite modificar el contenido de la página en tiempo real sin recargarla.
 
-// Ejemplo 1: Agregamos contenido a la página
+// Ejemplo 1:
+// Crear dinámicamente un título <h1> y agregarlo al cuerpo de la página.
 const titulo = document.createElement("h1");
 titulo.textContent = "Hola desde el DOM";
 document.body.appendChild(titulo);
 
-// Ejemplo 2: Creamos un párrafo desde JavaScript
+// Ejemplo 2:
+// Crear un párrafo desde JavaScript y mostrarlo en el documento.
 const parrafo = document.createElement("p");
 parrafo.textContent = "Este texto fue creado con JavaScript.";
 document.body.appendChild(parrafo);
 
-// Ejercicio resuelto: Agregamos una lista
+// Ejercicio resuelto:
+// Crear una lista desordenada con tres elementos, generados dinámicamente.
 const lista = document.createElement("ul");
 ["Elemento 1", "Elemento 2", "Elemento 3"].forEach(texto => {
   const li = document.createElement("li");
@@ -28,21 +31,24 @@ document.body.appendChild(lista);
 // Métodos comunes: getElementById, querySelector, querySelectorAll, etc.
 
 // Ejemplo 1:
+// Crear un título <h2> con id, luego seleccionarlo y cambiarle el color.
 const miTitulo = document.createElement("h2");
 miTitulo.id = "tituloPrincipal";
 miTitulo.textContent = "Título dinámico";
 document.body.appendChild(miTitulo);
 const capturado = document.getElementById("tituloPrincipal");
-capturado.style.color = "blue"; // se modifica el estilo del elemento
+capturado.style.color = "blue";
 
 // Ejemplo 2:
+// Crear un botón con clase "btn" y seleccionarlo mediante querySelectorAll.
 const boton1 = document.createElement("button");
 boton1.className = "btn";
 boton1.textContent = "Botón 1";
 document.body.appendChild(boton1);
-const botones = document.querySelectorAll(".btn"); // seleccionamos por clase
+const botones = document.querySelectorAll(".btn");
 
 // Ejercicio resuelto:
+// Crear un párrafo con un id específico, seleccionarlo y mostrar su contenido en consola.
 const nuevoParrafo = document.createElement("p");
 nuevoParrafo.textContent = "Este es un nuevo párrafo";
 nuevoParrafo.id = "parrafoTest";
@@ -56,6 +62,7 @@ console.log(leerParrafo.textContent);
 // Métodos comunes: textContent, innerHTML, setAttribute, style, etc.
 
 // Ejemplo 1:
+// Crear un div con texto y luego cambiar ese texto.
 const mensaje = document.createElement("div");
 mensaje.id = "mensaje";
 mensaje.textContent = "Texto original";
@@ -63,6 +70,7 @@ document.body.appendChild(mensaje);
 document.getElementById("mensaje").textContent = "Texto modificado";
 
 // Ejemplo 2:
+// Crear un div con estilos modificados desde JavaScript.
 const caja = document.createElement("div");
 caja.className = "caja";
 caja.textContent = "Caja";
@@ -71,6 +79,7 @@ caja.style.backgroundColor = "lightgreen";
 document.body.appendChild(caja);
 
 // Ejercicio resuelto:
+// Crear una imagen, asignarle el atributo src y luego agregarle un atributo alt.
 const imagen = document.createElement("img");
 imagen.src = "https://via.placeholder.com/150";
 document.body.appendChild(imagen);
@@ -82,16 +91,19 @@ imagen.setAttribute("alt", "Imagen de ejemplo");
 // Muy útil para generar contenido dinámico en HTML con JavaScript
 
 // Ejemplo 1:
+// Usar una template string para mostrar un saludo con una variable.
 const nombre = "Ana";
 document.body.innerHTML += `<p>Bienvenida, ${nombre}!</p>`;
 
 // Ejemplo 2:
+// Mostrar un bloque de información que incluya una variable numérica.
 const edad = 30;
 const divInfo = document.createElement("div");
 divInfo.innerHTML = `<strong>Edad:</strong> ${edad} años`;
 document.body.appendChild(divInfo);
 
 // Ejercicio resuelto:
+// Crear un contenedor que muestre el nombre de un producto y su precio usando template strings.
 const producto = "Zapatos";
 const precio = 5000;
 const contenedor = document.createElement("div");
@@ -104,19 +116,22 @@ document.body.appendChild(contenedor);
 // Ideal para personalizar navegación o redirecciones según lógica del sistema
 
 // Ejemplo 1:
+// Crear un enlace, luego modificar su destino con JavaScript.
 const enlace = document.createElement("a");
 enlace.href = "#";
 enlace.textContent = "Ir a Google";
 document.body.appendChild(enlace);
-enlace.href = "https://www.google.com"; // se cambia el destino del enlace
+enlace.href = "https://www.google.com";
 
 // Ejemplo 2:
+// Crear un enlace con id y luego asignarle una ruta específica.
 const otroEnlace = document.createElement("a");
 otroEnlace.textContent = "Ir al inicio";
 otroEnlace.id = "navInicio";
 document.body.appendChild(otroEnlace);
 
 // Ejercicio resuelto:
+// Cambiar dinámicamente el href de un enlace con id usando setAttribute.
 document.querySelector("#navInicio").setAttribute("href", "/index.html");
 
 
@@ -125,6 +140,7 @@ document.querySelector("#navInicio").setAttribute("href", "/index.html");
 // Los eventos permiten reaccionar a acciones del usuario como clics o escritura
 
 // Ejemplo 1:
+// Crear un botón que al hacer clic cambie el texto de un elemento.
 const btnCambiar = document.createElement("button");
 btnCambiar.textContent = "Cambiar texto";
 document.body.appendChild(btnCambiar);
@@ -135,6 +151,7 @@ btnCambiar.addEventListener("click", () => {
 });
 
 // Ejemplo 2:
+// Crear un input que muestre el nombre en tiempo real mientras se escribe.
 const inputNombre = document.createElement("input");
 inputNombre.placeholder = "Escribí tu nombre";
 const preview = document.createElement("p");
@@ -145,6 +162,7 @@ inputNombre.addEventListener("input", (e) => {
 });
 
 // Ejercicio resuelto:
+// Crear un formulario con input y botón. Al enviarlo, mostrar un mensaje con el nombre ingresado.
 const formulario = document.createElement("form");
 const input = document.createElement("input");
 input.id = "nombre";
@@ -163,6 +181,7 @@ formulario.addEventListener("submit", (e) => {
 
 
 // 7.7 Recursos complementarios
+// Documentación recomendada para profundizar sobre el DOM:
 // - https://developer.mozilla.org/es/docs/Web/API/Document_Object_Model
 // - https://www.w3schools.com/js/js_htmldom.asp
 // - https://javascript.info/dom-nodes
