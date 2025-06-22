@@ -1,7 +1,8 @@
 // 7.1 Introducción al DOM
-// El DOM (Document Object Model) es una representación estructurada del HTML como un árbol de nodos.
-// Cada etiqueta HTML es un nodo que puede ser accedido y manipulado con JavaScript.
-// Esto permite modificar el contenido de la página en tiempo real sin recargarla.
+// El DOM (Document Object Model) es una interfaz que representa la estructura de un documento HTML o XML como un árbol de nodos.
+// Cada nodo representa una parte del documento: una etiqueta, un texto, un atributo, etc.
+// Usando JavaScript podemos acceder y modificar estos nodos: crear nuevos elementos, cambiarlos o eliminarlos dinámicamente.
+// Esto permite construir sitios web más interactivos y reactivos sin necesidad de recargar la página.
 
 // Ejemplo 1:
 // Crear dinámicamente un título <h1> y agregarlo al cuerpo de la página.
@@ -17,6 +18,7 @@ document.body.appendChild(parrafo);
 
 // Ejercicio resuelto:
 // Crear una lista desordenada con tres elementos, generados dinámicamente.
+// Ideal para aprender a recorrer arreglos y generar contenido a partir de ellos.
 const lista = document.createElement("ul");
 ["Elemento 1", "Elemento 2", "Elemento 3"].forEach(texto => {
   const li = document.createElement("li");
@@ -27,8 +29,11 @@ document.body.appendChild(lista);
 
 
 // 7.2 Accediendo al DOM
-// Para manipular elementos del DOM, primero debemos seleccionarlos.
-// Métodos comunes: getElementById, querySelector, querySelectorAll, etc.
+// Para modificar elementos del DOM ya existentes, primero debemos seleccionarlos.
+// JavaScript provee varios métodos para eso:
+// - getElementById: selecciona por id
+// - querySelector: selecciona el primer elemento que coincida con un selector CSS
+// - querySelectorAll: selecciona todos los que coincidan con un selector
 
 // Ejemplo 1:
 // Crear un título <h2> con id, luego seleccionarlo y cambiarle el color.
@@ -41,6 +46,7 @@ capturado.style.color = "blue";
 
 // Ejemplo 2:
 // Crear un botón con clase "btn" y seleccionarlo mediante querySelectorAll.
+// Esto permite acceder a múltiples elementos con la misma clase.
 const boton1 = document.createElement("button");
 boton1.className = "btn";
 boton1.textContent = "Botón 1";
@@ -49,6 +55,7 @@ const botones = document.querySelectorAll(".btn");
 
 // Ejercicio resuelto:
 // Crear un párrafo con un id específico, seleccionarlo y mostrar su contenido en consola.
+// Ejemplo común para ver si accedimos correctamente al nodo.
 const nuevoParrafo = document.createElement("p");
 nuevoParrafo.textContent = "Este es un nuevo párrafo";
 nuevoParrafo.id = "parrafoTest";
@@ -58,8 +65,11 @@ console.log(leerParrafo.textContent);
 
 
 // 7.3 Modificación de Nodos
-// Una vez seleccionado un nodo, se puede modificar su texto, atributos o estilos.
-// Métodos comunes: textContent, innerHTML, setAttribute, style, etc.
+// Una vez seleccionado un nodo, podemos cambiar su contenido o apariencia:
+// - textContent modifica el texto interior
+// - innerHTML permite insertar contenido HTML
+// - setAttribute permite modificar atributos
+// - style cambia estilos en línea
 
 // Ejemplo 1:
 // Crear un div con texto y luego cambiar ese texto.
@@ -80,6 +90,7 @@ document.body.appendChild(caja);
 
 // Ejercicio resuelto:
 // Crear una imagen, asignarle el atributo src y luego agregarle un atributo alt.
+// Importante para accesibilidad y SEO.
 const imagen = document.createElement("img");
 imagen.src = "https://via.placeholder.com/150";
 document.body.appendChild(imagen);
@@ -87,8 +98,8 @@ imagen.setAttribute("alt", "Imagen de ejemplo");
 
 
 // 7.4 Plantillas Literales e Interactividad
-// Las template strings (backticks ``) permiten insertar variables en el texto fácilmente con ${}
-// Muy útil para generar contenido dinámico en HTML con JavaScript
+// Las template strings (``) permiten construir strings complejas e insertar variables dentro usando ${}.
+// Son muy útiles para generar contenido dinámico en HTML con JavaScript.
 
 // Ejemplo 1:
 // Usar una template string para mostrar un saludo con una variable.
@@ -112,8 +123,8 @@ document.body.appendChild(contenedor);
 
 
 // 7.5 Enlaces y Rutas
-// Podemos crear etiquetas <a> y cambiar su atributo href dinámicamente con JS
-// Ideal para personalizar navegación o redirecciones según lógica del sistema
+// Podemos crear elementos <a> (enlaces) y modificar su ruta (href) desde JavaScript.
+// Esto es útil si queremos que los enlaces cambien según el contexto o usuario.
 
 // Ejemplo 1:
 // Crear un enlace, luego modificar su destino con JavaScript.
@@ -136,8 +147,9 @@ document.querySelector("#navInicio").setAttribute("href", "/index.html");
 
 
 // 7.6 Actividad práctica
-// Acá combinamos todo lo aprendido: selección, modificación y eventos
-// Los eventos permiten reaccionar a acciones del usuario como clics o escritura
+// Acá se combinan los tres grandes temas: creación de elementos, selección y eventos.
+// Un evento es una acción que ocurre en la página (click, input, submit, etc.).
+// Podemos usar JavaScript para escuchar esos eventos y ejecutar código en respuesta.
 
 // Ejemplo 1:
 // Crear un botón que al hacer clic cambie el texto de un elemento.
@@ -163,6 +175,7 @@ inputNombre.addEventListener("input", (e) => {
 
 // Ejercicio resuelto:
 // Crear un formulario con input y botón. Al enviarlo, mostrar un mensaje con el nombre ingresado.
+// Se previene el comportamiento por defecto del formulario (recargar la página).
 const formulario = document.createElement("form");
 const input = document.createElement("input");
 input.id = "nombre";
@@ -181,7 +194,7 @@ formulario.addEventListener("submit", (e) => {
 
 
 // 7.7 Recursos complementarios
-// Documentación recomendada para profundizar sobre el DOM:
+// Para seguir profundizando en el trabajo con el DOM y sus posibilidades:
 // - https://developer.mozilla.org/es/docs/Web/API/Document_Object_Model
 // - https://www.w3schools.com/js/js_htmldom.asp
 // - https://javascript.info/dom-nodes
