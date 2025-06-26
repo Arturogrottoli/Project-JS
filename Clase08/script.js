@@ -3,51 +3,61 @@
 // Si estas operaciones se ejecutaran de forma bloqueante, congelarían toda la página.
 // El asincronismo permite que estas tareas se ejecuten "en segundo plano", mientras el resto del código continúa.
 
+
 // 8.0 Material de Apoyo/Descargable
 // Esta sección generalmente contiene apuntes, PDFs, ejemplos descargables o enlaces recomendados.
 // Sirve para reforzar los conceptos y tener buenas referencias para repasar o consultar cuando surjan dudas.
 
-// Ejemplo:
 console.log("Consultar los recursos adicionales y ejercicios del campus para repasar.");
-
-// Ejercicio resuelto (consigna):
-// Mostrar un mensaje indicando que el estudiante debe guardar sus recursos favoritos.
 console.log("Guardar en favoritos los enlaces útiles de MDN y W3Schools sobre Promesas y async/await.");
 
 
 // 8.1 Fundamentos de Asincronismo
-// JavaScript funciona sobre un solo hilo de ejecución (single-thread), por eso usa un modelo de eventos para ejecutar tareas asincrónicas.
-// Esto permite que el código no se detenga mientras espera, por ejemplo, una respuesta del servidor.
+// En JavaScript, el asincronismo permite ejecutar tareas sin bloquear el flujo principal del programa.
+// Esto es esencial para mantener la interfaz fluida cuando se hacen operaciones lentas como llamadas a servidores o timers.
 
-// Principales mecanismos asincrónicos:
-// - setTimeout / setInterval: temporizadores
-// - fetch: para obtener datos externos
-// - Promises: objetos que representan valores futuros
-// - async/await: forma moderna de manejar promesas con sintaxis clara
+// ✅ Ejecución Sincrónica
+// Las operaciones se ejecutan una tras otra. Si una tarda, bloquea el resto.
 
-// Ejemplo:
 console.log("Inicio");
-setTimeout(() => {
-  console.log("Esto aparece después de 2 segundos");
-}, 2000);
+let resultado = "resultado simulado"; // Supongamos que operacionLenta tarda 5 segundos
+console.log("Resultado:", resultado);
 console.log("Fin");
 
-// Ejercicio resuelto (consigna):
+// ❗ Esto puede congelar la app si una operación es muy pesada.
+
+// ✅ Ejecución Asincrónica
+// Permite seguir ejecutando código mientras se espera que algo termine.
+
+console.log("Inicio");
+
+setTimeout(() => {
+  console.log("Esto se ejecuta después de 2 segundos");
+}, 2000);
+
+console.log("Fin");
+
+// 🧠 JavaScript es single-thread (un solo hilo) y usa el Event Loop para manejar tareas en segundo plano.
+
+// Principales herramientas asincrónicas:
+// - `setTimeout`, `setInterval`: temporizadores
+// - `fetch`: peticiones HTTP
+// - `Promise`: objetos que representan resultados futuros
+// - `async/await`: forma moderna y legible de usar Promesas
+
+// 🧪 Ejercicio resuelto (consigna):
 // Mostrar una alerta en pantalla 3 segundos después de cargar la página.
+
 setTimeout(() => {
   alert("¡Pasaron 3 segundos!");
 }, 3000);
 
 
 // 8.2 Profundizando en el Asincronismo
-// Una Promise es un objeto que representa el resultado de una operación asincrónica.
-// Puede estar:
-// - pending (pendiente)
-// - fulfilled (resuelta con éxito)
-// - rejected (rechazada con error)
-
-// Las promesas se pueden encadenar con .then() y manejar errores con .catch()
-// El async/await permite escribir este flujo como si fuera sincrónico.
+// Una `Promise` representa una operación asincrónica que puede:
+// - completarse (fulfilled)
+// - fallar (rejected)
+// - estar pendiente (pending)
 
 // Ejemplo con Promesas:
 fetch("https://jsonplaceholder.typicode.com/users/1")
@@ -70,10 +80,10 @@ traerUsuario();
 
 
 // 8.3 Temporizadores y su Manejo
-// Los temporizadores permiten ejecutar funciones después de un tiempo (setTimeout)
-// o en intervalos repetidos (setInterval). Se cancelan con clearTimeout y clearInterval.
+// `setTimeout`: ejecuta una vez luego del tiempo
+// `setInterval`: ejecuta varias veces cada cierto tiempo
+// Ambos se cancelan con `clearTimeout` o `clearInterval`
 
-// Ejemplo:
 let contador = 0;
 const intervalo = setInterval(() => {
   console.log("Contando:", contador++);
@@ -89,12 +99,9 @@ clearTimeout(timeoutId);
 
 
 // 8.4 Control de Errores
-// En JavaScript, los errores pueden ocurrir en tiempo de ejecución.
-// try...catch permite manejar esos errores y evitar que el programa se interrumpa por completo.
+// En JavaScript se puede manejar errores con try...catch
+// También se pueden lanzar errores personalizados con `throw`
 
-// También se pueden lanzar errores personalizados con throw new Error()
-
-// Ejemplo:
 try {
   JSON.parse("esto no es JSON válido");
 } catch (error) {
@@ -116,10 +123,7 @@ try {
 
 
 // 8.5 Actividad práctica
-// En este ejercicio se combina:
-// - el uso de `fetch` para consumir una API
-// - `setTimeout` para simular una carga
-// - `try...catch` para manejar errores
+// Combinamos: `fetch`, `setTimeout` y `try...catch`
 
 // Ejercicio resuelto (consigna):
 // Mostrar "Cargando productos..." y luego traer 3 productos desde una API. Si falla, mostrar error.
@@ -145,7 +149,7 @@ setTimeout(async () => {
 
 
 // 8.6 Recursos complementarios
-// Documentación recomendada para profundizar sobre asincronismo:
+// Documentación recomendada para profundizar:
 // - https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Using_promises
 // - https://developer.mozilla.org/es/docs/Web/API/Fetch_API
 // - https://javascript.info/async
