@@ -16,18 +16,10 @@ console.log("Guardar en favoritos los enlaces útiles de MDN y W3Schools sobre P
 // En JavaScript, el asincronismo permite ejecutar tareas sin bloquear el flujo principal del programa.
 // Esto es esencial para mantener la interfaz fluida cuando se hacen operaciones lentas como llamadas a servidores o timers.
 
-// ✅ Ejecución Sincrónica
-// Las operaciones se ejecutan una tras otra. Si una tarda, bloquea el resto.
-
 console.log("Inicio");
-let resultado = "resultado simulado"; // Supongamos que operacionLenta tarda 5 segundos
+let resultado = "resultado simulado";
 console.log("Resultado:", resultado);
 console.log("Fin");
-
-// ❗ Esto puede congelar la app si una operación es muy pesada.
-
-// ✅ Ejecución Asincrónica
-// Permite seguir ejecutando código mientras se espera que algo termine.
 
 console.log("Inicio");
 
@@ -37,16 +29,7 @@ setTimeout(() => {
 
 console.log("Fin");
 
-// 🧠 JavaScript es single-thread (un solo hilo) y usa el Event Loop para manejar tareas en segundo plano.
-
-// Principales herramientas asincrónicas:
-// - `setTimeout`, `setInterval`: temporizadores
-// - `fetch`: peticiones HTTP
-// - `Promise`: objetos que representan resultados futuros
-// - `async/await`: forma moderna y legible de usar Promesas
-
-// 🧪 Ejercicio resuelto (consigna):
-// Mostrar una alerta en pantalla 3 segundos después de cargar la página.
+// JavaScript es single-thread y usa el Event Loop para manejar tareas asincrónicas.
 
 setTimeout(() => {
   alert("¡Pasaron 3 segundos!");
@@ -73,20 +56,12 @@ Promise.resolve().then(() => {
 
 console.log("Fin");
 
-// Output esperado:
-// Inicio
-// Fin
-// Promesa resuelta (microtarea)
-// setTimeout (cola de callbacks)
-
 // Ejemplo con Promesas:
 fetch("https://jsonplaceholder.typicode.com/users/1")
   .then(res => res.json())
   .then(data => console.log("Usuario:", data.name))
   .catch(err => console.error("Error en la solicitud:", err));
 
-// Ejercicio resuelto (consigna):
-// Crear una función asincrónica que obtenga un usuario y lo muestre en consola.
 async function traerUsuario() {
   try {
     const res = await fetch("https://jsonplaceholder.typicode.com/users/2");
@@ -100,27 +75,45 @@ traerUsuario();
 
 
 // 8.3 Temporizadores y su Manejo
-// `setTimeout`: ejecuta una vez luego del tiempo
-// `setInterval`: ejecuta varias veces cada cierto tiempo
-// Ambos se cancelan con `clearTimeout` o `clearInterval`
+// En JavaScript, los temporizadores permiten ejecutar funciones en el futuro (una vez o repetidamente).
+// Las funciones principales son:
+// - setTimeout(func, ms): ejecuta una vez luego del tiempo.
+// - setInterval(func, ms): ejecuta periódicamente cada cierto tiempo.
+// Se cancelan con clearTimeout y clearInterval.
 
+// ✅ setTimeout - Ejecución diferida
+console.log("Inicio");
+setTimeout(() => {
+  console.log("Esto se ejecuta después de 2 segundos");
+}, 2000);
+
+// ✅ setInterval - Ejecución periódica
 let contador = 0;
 const intervalo = setInterval(() => {
   console.log("Contando:", contador++);
   if (contador > 4) clearInterval(intervalo);
 }, 1000);
 
-// Ejercicio resuelto (consigna):
-// Crear un setTimeout que no llegue a ejecutarse porque se cancela antes.
+// ❌ Cancelación con clearTimeout
 const timeoutId = setTimeout(() => {
   console.log("Este mensaje no se verá");
 }, 2000);
 clearTimeout(timeoutId);
 
+// ✅ Cancelación con clearInterval
+let otroIntervalo = setInterval(() => {
+  console.log("Esto no se verá repetidamente");
+}, 1000);
+clearInterval(otroIntervalo);
+
+// 📌 Resumen:
+// - setTimeout permite retrasar la ejecución sin bloquear el hilo.
+// - setInterval permite ejecutar código en intervalos regulares.
+// - Ambos se cancelan para evitar ejecuciones innecesarias.
+
 
 // 8.4 Control de Errores
-// En JavaScript se puede manejar errores con try...catch
-// También se pueden lanzar errores personalizados con `throw`
+// try...catch permite capturar errores en tiempo de ejecución.
 
 try {
   JSON.parse("esto no es JSON válido");
@@ -128,8 +121,6 @@ try {
   console.error("¡Ups! Error al parsear:", error.message);
 }
 
-// Ejercicio resuelto (consigna):
-// Crear una función que divida dos números y controle si el divisor es cero.
 function dividir(a, b) {
   if (b === 0) throw new Error("No se puede dividir por cero");
   return a / b;
@@ -143,10 +134,8 @@ try {
 
 
 // 8.5 Actividad práctica
-// Combinamos: `fetch`, `setTimeout` y `try...catch`
+// Ejercicio: mostrar "Cargando productos..." y luego traer 3 productos desde una API.
 
-// Ejercicio resuelto (consigna):
-// Mostrar "Cargando productos..." y luego traer 3 productos desde una API. Si falla, mostrar error.
 const contenedor = document.createElement("div");
 contenedor.textContent = "Cargando productos...";
 document.body.appendChild(contenedor);
@@ -169,7 +158,6 @@ setTimeout(async () => {
 
 
 // 8.6 Recursos complementarios
-// Documentación recomendada para profundizar:
 // - https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Using_promises
 // - https://developer.mozilla.org/es/docs/Web/API/Fetch_API
 // - https://javascript.info/async
