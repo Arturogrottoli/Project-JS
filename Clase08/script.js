@@ -54,10 +54,30 @@ setTimeout(() => {
 
 
 // 8.2 Profundizando en el Asincronismo
-// Una `Promise` representa una operación asincrónica que puede:
-// - completarse (fulfilled)
-// - fallar (rejected)
-// - estar pendiente (pending)
+// JavaScript usa el Call Stack (pila de ejecución) para manejar funciones sincrónicas
+// y el Event Loop para procesar tareas asincrónicas cuando el stack está libre.
+
+// 📚 Call Stack: apila funciones en ejecución.
+// 🔁 Event Loop: gestiona tareas asincrónicas usando colas (callback y microtask).
+// 🧵 Aunque JavaScript es single-threaded, puede manejar muchas tareas sin bloquearse.
+
+console.log("Inicio");
+
+setTimeout(() => {
+  console.log("setTimeout (cola de callbacks)");
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log("Promesa resuelta (microtarea)");
+});
+
+console.log("Fin");
+
+// Output esperado:
+// Inicio
+// Fin
+// Promesa resuelta (microtarea)
+// setTimeout (cola de callbacks)
 
 // Ejemplo con Promesas:
 fetch("https://jsonplaceholder.typicode.com/users/1")
