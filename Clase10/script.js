@@ -4,129 +4,141 @@
 console.log("Revisá los apuntes, enlaces y ejemplos del campus.");
 console.log("Guardalos como referencia para seguir aprendiendo.");
 console.log("Chequeá canales de YouTube, documentación oficial, y hacete una carpeta con tus recursos favoritos.");
+console.log("También podés seguir cursos gratuitos en plataformas como freeCodeCamp, MDN o YouTube (Midudev, Fazt, etc).");
 
 // 10.1 Introducción a Frameworks
-// Un framework te da estructuras y herramientas listas para usar.
-// En vez de empezar desde cero, usás componentes y lógica ya armada.
+// Un framework te da estructuras listas para crear aplicaciones ordenadas y eficientes.
+// Evitás reinventar la rueda y podés enfocarte en resolver problemas reales.
 
-console.log("Ejemplo de React (framework de frontend):");
+console.log("Ejemplo simple en React:");
 const Componente = () => {
   return `<h1>Hola desde React</h1>`;
 };
 console.log("Componente creado:", Componente());
 
-console.log("Otro ejemplo (React): componente con props:");
-const Saludo = (nombre) => {
-  return `<p>Hola ${nombre}!</p>`;
+console.log("React trabaja con componentes reutilizables y estado:");
+const BotonContador = (conteo) => {
+  return `<button>Clicks: ${conteo}</button>`;
 };
-console.log(Saludo("Arturo"));
+console.log(BotonContador(3));
 
-console.log("Frameworks conocidos:");
-console.log("- Angular: estructurado, usado en empresas grandes.");
-console.log("- Vue: liviano y fácil de aprender.");
-console.log("- Svelte: moderno, compila todo y corre muy rápido.");
-
-// Ejercicio resuelto (simulado):
-console.log("Ejercicio: crear un componente que devuelva una lista de tareas:");
-const ListaTareas = (tareas) => {
-  return tareas.map(t => `<li>${t}</li>`).join("");
-};
-console.log("<ul>" + ListaTareas(["Comprar pan", "Estudiar", "Llamar a mamá"]) + "</ul>");
-
-// 10.2 Proyectos con Node y NPM
-// Node te deja correr JS fuera del navegador.
-// NPM sirve para instalar librerías y herramientas.
-
-console.log("Pasos para un proyecto Node:");
-console.log("1. npm init -y");
-console.log("2. npm install axios");
-
-console.log("Ejemplo: pedir datos a una API con Axios:");
-/*
-const axios = require("axios");
-axios.get("https://jsonplaceholder.typicode.com/posts")
-  .then(res => console.log(res.data.slice(0, 3)));
-*/
+console.log("Otros frameworks populares:");
+console.log("- Angular: más estructurado y robusto, ideal para proyectos grandes.");
+console.log("- Vue: muy amigable para empezar y rápido para prototipar.");
+console.log("- Svelte: compila el código y no necesita tanta librería adicional.");
 
 // Ejercicio resuelto:
-console.log("Ejercicio: mostrar los títulos de los 3 primeros posts");
+console.log("Ejercicio: crear un componente que liste productos:");
+const Productos = (lista) => {
+  return lista.map(p => `<li>${p}</li>`).join("");
+};
+console.log("<ul>" + Productos(["Zapatillas", "Campera", "Gorra"]) + "</ul>");
+
+// 10.2 Proyectos con Node y NPM
+// Node permite ejecutar JavaScript fuera del navegador (por ejemplo, en un servidor).
+// NPM es el sistema para instalar paquetes (librerías).
+
+console.log("Pasos para un proyecto con Node:");
+console.log("1. npm init -y // inicializa el proyecto");
+console.log("2. npm install axios // instala una librería");
+
+console.log("Con Node podés crear APIs, automatizar tareas, leer archivos, etc.");
+
+// Ejemplo: usar axios (debe estar instalado con npm)
 /*
-axios.get("https://jsonplaceholder.typicode.com/posts")
-  .then(res => {
-    res.data.slice(0, 3).forEach(post => console.log(post.title));
-  });
+const axios = require("axios");
+axios.get("https://jsonplaceholder.typicode.com/users")
+  .then(res => res.data.forEach(u => console.log(u.name)));
+*/
+
+// Crear un archivo básico con Node:
+/*
+fs.writeFile("saludo.txt", "Hola desde Node", (err) => {
+  if (err) console.error("Error al escribir archivo");
+  else console.log("Archivo creado");
+});
 */
 
 // 10.3 Paradigmas en Programación
-// Paradigmas: formas de escribir y pensar código.
+// Paradigma = manera de organizar y pensar la programación
 
-console.log("Imperativo:");
-let nums = [4, 5, 6];
-let resultados = [];
-for (let i = 0; i < nums.length; i++) {
-  resultados.push(nums[i] + 1);
+console.log("Imperativo (más detallado):");
+let edades = [20, 30, 40];
+let mayores = [];
+for (let i = 0; i < edades.length; i++) {
+  if (edades[i] >= 30) mayores.push(edades[i]);
 }
-console.log(resultados);
+console.log("Mayores:", mayores);
 
-console.log("Funcional:");
-const sumaUno = nums.map(n => n + 1);
-console.log(sumaUno);
+console.log("Funcional (más directo):");
+const mayoresFuncional = edades.filter(e => e >= 30);
+console.log("Mayores con filter:", mayoresFuncional);
 
-// Orientado a objetos:
-class Persona {
-  constructor(nombre) {
-    this.nombre = nombre;
+console.log("Orientado a objetos:");
+class Auto {
+  constructor(marca, modelo) {
+    this.marca = marca;
+    this.modelo = modelo;
   }
-  saludar() {
-    return `Hola, soy ${this.nombre}`;
+  descripcion() {
+    return `${this.marca} modelo ${this.modelo}`;
   }
 }
-const persona1 = new Persona("Luna");
-console.log(persona1.saludar());
+const miAuto = new Auto("Toyota", "Corolla");
+console.log(miAuto.descripcion());
 
 // Ejercicio resuelto:
-console.log("Ejercicio: convertir una lista de números en objetos:");
-const objetos = [10, 20].map(n => ({ valor: n, doble: n * 2 }));
-console.log(objetos);
+console.log("Ejercicio: transformar un array en un objeto con nombre y edad:");
+const nombres = ["Ana", "Leo"];
+const edadesAsignadas = nombres.map((n, i) => ({ nombre: n, edad: 20 + i }));
+console.log(edadesAsignadas);
 
 // 10.4 Caminos del Frontend
-// Podés especializarte en muchos lados según lo que te guste.
+// Podés elegir un enfoque según tus intereses:
 
-console.log("Si te gusta diseñar:");
-console.log("- UI/UX, Figma, diseño accesible.");
+console.log("🎨 Si te gusta el diseño:");
+console.log("- UI/UX, prototipos en Figma, diseño responsive, accesibilidad.");
 
-console.log("Si te gusta programar lógica:");
-console.log("- React, Vue, TypeScript, gestión de estados.");
+console.log("💻 Si te interesa programar:");
+console.log("- React, Vue, Svelte, TypeScript, GraphQL.");
 
-console.log("Si te interesa automatizar pruebas:");
-console.log("- Jest (unitarias), Cypress (navegador).");
+console.log("🧪 Si te atraen las pruebas:");
+console.log("- Testing con Jest, Cypress, Testing Library.");
 
-console.log("Animaciones:");
-console.log("- CSS Keyframes, GSAP, Framer Motion.");
+console.log("🎞️ Si te copan las animaciones:");
+console.log("- CSS animations, GSAP, Framer Motion (para React).");
 
-// Ejercicio resuelto:
-console.log("Ejercicio: animación básica con CSS");
+// Ejercicio práctico:
+console.log("Ejercicio: cambio de clases con animación en HTML");
 /*
-En HTML:
-<div class="cuadro"></div>
+HTML:
+<button onclick="toggle()">Mostrar</button>
+<div id="box" class="oculto">Contenido</div>
 
-En CSS:
-.cuadro {
-  width: 100px;
-  height: 100px;
-  background: red;
-  animation: girar 2s infinite;
-}
-@keyframes girar {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+CSS:
+.oculto { display: none; }
+.visible { display: block; transition: all 0.3s ease; }
+
+JS:
+function toggle() {
+  const box = document.getElementById("box");
+  box.classList.toggle("visible");
+  box.classList.toggle("oculto");
 }
 */
 
 // 10.5 Conclusiones y Próximos Pasos
-console.log("Ya sabés HTML, CSS, JS, asincronismo y lógica.");
-console.log("Ahora podés seguir con frameworks, backends, bases de datos.");
-console.log("Hacé proyectos aunque sean chiquitos:");
-console.log("- Calculadora, lista de tareas, clon de redes, galería de imágenes.");
-console.log("Subí todo a GitHub. Mostralo en tu portfolio.");
-console.log("La mejor forma de mejorar es creando y probando cosas nuevas.");
+console.log("Tenés los fundamentos: HTML, CSS, JS, lógica y asincronismo.");
+console.log("Podés seguir con un camino más profesional.");
+
+console.log("🎯 Ideas de proyectos para practicar:");
+console.log("- To-do list (con guardar en localStorage)");
+console.log("- Clima usando una API pública");
+console.log("- Página personal con portfolio y contacto");
+console.log("- Juego tipo trivia o piedra-papel-tijera");
+
+console.log("💡 Consejo:");
+console.log("Creá proyectos. Compartilos. Subilos a GitHub. Pedí feedback.");
+console.log("Cada proyecto nuevo te enseña algo que no sabías.");
+
+console.log("🎓 El aprendizaje nunca termina. Pero ya tenés el mapa para avanzar.");
