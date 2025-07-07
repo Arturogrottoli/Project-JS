@@ -3,113 +3,101 @@
 // 10.0 Material de Apoyo/Descargable
 console.log("Revisá los apuntes, enlaces y ejemplos del campus.");
 console.log("Guardalos como referencia para seguir aprendiendo.");
-console.log("Chequeá canales de YouTube, documentación oficial, y hacete una carpeta con tus recursos favoritos.");
-console.log("También podés seguir cursos gratuitos en plataformas como freeCodeCamp, MDN o YouTube (Midudev, Fazt, etc).");
+console.log("Chequeá YouTube (Midudev, Fazt), MDN, freeCodeCamp, JavaScript.info.");
+console.log("Tener tus propios resúmenes y código de prueba te ayuda a repasar más rápido.");
 
 // 10.1 Introducción a Frameworks
-// Un framework te da estructuras listas para crear aplicaciones ordenadas y eficientes.
-// Evitás reinventar la rueda y podés enfocarte en resolver problemas reales.
+// Un framework te da una base para armar apps más rápido y ordenado.
 
-console.log("Ejemplo simple en React:");
-const Componente = () => {
-  return `<h1>Hola desde React</h1>`;
-};
-console.log("Componente creado:", Componente());
+console.log("React: el más usado hoy en frontend.");
 
-console.log("React trabaja con componentes reutilizables y estado:");
-const BotonContador = (conteo) => {
-  return `<button>Clicks: ${conteo}</button>`;
-};
+const Componente = () => `<h1>Hola desde React</h1>`;
+console.log(Componente());
+
+const BotonContador = (conteo) => `<button>Clicks: ${conteo}</button>`;
 console.log(BotonContador(3));
 
-console.log("Otros frameworks populares:");
-console.log("- Angular: más estructurado y robusto, ideal para proyectos grandes.");
-console.log("- Vue: muy amigable para empezar y rápido para prototipar.");
-console.log("- Svelte: compila el código y no necesita tanta librería adicional.");
+console.log("Otros frameworks:");
+console.log("- Angular (más reglas, ideal para empresas grandes)");
+console.log("- Vue (fácil y rápido para prototipos)");
+console.log("- Svelte (sin tanta librería, compila a JS puro)");
 
-// Ejercicio resuelto:
-console.log("Ejercicio: crear un componente que liste productos:");
-const Productos = (lista) => {
-  return lista.map(p => `<li>${p}</li>`).join("");
-};
+// Ejercicio: lista de productos
+const Productos = (lista) => lista.map(p => `<li>${p}</li>`).join("");
 console.log("<ul>" + Productos(["Zapatillas", "Campera", "Gorra"]) + "</ul>");
 
 // 10.2 Proyectos con Node y NPM
-// Node permite ejecutar JavaScript fuera del navegador (por ejemplo, en un servidor).
-// NPM es el sistema para instalar paquetes (librerías).
+// Node sirve para correr JS fuera del navegador.
+// NPM instala paquetes que otros ya programaron.
 
-console.log("Pasos para un proyecto con Node:");
-console.log("1. npm init -y // inicializa el proyecto");
-console.log("2. npm install axios // instala una librería");
+console.log("Para empezar un proyecto:");
+console.log("npm init -y");
+console.log("npm install axios");
 
-console.log("Con Node podés crear APIs, automatizar tareas, leer archivos, etc.");
-
-// Ejemplo: usar axios (debe estar instalado con npm)
+console.log("Ejemplo: pedir datos con axios");
 /*
 const axios = require("axios");
 axios.get("https://jsonplaceholder.typicode.com/users")
   .then(res => res.data.forEach(u => console.log(u.name)));
 */
 
-// Crear un archivo básico con Node:
+// Crear archivo con Node:
 /*
-fs.writeFile("saludo.txt", "Hola desde Node", (err) => {
-  if (err) console.error("Error al escribir archivo");
+const fs = require("fs");
+fs.writeFile("nota.txt", "Hola desde Node", (err) => {
+  if (err) console.error("Error");
   else console.log("Archivo creado");
 });
 */
 
 // 10.3 Paradigmas en Programación
-// Paradigma = manera de organizar y pensar la programación
+// Formas de pensar y escribir el código
 
-console.log("Imperativo (más detallado):");
+// Imperativo
 let edades = [20, 30, 40];
 let mayores = [];
 for (let i = 0; i < edades.length; i++) {
   if (edades[i] >= 30) mayores.push(edades[i]);
 }
-console.log("Mayores:", mayores);
+console.log("Imperativo:", mayores);
 
-console.log("Funcional (más directo):");
+// Funcional
 const mayoresFuncional = edades.filter(e => e >= 30);
-console.log("Mayores con filter:", mayoresFuncional);
+console.log("Funcional:", mayoresFuncional);
 
-console.log("Orientado a objetos:");
-class Auto {
-  constructor(marca, modelo) {
-    this.marca = marca;
-    this.modelo = modelo;
+// Orientado a Objetos
+class Persona {
+  constructor(nombre, edad) {
+    this.nombre = nombre;
+    this.edad = edad;
   }
-  descripcion() {
-    return `${this.marca} modelo ${this.modelo}`;
+  saludar() {
+    return `Hola, soy ${this.nombre}`;
   }
 }
-const miAuto = new Auto("Toyota", "Corolla");
-console.log(miAuto.descripcion());
+const p1 = new Persona("Leo", 25);
+console.log(p1.saludar());
 
-// Ejercicio resuelto:
-console.log("Ejercicio: transformar un array en un objeto con nombre y edad:");
+// Ejercicio: transformar nombres a objetos
 const nombres = ["Ana", "Leo"];
-const edadesAsignadas = nombres.map((n, i) => ({ nombre: n, edad: 20 + i }));
-console.log(edadesAsignadas);
+const personas = nombres.map((n, i) => ({ nombre: n, edad: 20 + i }));
+console.log(personas);
 
 // 10.4 Caminos del Frontend
-// Podés elegir un enfoque según tus intereses:
 
 console.log("🎨 Si te gusta el diseño:");
-console.log("- UI/UX, prototipos en Figma, diseño responsive, accesibilidad.");
+console.log("- UI/UX, Figma, accesibilidad");
 
-console.log("💻 Si te interesa programar:");
-console.log("- React, Vue, Svelte, TypeScript, GraphQL.");
+console.log("💻 Si te gusta el código:");
+console.log("- React, Vue, Svelte, TypeScript");
 
-console.log("🧪 Si te atraen las pruebas:");
-console.log("- Testing con Jest, Cypress, Testing Library.");
+console.log("🧪 Si te gusta testear:");
+console.log("- Jest, Cypress");
 
-console.log("🎞️ Si te copan las animaciones:");
-console.log("- CSS animations, GSAP, Framer Motion (para React).");
+console.log("🎞️ Si te gustan las animaciones:");
+console.log("- CSS animations, GSAP, Framer Motion");
 
-// Ejercicio práctico:
-console.log("Ejercicio: cambio de clases con animación en HTML");
+// Ejercicio: mostrar/ocultar div
 /*
 HTML:
 <button onclick="toggle()">Mostrar</button>
@@ -117,7 +105,7 @@ HTML:
 
 CSS:
 .oculto { display: none; }
-.visible { display: block; transition: all 0.3s ease; }
+.visible { display: block; }
 
 JS:
 function toggle() {
@@ -128,17 +116,19 @@ function toggle() {
 */
 
 // 10.5 Conclusiones y Próximos Pasos
-console.log("Tenés los fundamentos: HTML, CSS, JS, lógica y asincronismo.");
-console.log("Podés seguir con un camino más profesional.");
+console.log("Ya tenés lo básico: HTML, CSS, JS, lógica y asincronismo.");
+console.log("Ahora es cuestión de practicar.");
 
-console.log("🎯 Ideas de proyectos para practicar:");
-console.log("- To-do list (con guardar en localStorage)");
-console.log("- Clima usando una API pública");
-console.log("- Página personal con portfolio y contacto");
-console.log("- Juego tipo trivia o piedra-papel-tijera");
+console.log("Proyectos que podés hacer:");
+console.log("- To-do list (guardar en localStorage)");
+console.log("- Página personal (portfolio)");
+console.log("- Consumo de API del clima");
+console.log("- Juego simple (trivia, piedra/papel/tijera)");
+console.log("- Calculadora");
+console.log("- App de gastos compartidos");
 
-console.log("💡 Consejo:");
-console.log("Creá proyectos. Compartilos. Subilos a GitHub. Pedí feedback.");
-console.log("Cada proyecto nuevo te enseña algo que no sabías.");
-
-console.log("🎓 El aprendizaje nunca termina. Pero ya tenés el mapa para avanzar.");
+// Consejo final
+console.log("Subí tus proyectos a GitHub.");
+console.log("Hacé tu web personal.");
+console.log("Compartilo con amigos, pedí feedback.");
+console.log("Seguí aprendiendo con práctica y curiosidad.");
