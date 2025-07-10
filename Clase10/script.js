@@ -1,5 +1,35 @@
 // 10. Clase Final: Herramientas y Caminos del Desarrollo
 
+// Cursor AI
+// Es un editor de código basado en VS Code, pero con inteligencia artificial integrada.
+// Está pensado para programadores modernos que quieren escribir código más rápido,
+// resolver dudas al instante y tener ayuda inteligente dentro del mismo editor.
+
+// ¿Por qué se usa?
+// - Es como tener un copiloto que te sugiere código, corrige errores, explica funciones
+//   y hasta resume archivos largos.
+// - Ideal para practicar mientras aprendés, resolver bugs o prototipar ideas rápido.
+
+// Ventajas:
+// - Tiene IA integrada en el editor (sin necesidad de extensiones).
+// - Muy rápido y liviano, arranca al toque.
+// - Podés escribir código, pedir explicaciones o refactorizar con comandos naturales.
+// - Compatible con proyectos de React, Node, etc. Se siente igual que VS Code.
+
+// Desventajas:
+// - Todavía está en beta, puede tener errores ocasionales.
+// - Requiere cuenta (gratis, pero con registro).
+// - No todas las funciones están disponibles offline.
+// - Si dependés mucho de la IA, podés perder práctica resolviendo por tu cuenta.
+
+// ¿Dónde se descarga?
+// 👉 https://www.cursor.sh/
+// Solo hacés clic en “Download for Mac” o “Download for Windows”, lo instalás como cualquier app.
+
+// En resumen:
+// Cursor AI es como usar VS Code, pero con IA lista para ayudarte en todo momento.
+
+
 // 10.0 Material de Apoyo/Descargable
 console.log("Revisá los apuntes, enlaces y ejemplos del campus.");
 console.log("Guardalos como referencia para seguir aprendiendo.");
