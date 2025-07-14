@@ -1,25 +1,18 @@
-// 9. Manejo de Promesas y Librerías Externas
-// En esta unidad aprendemos cómo usar librerías externas para mejorar la experiencia del usuario y trabajar con asincronismo.
-// También exploramos cómo las promesas son la base para manejar procesos asincrónicos como peticiones HTTP, animaciones, alertas, etc.
-
+// 9. Clase: Manejo de Promesas y Librerías Externas
+// Esta unidad trata sobre cómo trabajar con procesos que no se resuelven al instante (asincronismo),
+// y cómo usar herramientas externas (librerías) que hacen que nuestro código sea más cómodo y profesional.
 
 // 9.0 Material de Apoyo/Descargable
-// Esta sección incluye recursos como guías, documentación oficial de librerías, y ejemplos para descargar.
-// Recomendación: investigar las librerías que aparecen en clase y revisar su documentación oficial (ej. SweetAlert2, Toastify, Axios).
-
-// Ejemplo:
-console.log("Descargar los ejemplos de alertas, peticiones con Axios y documentación de librerías");
-
-// Ejercicio resuelto (consigna):
-// Mostrar un mensaje indicando al usuario que revise los links oficiales de las librerías.
-console.log("No olvides revisar https://sweetalert2.github.io/ y https://axios-http.com/");
-
+console.log("Revisá los recursos del campus y descargá los ejemplos.");
+console.log("Consultá las webs oficiales de las librerías para entender bien cómo se usan:");
+console.log("- SweetAlert2: https://sweetalert2.github.io/");
+console.log("- Axios: https://axios-http.com/");
+console.log("- Toastify: https://apvarun.github.io/toastify-js/");
 
 // 9.1 Introducción a Promesas y Librerías
-// Las promesas son objetos que representan la eventual finalización (o falla) de una operación asincrónica.
-// Las librerías son herramientas externas (normalmente instaladas con npm) que nos permiten simplificar tareas comunes o agregar funcionalidades.
+// Las promesas permiten manejar tareas que se completan más tarde: peticiones a APIs, animaciones, loaders, etc.
+// Las librerías son “herramientas” que ya vienen hechas, y nos ahorran mucho tiempo.
 
-// Ejemplo con una Promesa:
 const promesa = new Promise((resolve, reject) => {
   const exito = true;
   setTimeout(() => {
@@ -31,8 +24,7 @@ promesa
   .then(res => console.log(res))
   .catch(err => console.error(err));
 
-// Ejercicio resuelto (consigna):
-// Crear una promesa que simule validar un usuario, y mostrar el resultado en consola.
+// Ejercicio: validar un usuario con una promesa simulada
 function validarUsuario(usuario) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -42,24 +34,26 @@ function validarUsuario(usuario) {
     }, 1500);
   });
 }
+
 validarUsuario("admin")
   .then(msg => console.log(msg))
   .catch(err => console.error(err));
 
-
 // 9.2 Trabajando con Librerías
-// Para usar una librería, primero se instala (npm install), luego se importa en el archivo JavaScript.
-// Ejemplo: Axios simplifica las peticiones HTTP, SweetAlert2 mejora las alertas, Toastify muestra notificaciones estilo "toast".
+// Las librerías se instalan con `npm install` y luego se importan en el archivo JS.
+// Algunas útiles para el frontend:
+// - Axios: para hacer pedidos HTTP
+// - SweetAlert2: para alertas lindas
+// - Toastify: para notificaciones tipo Instagram
 
-// Ejemplo con Axios:
+// Axios nos permite pedir datos de una API fácilmente
 import axios from "axios";
 
 axios.get("https://jsonplaceholder.typicode.com/posts/1")
   .then(res => console.log("Título:", res.data.title))
   .catch(err => console.error("Error al obtener datos:", err));
 
-// Ejercicio resuelto (consigna):
-// Usar Axios para traer un usuario y mostrar su email.
+// Ejercicio: pedir email de un usuario usando async/await
 async function traerEmailUsuario(id) {
   try {
     const res = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
@@ -70,12 +64,10 @@ async function traerEmailUsuario(id) {
 }
 traerEmailUsuario(1);
 
-
 // 9.3 Alertas y Notificaciones
-// Las alertas nativas de JavaScript (`alert`) son simples, pero podemos usar librerías como SweetAlert2 para mostrar mensajes más elegantes y personalizables.
-// Toastify permite mostrar notificaciones flotantes, similares a las que usan las redes sociales.
+// Las alertas nativas (`alert()`) son muy básicas.
+// Con SweetAlert2 y Toastify podemos dar mensajes con mejor diseño.
 
-// Ejemplo con SweetAlert2:
 import Swal from "sweetalert2";
 
 Swal.fire({
@@ -85,8 +77,7 @@ Swal.fire({
   confirmButtonText: "Aceptar"
 });
 
-// Ejercicio resuelto (consigna):
-// Mostrar una alerta de error si el usuario falla un login simulado.
+// Ejercicio: login simulado con SweetAlert2
 function loginSimulado(usuario) {
   if (usuario !== "admin") {
     Swal.fire({
@@ -103,15 +94,21 @@ function loginSimulado(usuario) {
 }
 loginSimulado("invitado");
 
+// Toastify (se importa con un tag en HTML o npm install toastify-js)
+// Ejemplo con Toastify:
+/*
+import Toastify from "toastify-js";
+Toastify({
+  text: "Producto agregado al carrito",
+  duration: 3000,
+  gravity: "top",
+  position: "right",
+  style: { background: "#28a745" }
+}).showToast();
+*/
 
 // 9.4 Actividad práctica
-// En este punto se combinan los conocimientos de promesas, librerías externas y asincronismo:
-// - Promesa o `fetch` para obtener datos
-// - Librería para mostrar notificaciones
-// - Control de errores
-
-// Ejercicio resuelto (consigna):
-// Traer un producto de una API, mostrarlo con un `console.log`, y notificar al usuario si hay error.
+// Combinar librerías + promesas + control de errores
 
 async function mostrarProducto(id) {
   try {
@@ -131,3 +128,5 @@ async function mostrarProducto(id) {
   }
 }
 mostrarProducto(3);
+
+// Tip extra: para practicar esto, podés hacer una mini tienda con productos y notificaciones.
