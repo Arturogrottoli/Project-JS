@@ -1,140 +1,144 @@
 // 8. Manejo del Asincronismo y Errores
-// En JavaScript, muchas operaciones tardan en completarse: leer archivos, consultar APIs, temporizadores, etc.
-// Si estas operaciones se ejecutaran de forma bloqueante, congelarían toda la página.
-// El asincronismo permite que estas tareas se ejecuten "en segundo plano", mientras el resto del código continúa.
-
+// A veces tu código tiene que esperar: por ejemplo, cuando pide datos a internet, espera 3 segundos con un temporizador,
+// o intenta cargar algo del disco. Si el navegador se quedara esperando esas cosas, se congelaría todo.
+// Para evitar eso, JavaScript usa el *asincronismo* → permite que esas tareas se hagan "en el fondo"
+// mientras el resto del programa sigue funcionando.
 
 // 8.0 Material de Apoyo/Descargable
-// Esta sección generalmente contiene apuntes, PDFs, ejemplos descargables o enlaces recomendados.
-// Sirve para reforzar los conceptos y tener buenas referencias para repasar o consultar cuando surjan dudas.
-
-console.log("Consultar los recursos adicionales y ejercicios del campus para repasar.");
-console.log("Guardar en favoritos los enlaces útiles de MDN y W3Schools sobre Promesas y async/await.");
-
+console.log("Chequeá los materiales del campus para repasar.");
+console.log("Guardá enlaces como: https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Using_promises");
+console.log("También mirá videos explicativos en YouTube o freeCodeCamp sobre Promesas y async/await.");
 
 // 8.1 Fundamentos de Asincronismo
-// En JavaScript, el asincronismo permite ejecutar tareas sin bloquear el flujo principal del programa.
-// Esto es esencial para mantener la interfaz fluida cuando se hacen operaciones lentas como llamadas a servidores o timers.
+// JS puede hacer cosas mientras espera otras, sin frenar todo.
+// Esto es clave cuando hay que esperar respuestas de una API, cargar datos, o simplemente hacer una pausa.
 
 console.log("Inicio");
-let resultado = "resultado simulado";
-console.log("Resultado:", resultado);
-console.log("Fin");
-
-console.log("Inicio");
-
 setTimeout(() => {
-  console.log("Esto se ejecuta después de 2 segundos");
+  console.log("Esto se muestra después de 2 segundos");
 }, 2000);
-
 console.log("Fin");
 
-// JavaScript es single-thread y usa el Event Loop para manejar tareas asincrónicas.
+// Otro ejemplo: hacer algo después de 1 segundo
+setTimeout(() => {
+  console.log("Esperé 1 segundo antes de hablar");
+}, 1000);
+
+// JavaScript usa un sistema llamado Event Loop para manejar estas pausas sin trabarse.
 
 setTimeout(() => {
-  alert("¡Pasaron 3 segundos!");
+  alert("¡Hola! Esto salió después de 3 segundos.");
 }, 3000);
 
-
 // 8.2 Profundizando en el Asincronismo
-// JavaScript usa el Call Stack (pila de ejecución) para manejar funciones sincrónicas
-// y el Event Loop para procesar tareas asincrónicas cuando el stack está libre.
-
-// 📚 Call Stack: apila funciones en ejecución.
-// 🔁 Event Loop: gestiona tareas asincrónicas usando colas (callback y microtask).
-// 🧵 Aunque JavaScript es single-threaded, puede manejar muchas tareas sin bloquearse.
+// El código se apila en una "pila de ejecución" (Call Stack).
+// Cuando algo es asincrónico (como un setTimeout o una promesa), se pasa a una cola, y el Event Loop lo mete al stack cuando hay lugar.
 
 console.log("Inicio");
 
 setTimeout(() => {
-  console.log("setTimeout (cola de callbacks)");
+  console.log("Esto viene del setTimeout (cola de callbacks)");
 }, 0);
 
 Promise.resolve().then(() => {
-  console.log("Promesa resuelta (microtarea)");
+  console.log("Esto viene de una promesa (microtarea)");
 });
 
 console.log("Fin");
 
-// Ejemplo con Promesas:
+// Otro ejemplo real: usar fetch para pedir datos desde una API
+
 fetch("https://jsonplaceholder.typicode.com/users/1")
   .then(res => res.json())
   .then(data => console.log("Usuario:", data.name))
-  .catch(err => console.error("Error en la solicitud:", err));
+  .catch(err => console.error("Error:", err));
 
+// Con async/await se ve más limpio:
 async function traerUsuario() {
   try {
     const res = await fetch("https://jsonplaceholder.typicode.com/users/2");
     const data = await res.json();
-    console.log("Nombre:", data.name);
+    console.log("Nombre con await:", data.name);
   } catch (err) {
-    console.error("Error:", err);
+    console.error("Error:", err.message);
   }
 }
 traerUsuario();
 
+// Otro ejemplo más corto
+async function getPost() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts/1");
+  const data = await res.json();
+  console.log("Post:", data.title);
+}
+getPost();
 
 // 8.3 Temporizadores y su Manejo
-// En JavaScript, los temporizadores permiten ejecutar funciones en el futuro (una vez o repetidamente).
-// Las funciones principales son:
-// - setTimeout(func, ms): ejecuta una vez luego del tiempo.
-// - setInterval(func, ms): ejecuta periódicamente cada cierto tiempo.
-// Se cancelan con clearTimeout y clearInterval.
+// Estas funciones permiten programar acciones para el futuro.
 
-// ✅ setTimeout - Ejecución diferida
-console.log("Inicio");
+console.log("Probamos un setTimeout");
 setTimeout(() => {
-  console.log("Esto se ejecuta después de 2 segundos");
+  console.log("¡Hola después de 2 segundos!");
 }, 2000);
 
-// ✅ setInterval - Ejecución periódica
-let contador = 0;
+// setInterval repite una acción varias veces
+let i = 0;
 const intervalo = setInterval(() => {
-  console.log("Contando:", contador++);
-  if (contador > 4) clearInterval(intervalo);
+  console.log("Contando:", ++i);
+  if (i >= 5) clearInterval(intervalo);
 }, 1000);
 
-// ❌ Cancelación con clearTimeout
-const timeoutId = setTimeout(() => {
-  console.log("Este mensaje no se verá");
-}, 2000);
-clearTimeout(timeoutId);
+// Cancelar setTimeout antes de que se ejecute
+const id = setTimeout(() => {
+  console.log("Esto nunca se verá");
+}, 1500);
+clearTimeout(id);
 
-// ✅ Cancelación con clearInterval
-let otroIntervalo = setInterval(() => {
-  console.log("Esto no se verá repetidamente");
-}, 1000);
-clearInterval(otroIntervalo);
-
-// 📌 Resumen:
-// - setTimeout permite retrasar la ejecución sin bloquear el hilo.
-// - setInterval permite ejecutar código en intervalos regulares.
-// - Ambos se cancelan para evitar ejecuciones innecesarias.
-
+// Otro ejemplo:
+let segundoContador = 0;
+const id2 = setInterval(() => {
+  console.log("Segundo contador:", segundoContador++);
+  if (segundoContador >= 3) {
+    clearInterval(id2);
+    console.log("Fin del segundo contador");
+  }
+}, 500);
 
 // 8.4 Control de Errores
-// try...catch permite capturar errores en tiempo de ejecución.
+// Cuando algo puede fallar, usamos try...catch para evitar que el código se rompa.
 
 try {
-  JSON.parse("esto no es JSON válido");
+  JSON.parse("no es JSON");
 } catch (error) {
-  console.error("¡Ups! Error al parsear:", error.message);
+  console.error("Error al parsear:", error.message);
 }
 
+// Otro ejemplo: división por cero
 function dividir(a, b) {
   if (b === 0) throw new Error("No se puede dividir por cero");
   return a / b;
 }
 try {
-  const resultado = dividir(10, 0);
-  console.log(resultado);
-} catch (err) {
-  console.error("Error detectado:", err.message);
+  console.log(dividir(10, 2));
+  console.log(dividir(5, 0));
+} catch (e) {
+  console.error("Algo salió mal:", e.message);
 }
 
+// Otro ejemplo: función que espera string
+function saludar(nombre) {
+  if (typeof nombre !== "string") throw new Error("Nombre debe ser texto");
+  return `Hola, ${nombre}`;
+}
+try {
+  console.log(saludar("Ana"));
+  console.log(saludar(123));
+} catch (err) {
+  console.error("Error:", err.message);
+}
 
 // 8.5 Actividad práctica
-// Ejercicio: mostrar "Cargando productos..." y luego traer 3 productos desde una API.
+// Cargar productos desde una API y mostrarlos luego de un loader
 
 const contenedor = document.createElement("div");
 contenedor.textContent = "Cargando productos...";
@@ -156,9 +160,23 @@ setTimeout(async () => {
   }
 }, 2000);
 
+// Otro ejemplo práctico: cargar un chiste desde una API
+async function chisteDelDia() {
+  try {
+    const res = await fetch("https://icanhazdadjoke.com/", {
+      headers: { Accept: "application/json" }
+    });
+    const data = await res.json();
+    console.log("Chiste:", data.joke);
+  } catch (e) {
+    console.error("No se pudo traer el chiste:", e.message);
+  }
+}
+chisteDelDia();
 
 // 8.6 Recursos complementarios
-// - https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Using_promises
-// - https://developer.mozilla.org/es/docs/Web/API/Fetch_API
-// - https://javascript.info/async
-// - https://www.freecodecamp.org/news/asynchronous-javascript-explained/
+console.log("Recursos recomendados para profundizar:");
+console.log("- https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Using_promises");
+console.log("- https://developer.mozilla.org/es/docs/Web/API/Fetch_API");
+console.log("- https://javascript.info/async");
+console.log("- https://www.freecodecamp.org/news/asynchronous-javascript-explained/");
