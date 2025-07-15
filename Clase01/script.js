@@ -51,6 +51,22 @@ let nulo = null;              // null (ausencia intencional de valor)
 
 console.log(texto, numero, activo, indefinido, nulo);
 
+// ============================
+// 4.1. Arrays y Objetos básicos
+// ============================
+
+let colores = ["rojo", "verde", "azul"];  // Array (lista de elementos)
+let persona = {                            // Objeto (colección de propiedades)
+    nombre: "María",
+    edad: 25,
+    ciudad: "Buenos Aires"
+};
+
+console.log("Colores:", colores);
+console.log("Persona:", persona);
+console.log("Primer color:", colores[0]);
+console.log("Nombre de la persona:", persona.nombre);
+
 
 // ============================
 // 5. Repaso de Git y GitHub
@@ -123,7 +139,76 @@ console.log(usuario, edadUsuario, estaActivo);
 let nom = "Ana";
 let ape = "López";
 let ed = 28;
+
+// Forma tradicional (concatenación):
 console.log("Mi nombre es " + nom + " " + ape + " y tengo " + ed + " años.");
+
+// Forma moderna (template literals):
+console.log(`Mi nombre es ${nom} ${ape} y tengo ${ed} años.`);
+
+
+// --------------------------------------
+// EJERCICIO 6: Arrays básicos
+// --------------------------------------
+// Crear un array con tus 3 comidas favoritas y mostrarlas.
+
+let comidasFavoritas = ["pizza", "sushi", "asado"];
+console.log("Mis comidas favoritas:", comidasFavoritas);
+console.log("Mi comida favorita es:", comidasFavoritas[0]);
+
+
+// --------------------------------------
+// EJERCICIO 7: Objetos básicos
+// --------------------------------------
+// Crear un objeto que represente tu información personal.
+
+let miInfo = {
+    nombre: "Juan",
+    edad: 25,
+    profesion: "Desarrollador",
+    ciudad: "Córdoba"
+};
+
+console.log("Mi información:", miInfo);
+console.log(`Soy ${miInfo.nombre}, tengo ${miInfo.edad} años y vivo en ${miInfo.ciudad}`);
+
+
+// ============================
+// MANEJO DE ERRORES COMUNES
+// ============================
+
+// --------------------------------------
+// Error 1: Intentar cambiar una constante
+// --------------------------------------
+try {
+    const PI = 3.1416;
+    // PI = 3.14; // ❌ Esto causaría un error
+    console.log("PI es:", PI);
+} catch (error) {
+    console.log("Error al cambiar constante:", error.message);
+}
+
+// --------------------------------------
+// Error 2: Usar variable antes de declararla
+// --------------------------------------
+try {
+    // console.log(variableNoDeclarada); // ❌ Esto causaría un error
+    let variableNoDeclarada = "Ahora sí está declarada";
+    console.log("Variable declarada:", variableNoDeclarada);
+} catch (error) {
+    console.log("Error de variable no declarada:", error.message);
+}
+
+// --------------------------------------
+// Error 3: Acceder a índice inexistente en array
+// --------------------------------------
+try {
+    let frutas = ["manzana", "banana"];
+    console.log("Primera fruta:", frutas[0]); // ✅ Correcto
+    console.log("Tercera fruta:", frutas[2]); // ❌ undefined (no existe)
+} catch (error) {
+    console.log("Error de acceso a array:", error.message);
+}
 
 
 // ============================
@@ -156,7 +241,7 @@ function ejemploLet() {
     if (true) {
         let y = 20; // let tiene alcance de bloque
     }
-    console.log(y); // Error: "y" no está definida fuera del bloque
+    // console.log(y); // Error: "y" no está definida fuera del bloque
 }
 
 ejemploLet(); // Resultado: Error porque "y" solo es accesible dentro del bloque
