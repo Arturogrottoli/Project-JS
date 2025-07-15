@@ -5,48 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clase de Variables y Git/GitHub</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .section-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .section-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+        
+        .section-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .section-btn.success {
+            background-color: #27ae60;
+        }
+        
+        .section-btn.warning {
+            background-color: #f39c12;
+        }
+        
+        .section-btn.error {
+            background-color: #e74c3c;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>🔧 Clase: Variables y Git/GitHub</h1>
-        <p>Este archivo contiene ejemplos de declaración de variables, tipos de datos y ejemplos prácticos con Git.</p>
+        <h1>🔧 Clase: Variables y Git/GitHub - Versión Paso a Paso</h1>
+        <p>Versión interactiva para enseñar en vivo. Ejecuta cada sección cuando la necesites.</p>
     </header>
 
     <div class="controls">
-        <button onclick="abrirConsola()">🔍 Abrir Consola del Navegador</button>
+        <button onclick="abrirConsola()">🔍 Cómo Abrir Consola</button>
         <button onclick="limpiarConsola()" class="clear-btn">🧹 Limpiar Consola</button>
-        <button onclick="ejecutarEjemplos()">▶️ Ejecutar Ejemplos</button>
+        <button onclick="ejecutarTodo()" style="background-color: #27ae60;">🚀 Ejecutar Todo</button>
     </div>
 
     <div class="container">
         <div class="instructions">
-            <h2>📋 Instrucciones</h2>
+            <h2>📋 Instrucciones para la Clase</h2>
             <ul>
-                <li><strong>F12</strong> o <strong>Ctrl+Shift+I</strong>: Abrir herramientas de desarrollador</li>
-                <li><strong>Console</strong>: Ver mensajes y errores de JavaScript</li>
-                <li><strong>Sources</strong>: Depurar código paso a paso</li>
-                <li><strong>Network</strong>: Ver peticiones HTTP</li>
+                <li><strong>1.</strong> Presiona cada botón cuando llegues a esa sección</li>
+                <li><strong>2.</strong> Los ejemplos se ejecutarán automáticamente</li>
+                <li><strong>3.</strong> Los resultados aparecerán en la consola visual</li>
+                <li><strong>4.</strong> Puedes repetir secciones cuantas veces quieras</li>
             </ul>
             
-            <h3>🎯 Errores comunes a detectar:</h3>
-            <ul>
-                <li class="error">❌ Variables no declaradas</li>
-                <li class="error">❌ Cambiar valores de constantes</li>
-                <li class="error">❌ Errores de sintaxis</li>
-                <li class="warning">⚠️ Variables no utilizadas</li>
-                <li class="info">ℹ️ Tipos de datos incorrectos</li>
-            </ul>
+            <h3>🎯 Orden recomendado:</h3>
+            <ol>
+                <li>¿Qué es una variable?</li>
+                <li>Declaración con LET</li>
+                <li>Declaración con CONST</li>
+                <li>Declaración con VAR</li>
+                <li>Tipos de datos</li>
+                <li>Arrays y Objetos</li>
+                <li>Ejercicios prácticos</li>
+                <li>Manejo de errores</li>
+                <li>Diferencias VAR vs LET</li>
+                <li>Git y GitHub</li>
+            </ol>
         </div>
 
         <div class="console-output" id="consoleOutput">
             <div class="info">🚀 Consola iniciada...</div>
-            <div class="info">💡 Presiona F12 para abrir las herramientas de desarrollador</div>
-            <div class="info">📝 Los resultados aparecerán aquí y en la consola del navegador</div>
+            <div class="info">📚 Clase de Variables - Versión Paso a Paso</div>
+            <div class="info">💡 Usa los botones para ejecutar cada sección</div>
         </div>
     </div>
 
+    <div class="section-buttons">
+        <button class="section-btn" onclick="explicarVariables()">
+            📚 1. ¿Qué es una variable?
+        </button>
+        <button class="section-btn" onclick="explicarLet()">
+            🔄 2. Declaración con LET
+        </button>
+        <button class="section-btn" onclick="explicarConst()">
+            🔒 3. Declaración con CONST
+        </button>
+        <button class="section-btn" onclick="explicarVar()">
+            ⚠️ 4. Declaración con VAR
+        </button>
+        <button class="section-btn" onclick="explicarTiposDatos()">
+            📊 5. Tipos de datos
+        </button>
+        <button class="section-btn" onclick="explicarArraysObjetos()">
+            📦 6. Arrays y Objetos
+        </button>
+        <button class="section-btn success" onclick="ejerciciosPracticos()">
+            🎯 7. Ejercicios prácticos
+        </button>
+        <button class="section-btn error" onclick="manejoErrores()">
+            ❌ 8. Manejo de errores
+        </button>
+        <button class="section-btn warning" onclick="diferenciasVarLet()">
+            ⚖️ 9. VAR vs LET
+        </button>
+        <button class="section-btn" onclick="explicarGit()">
+            📝 10. Git y GitHub
+        </button>
+    </div>
+
     <footer>
-        <p>&copy; 2025 Curso de JavaScript - Herramientas de Depuración</p>
+        <p>&copy; 2025 Curso de JavaScript - Versión Paso a Paso para Enseñar en Vivo</p>
     </footer>
 
     <!-- Vinculación del archivo JavaScript -->

@@ -1,260 +1,11 @@
 // ==========================================
 // PRIMERA CLASE - VARIABLES Y GIT/GITHUB
+// VERSIÓN PASO A PASO PARA ENSEÑAR EN VIVO
 // ==========================================
 
 // ============================
-// ¿Qué es una variable?
+// CONFIGURACIÓN INICIAL
 // ============================
-// Es un contenedor para guardar datos que pueden cambiar o no a lo largo del programa.
-
-
-// ============================
-// 1. Declaración con let
-// ============================
-// Se usa cuando el valor puede cambiar.
-
-let edad = 25; // edad puede cambiar después
-edad = 30;
-console.log("Edad:", edad);
-
-
-// ============================
-// 2. Declaración con const
-// ============================
-// Se usa cuando el valor no debe cambiar.
-
-const pais = "Argentina";
-// pais = "Chile"; ❌ Error: no se puede cambiar una constante
-
-console.log("País:", pais);
-
-
-// ============================
-// 3. Declaración con var
-// ============================
-// Es más antigua. Se puede redeclarar y tiene comportamiento especial de alcance (scope)
-
-var nombre = "Juan";
-var nombre = "Pedro"; // ✅ Esto es válido con var
-console.log("Nombre:", nombre);
-
-
-// ============================
-// 4. Tipos de datos en variables
-// ============================
-
-let texto = "Hola mundo";     // String (texto)
-let numero = 42;              // Number
-let activo = true;            // Boolean (true o false)
-let indefinido;               // undefined (sin valor asignado)
-let nulo = null;              // null (ausencia intencional de valor)
-
-console.log(texto, numero, activo, indefinido, nulo);
-
-// ============================
-// 4.1. Arrays y Objetos básicos
-// ============================
-
-let colores = ["rojo", "verde", "azul"];  // Array (lista de elementos)
-let persona = {                            // Objeto (colección de propiedades)
-    nombre: "María",
-    edad: 25,
-    ciudad: "Buenos Aires"
-};
-
-console.log("Colores:", colores);
-console.log("Persona:", persona);
-console.log("Primer color:", colores[0]);
-console.log("Nombre de la persona:", persona.nombre);
-
-
-// ============================
-// 5. Repaso de Git y GitHub
-// ============================
-// Git: Control de versiones para proyectos.
-// GitHub: Plataforma online para subir y compartir proyectos de Git.
-
-// Comandos básicos de Git (comentado para referencia):
-/*
-git init                    # Iniciar repositorio
-git status                  # Ver estado de archivos
-git add archivo.js          # Agregar archivo al staging
-git commit -m "mensaje"     # Guardar cambios con un mensaje
-git remote add origin URL   # Conectar con repositorio remoto
-git push -u origin main     # Subir archivos al repositorio remoto
-*/
-
-
-// ============================
-// EJERCICIOS DE VARIABLES
-// ============================
-
-
-// --------------------------------------
-// EJERCICIO 1: Declaración simple
-// --------------------------------------
-// Crear una variable llamada "nombre" y asignarle tu nombre.
-// Mostrarla por consola.
-
-let miNombre = "Lucía";
-console.log(miNombre);
-
-
-// --------------------------------------
-// EJERCICIO 2: Reasignar valor
-// --------------------------------------
-// Crear una variable "ciudad", asignar una ciudad y luego cambiarla por otra.
-
-let ciudad = "Rosario";
-ciudad = "Mendoza";
-console.log(ciudad);
-
-
-// --------------------------------------
-// EJERCICIO 3: Uso de const
-// --------------------------------------
-// Crear una constante "nacimiento" con tu año de nacimiento.
-
-const nacimiento = 2000;
-console.log("Año de nacimiento:", nacimiento);
-
-
-// --------------------------------------
-// EJERCICIO 4: Tipos de datos
-// --------------------------------------
-// Crear variables para representar: nombre (string), edad (number), estáActivo (booleano)
-
-let usuario = "Carlos";
-let edadUsuario = 22;
-let estaActivo = false;
-console.log(usuario, edadUsuario, estaActivo);
-
-
-// --------------------------------------
-// EJERCICIO 5: Variables combinadas
-// --------------------------------------
-// Crear tres variables: nombre, apellido y edad. Mostrar el mensaje:
-// "Mi nombre es [nombre] [apellido] y tengo [edad] años."
-
-let nom = "Ana";
-let ape = "López";
-let ed = 28;
-
-// Forma tradicional (concatenación):
-console.log("Mi nombre es " + nom + " " + ape + " y tengo " + ed + " años.");
-
-// Forma moderna (template literals):
-console.log(`Mi nombre es ${nom} ${ape} y tengo ${ed} años.`);
-
-
-// --------------------------------------
-// EJERCICIO 6: Arrays básicos
-// --------------------------------------
-// Crear un array con tus 3 comidas favoritas y mostrarlas.
-
-let comidasFavoritas = ["pizza", "sushi", "asado"];
-console.log("Mis comidas favoritas:", comidasFavoritas);
-console.log("Mi comida favorita es:", comidasFavoritas[0]);
-
-
-// --------------------------------------
-// EJERCICIO 7: Objetos básicos
-// --------------------------------------
-// Crear un objeto que represente tu información personal.
-
-let miInfo = {
-    nombre: "Juan",
-    edad: 25,
-    profesion: "Desarrollador",
-    ciudad: "Córdoba"
-};
-
-console.log("Mi información:", miInfo);
-console.log(`Soy ${miInfo.nombre}, tengo ${miInfo.edad} años y vivo en ${miInfo.ciudad}`);
-
-
-// ============================
-// MANEJO DE ERRORES COMUNES
-// ============================
-
-// --------------------------------------
-// Error 1: Intentar cambiar una constante
-// --------------------------------------
-try {
-    const PI = 3.1416;
-    // PI = 3.14; // ❌ Esto causaría un error
-    console.log("PI es:", PI);
-} catch (error) {
-    console.log("Error al cambiar constante:", error.message);
-}
-
-// --------------------------------------
-// Error 2: Usar variable antes de declararla
-// --------------------------------------
-try {
-    // console.log(variableNoDeclarada); // ❌ Esto causaría un error
-    let variableNoDeclarada = "Ahora sí está declarada";
-    console.log("Variable declarada:", variableNoDeclarada);
-} catch (error) {
-    console.log("Error de variable no declarada:", error.message);
-}
-
-// --------------------------------------
-// Error 3: Acceder a índice inexistente en array
-// --------------------------------------
-try {
-    let frutas = ["manzana", "banana"];
-    console.log("Primera fruta:", frutas[0]); // ✅ Correcto
-    console.log("Tercera fruta:", frutas[2]); // ❌ undefined (no existe)
-} catch (error) {
-    console.log("Error de acceso a array:", error.message);
-}
-
-
-// ============================
-// DIFERENCIA ENTRE "var" Y "let"
-// ============================
-
-/* 
-La principal diferencia entre "var" y "let" radica en el alcance de la variable (scope).
-
-1. **var** tiene un **alcance de función** o **global**, lo que significa que si declaramos una variable con var dentro de un bloque, su alcance será fuera del bloque también, lo que puede causar comportamientos inesperados.
-
-2. **let** tiene un **alcance de bloque**, lo que significa que la variable solo es accesible dentro del bloque donde fue declarada (siendo más seguro en su uso dentro de bloques de código).
-
-### Ejemplo con "var" (posible error):
-*/
-
-function ejemploVar() {
-    if (true) {
-        var x = 10; // var tiene alcance de función
-    }
-    console.log(x); // Accede a "x" fuera del bloque, lo cual es un comportamiento no deseado
-}
-
-ejemploVar(); // Resultado: 10 (aunque la variable se definió dentro de un bloque, "var" permite el acceso fuera)
-
-
-// ### Ejemplo con "let" (comportamiento correcto):
-
-function ejemploLet() {
-    if (true) {
-        let y = 20; // let tiene alcance de bloque
-    }
-    // console.log(y); // Error: "y" no está definida fuera del bloque
-}
-
-ejemploLet(); // Resultado: Error porque "y" solo es accesible dentro del bloque
-
-
-/* 
-En resumen, aunque "var" se sigue usando, "let" es más seguro y recomendado para evitar errores al trabajar con variables dentro de bloques, ya que no permite que la variable sea accesible fuera de su alcance lógico.
-*/
-
-
-// ==========================================
-// FUNCIONALIDAD DE LA INTERFAZ
-// ==========================================
 
 // Función para mostrar mensajes en la consola personalizada
 function mostrarEnConsola(mensaje, tipo = 'info') {
@@ -266,30 +17,29 @@ function mostrarEnConsola(mensaje, tipo = 'info') {
     output.scrollTop = output.scrollHeight;
 }
 
-// Función para abrir la consola del navegador
-function abrirConsola() {
-    mostrarEnConsola('🔍 Abriendo herramientas de desarrollador...', 'info');
-    // En algunos navegadores esto puede no funcionar por seguridad
-    try {
-        window.open('', '_blank');
-    } catch (e) {
-        mostrarEnConsola('💡 Presiona F12 manualmente para abrir las herramientas', 'warning');
-    }
-}
-
 // Función para limpiar la consola
 function limpiarConsola() {
     const output = document.getElementById('consoleOutput');
     output.innerHTML = '<div class="info">🧹 Consola limpiada</div>';
 }
 
-// Función para ejecutar ejemplos
-function ejecutarEjemplos() {
-    mostrarEnConsola('▶️ Ejecutando ejemplos de variables...', 'success');
-    // Los ejemplos ya se ejecutan automáticamente al cargar script.js
+// Función para abrir la consola del navegador
+function abrirConsola() {
+    mostrarEnConsola('🔍 Instrucciones para abrir la consola del navegador:', 'info');
+    mostrarEnConsola('💡 Presiona F12 en tu teclado', 'info');
+    mostrarEnConsola('💡 O usa Ctrl+Shift+I (Windows/Linux)', 'info');
+    mostrarEnConsola('💡 O usa Cmd+Option+I (Mac)', 'info');
+    mostrarEnConsola('💡 O haz clic derecho → "Inspeccionar"', 'info');
+    
+    alert('Para abrir la consola del navegador:\n\n' +
+          '• Presiona F12\n' +
+          '• O usa Ctrl+Shift+I (Windows/Linux)\n' +
+          '• O usa Cmd+Option+I (Mac)\n' +
+          '• O haz clic derecho → "Inspeccionar"\n\n' +
+          'Luego ve a la pestaña "Console" para ver los mensajes.');
 }
 
-// Función para interceptar console.log y mostrar en nuestra consola personalizada
+// Configurar interceptación de console.log
 function configurarInterceptacion() {
     const originalLog = console.log;
     const originalError = console.error;
@@ -311,15 +61,237 @@ function configurarInterceptacion() {
     };
 }
 
-// Función para inicializar la interfaz
-function inicializarInterfaz() {
-    // Configurar interceptación de console
-    configurarInterceptacion();
+// Configurar interceptación inmediatamente
+configurarInterceptacion();
+
+// ============================
+// FUNCIONES PARA CADA SECCIÓN
+// ============================
+
+// SECCIÓN 1: ¿Qué es una variable?
+function explicarVariables() {
+    limpiarConsola();
+    mostrarEnConsola('📚 SECCIÓN 1: ¿Qué es una variable?', 'info');
+    mostrarEnConsola('Una variable es un contenedor para guardar datos', 'info');
+    mostrarEnConsola('Los datos pueden cambiar o no a lo largo del programa', 'info');
+    mostrarEnConsola('Ejemplo: edad = 25 (guardamos el número 25 en la variable "edad")', 'success');
+}
+
+// SECCIÓN 2: Declaración con let
+function explicarLet() {
+    limpiarConsola();
+    mostrarEnConsola('📚 SECCIÓN 2: Declaración con LET', 'info');
+    mostrarEnConsola('Se usa cuando el valor puede cambiar', 'info');
     
-    // Mensaje inicial
+    let edad = 25;
+    console.log("Edad inicial:", edad);
+    
+    edad = 30;
+    console.log("Edad después del cambio:", edad);
+    
+    mostrarEnConsola('✅ Con LET puedes cambiar el valor después', 'success');
+}
+
+// SECCIÓN 3: Declaración con const
+function explicarConst() {
+    limpiarConsola();
+    mostrarEnConsola('📚 SECCIÓN 3: Declaración con CONST', 'info');
+    mostrarEnConsola('Se usa cuando el valor NO debe cambiar', 'info');
+    
+    const pais = "Argentina";
+    console.log("País:", pais);
+    
+    mostrarEnConsola('✅ CONST mantiene el valor fijo', 'success');
+    mostrarEnConsola('❌ Si intentas cambiar const, dará error', 'error');
+    
+    // Mostrar el error (comentado para no romper el código)
+    mostrarEnConsola('// pais = "Chile"; ← Esto daría error', 'warning');
+}
+
+// SECCIÓN 4: Declaración con var
+function explicarVar() {
+    limpiarConsola();
+    mostrarEnConsola('📚 SECCIÓN 4: Declaración con VAR', 'info');
+    mostrarEnConsola('Es más antigua, se puede redeclarar', 'info');
+    
+    var nombre = "Juan";
+    console.log("Primer nombre:", nombre);
+    
+    var nombre = "Pedro"; // Se puede redeclarar
+    console.log("Segundo nombre:", nombre);
+    
+    mostrarEnConsola('✅ Con VAR puedes redeclarar la misma variable', 'success');
+    mostrarEnConsola('⚠️ VAR es más antigua, se recomienda usar LET', 'warning');
+}
+
+// SECCIÓN 5: Tipos de datos
+function explicarTiposDatos() {
+    limpiarConsola();
+    mostrarEnConsola('📚 SECCIÓN 5: Tipos de datos en variables', 'info');
+    
+    let texto = "Hola mundo";
+    let numero = 42;
+    let activo = true;
+    let indefinido;
+    let nulo = null;
+    
+    console.log("Texto (string):", texto);
+    console.log("Número (number):", numero);
+    console.log("Booleano (boolean):", activo);
+    console.log("Indefinido (undefined):", indefinido);
+    console.log("Nulo (null):", nulo);
+    
+    mostrarEnConsola('✅ JavaScript detecta automáticamente el tipo de dato', 'success');
+}
+
+// SECCIÓN 6: Arrays y Objetos
+function explicarArraysObjetos() {
+    limpiarConsola();
+    mostrarEnConsola('📚 SECCIÓN 6: Arrays y Objetos básicos', 'info');
+    
+    let colores = ["rojo", "verde", "azul"];
+    let persona = {
+        nombre: "María",
+        edad: 25,
+        ciudad: "Buenos Aires"
+    };
+    
+    console.log("Array de colores:", colores);
+    console.log("Objeto persona:", persona);
+    console.log("Primer color:", colores[0]);
+    console.log("Nombre de la persona:", persona.nombre);
+    
+    mostrarEnConsola('✅ Arrays: lista de elementos [elemento1, elemento2]', 'success');
+    mostrarEnConsola('✅ Objetos: colección de propiedades {propiedad: valor}', 'success');
+}
+
+// SECCIÓN 7: Ejercicios prácticos
+function ejerciciosPracticos() {
+    limpiarConsola();
+    mostrarEnConsola('📚 SECCIÓN 7: Ejercicios prácticos', 'info');
+    
+    // Ejercicio 1
+    mostrarEnConsola('🎯 EJERCICIO 1: Declaración simple', 'info');
+    let miNombre = "Lucía";
+    console.log("Mi nombre es:", miNombre);
+    
+    // Ejercicio 2
+    mostrarEnConsola('🎯 EJERCICIO 2: Reasignar valor', 'info');
+    let ciudad = "Rosario";
+    console.log("Ciudad inicial:", ciudad);
+    ciudad = "Mendoza";
+    console.log("Ciudad final:", ciudad);
+    
+    // Ejercicio 3
+    mostrarEnConsola('🎯 EJERCICIO 3: Uso de const', 'info');
+    const nacimiento = 2000;
+    console.log("Año de nacimiento:", nacimiento);
+    
+    // Ejercicio 4
+    mostrarEnConsola('🎯 EJERCICIO 4: Tipos de datos', 'info');
+    let usuario = "Carlos";
+    let edadUsuario = 22;
+    let estaActivo = false;
+    console.log("Usuario:", usuario, "Edad:", edadUsuario, "Activo:", estaActivo);
+    
+    // Ejercicio 5
+    mostrarEnConsola('🎯 EJERCICIO 5: Template literals', 'info');
+    let nom = "Ana";
+    let ape = "López";
+    let ed = 28;
+    console.log(`Mi nombre es ${nom} ${ape} y tengo ${ed} años.`);
+}
+
+// SECCIÓN 8: Manejo de errores
+function manejoErrores() {
+    limpiarConsola();
+    mostrarEnConsola('📚 SECCIÓN 8: Manejo de errores comunes', 'info');
+    
+    // Error 1: Cambiar constante
+    mostrarEnConsola('❌ Error 1: Intentar cambiar una constante', 'error');
+    const PI = 3.1416;
+    console.log("PI es:", PI);
+    mostrarEnConsola('// PI = 3.14; ← Esto causaría un error', 'warning');
+    
+    // Error 2: Variable no declarada
+    mostrarEnConsola('❌ Error 2: Usar variable antes de declararla', 'error');
+    // console.log(variableNoDeclarada); ← Esto causaría un error
+    mostrarEnConsola('// console.log(variableNoDeclarada); ← Error', 'warning');
+    let variableNoDeclarada = "Ahora sí está declarada";
+    console.log("Variable declarada:", variableNoDeclarada);
+    
+    // Error 3: Acceso a array
+    mostrarEnConsola('❌ Error 3: Acceder a índice inexistente', 'error');
+    let frutas = ["manzana", "banana"];
+    console.log("Primera fruta:", frutas[0]); // ✅ Correcto
+    console.log("Tercera fruta:", frutas[2]); // ❌ undefined
+}
+
+// SECCIÓN 9: Diferencias var vs let
+function diferenciasVarLet() {
+    limpiarConsola();
+    mostrarEnConsola('📚 SECCIÓN 9: Diferencias entre VAR y LET', 'info');
+    
+    mostrarEnConsola('VAR tiene alcance de función', 'info');
+    mostrarEnConsola('LET tiene alcance de bloque', 'info');
+    
+    // Ejemplo con var
+    mostrarEnConsola('Ejemplo con VAR:', 'info');
+    if (true) {
+        var x = 10;
+    }
+    console.log("x con var:", x); // Accesible fuera del bloque
+    
+    // Ejemplo con let
+    mostrarEnConsola('Ejemplo con LET:', 'info');
+    if (true) {
+        let y = 20;
+        console.log("y dentro del bloque:", y);
+    }
+    // console.log("y fuera del bloque:", y); ← Esto daría error
+    mostrarEnConsola('// y no es accesible fuera del bloque con LET', 'warning');
+}
+
+// SECCIÓN 10: Git y GitHub
+function explicarGit() {
+    limpiarConsola();
+    mostrarEnConsola('📚 SECCIÓN 10: Repaso de Git y GitHub', 'info');
+    
+    mostrarEnConsola('Git: Control de versiones para proyectos', 'info');
+    mostrarEnConsola('GitHub: Plataforma online para compartir proyectos', 'info');
+    
+    console.log("Comandos básicos de Git:");
+    console.log("git init                    # Iniciar repositorio");
+    console.log("git status                  # Ver estado de archivos");
+    console.log("git add archivo.js          # Agregar archivo al staging");
+    console.log("git commit -m 'mensaje'     # Guardar cambios");
+    console.log("git push -u origin main     # Subir al repositorio");
+    
+    mostrarEnConsola('✅ Git te permite guardar versiones de tu código', 'success');
+}
+
+// Función para ejecutar todo de una vez
+function ejecutarTodo() {
+    limpiarConsola();
+    mostrarEnConsola('🚀 EJECUTANDO TODA LA CLASE', 'info');
+    
+    setTimeout(() => explicarVariables(), 500);
+    setTimeout(() => explicarLet(), 2000);
+    setTimeout(() => explicarConst(), 4000);
+    setTimeout(() => explicarVar(), 6000);
+    setTimeout(() => explicarTiposDatos(), 8000);
+    setTimeout(() => explicarArraysObjetos(), 10000);
+    setTimeout(() => ejerciciosPracticos(), 12000);
+    setTimeout(() => manejoErrores(), 14000);
+    setTimeout(() => diferenciasVarLet(), 16000);
+    setTimeout(() => explicarGit(), 18000);
+}
+
+// Inicializar interfaz
+function inicializarInterfaz() {
     mostrarEnConsola('✅ Página cargada correctamente', 'success');
-    mostrarEnConsola('📚 Ejemplos de variables cargados', 'info');
-    mostrarEnConsola('💡 Presiona F12 para abrir las herramientas de desarrollador', 'info');
+    mostrarEnConsola('📚 Clase de Variables - Versión Paso a Paso', 'info');
+    mostrarEnConsola('💡 Usa los botones para ejecutar cada sección', 'info');
 }
 
 // Ejecutar cuando el DOM esté listo
