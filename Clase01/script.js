@@ -251,3 +251,77 @@ ejemploLet(); // Resultado: Error porque "y" solo es accesible dentro del bloque
 En resumen, aunque "var" se sigue usando, "let" es más seguro y recomendado para evitar errores al trabajar con variables dentro de bloques, ya que no permite que la variable sea accesible fuera de su alcance lógico.
 */
 
+
+// ==========================================
+// FUNCIONALIDAD DE LA INTERFAZ
+// ==========================================
+
+// Función para mostrar mensajes en la consola personalizada
+function mostrarEnConsola(mensaje, tipo = 'info') {
+    const output = document.getElementById('consoleOutput');
+    const div = document.createElement('div');
+    div.className = tipo;
+    div.textContent = `[${new Date().toLocaleTimeString()}] ${mensaje}`;
+    output.appendChild(div);
+    output.scrollTop = output.scrollHeight;
+}
+
+// Función para abrir la consola del navegador
+function abrirConsola() {
+    mostrarEnConsola('🔍 Abriendo herramientas de desarrollador...', 'info');
+    // En algunos navegadores esto puede no funcionar por seguridad
+    try {
+        window.open('', '_blank');
+    } catch (e) {
+        mostrarEnConsola('💡 Presiona F12 manualmente para abrir las herramientas', 'warning');
+    }
+}
+
+// Función para limpiar la consola
+function limpiarConsola() {
+    const output = document.getElementById('consoleOutput');
+    output.innerHTML = '<div class="info">🧹 Consola limpiada</div>';
+}
+
+// Función para ejecutar ejemplos
+function ejecutarEjemplos() {
+    mostrarEnConsola('▶️ Ejecutando ejemplos de variables...', 'success');
+    // Los ejemplos ya se ejecutan automáticamente al cargar script.js
+}
+
+// Función para interceptar console.log y mostrar en nuestra consola personalizada
+function configurarInterceptacion() {
+    const originalLog = console.log;
+    const originalError = console.error;
+    const originalWarn = console.warn;
+
+    console.log = function(...args) {
+        originalLog.apply(console, args);
+        mostrarEnConsola(args.join(' '), 'success');
+    };
+
+    console.error = function(...args) {
+        originalError.apply(console, args);
+        mostrarEnConsola(args.join(' '), 'error');
+    };
+
+    console.warn = function(...args) {
+        originalWarn.apply(console, args);
+        mostrarEnConsola(args.join(' '), 'warning');
+    };
+}
+
+// Función para inicializar la interfaz
+function inicializarInterfaz() {
+    // Configurar interceptación de console
+    configurarInterceptacion();
+    
+    // Mensaje inicial
+    mostrarEnConsola('✅ Página cargada correctamente', 'success');
+    mostrarEnConsola('📚 Ejemplos de variables cargados', 'info');
+    mostrarEnConsola('💡 Presiona F12 para abrir las herramientas de desarrollador', 'info');
+}
+
+// Ejecutar cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', inicializarInterfaz);
+

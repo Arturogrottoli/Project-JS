@@ -4,20 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clase de Variables y Git/GitHub</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Clase: Variables y Git/GitHub</h1>
+        <h1>🔧 Clase: Variables y Git/GitHub</h1>
         <p>Este archivo contiene ejemplos de declaración de variables, tipos de datos y ejemplos prácticos con Git.</p>
     </header>
 
-    <section>
-        <h2>Ejemplos de Código</h2>
-        <p>Consulta la consola para ver los resultados de los ejemplos de variables.</p>
-    </section>
+    <div class="controls">
+        <button onclick="abrirConsola()">🔍 Abrir Consola del Navegador</button>
+        <button onclick="limpiarConsola()" class="clear-btn">🧹 Limpiar Consola</button>
+        <button onclick="ejecutarEjemplos()">▶️ Ejecutar Ejemplos</button>
+    </div>
+
+    <div class="container">
+        <div class="instructions">
+            <h2>📋 Instrucciones</h2>
+            <ul>
+                <li><strong>F12</strong> o <strong>Ctrl+Shift+I</strong>: Abrir herramientas de desarrollador</li>
+                <li><strong>Console</strong>: Ver mensajes y errores de JavaScript</li>
+                <li><strong>Sources</strong>: Depurar código paso a paso</li>
+                <li><strong>Network</strong>: Ver peticiones HTTP</li>
+            </ul>
+            
+            <h3>🎯 Errores comunes a detectar:</h3>
+            <ul>
+                <li class="error">❌ Variables no declaradas</li>
+                <li class="error">❌ Cambiar valores de constantes</li>
+                <li class="error">❌ Errores de sintaxis</li>
+                <li class="warning">⚠️ Variables no utilizadas</li>
+                <li class="info">ℹ️ Tipos de datos incorrectos</li>
+            </ul>
+        </div>
+
+        <div class="console-output" id="consoleOutput">
+            <div class="info">🚀 Consola iniciada...</div>
+            <div class="info">💡 Presiona F12 para abrir las herramientas de desarrollador</div>
+            <div class="info">📝 Los resultados aparecerán aquí y en la consola del navegador</div>
+        </div>
+    </div>
 
     <footer>
-        <p>&copy; 2025 Curso de JavaScript</p>
+        <p>&copy; 2025 Curso de JavaScript - Herramientas de Depuración</p>
     </footer>
 
     <!-- Vinculación del archivo JavaScript -->
