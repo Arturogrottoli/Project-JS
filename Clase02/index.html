@@ -10,6 +10,424 @@
   <div class="container">
     <h1>Ejercicios de JavaScript</h1>
 
+    <!-- Índice de Temas -->
+    <section class="indice">
+      <h2>📚 Índice de Temas - Clase 02</h2>
+      
+      <div class="temas-grid">
+        <div class="tema-card">
+          <h3>🎯 Tema 1: Condicionales</h3>
+          <ul>
+            <li>Estructura if/else básica</li>
+            <li>Operadores de comparación</li>
+            <li>Operadores lógicos (&&, ||, !)</li>
+            <li>Condiciones anidadas</li>
+            <li>Validación de datos</li>
+            <li>Manejo de valores NaN</li>
+          </ul>
+        </div>
+
+        <div class="tema-card">
+          <h3>🔄 Tema 2: Ciclos y Control de Flujo</h3>
+          <ul>
+            <li>Ciclo for tradicional</li>
+            <li>Ciclo while</li>
+            <li>Ciclo do-while</li>
+            <li>Método forEach()</li>
+            <li>Control de flujo con break/continue</li>
+            <li>Iteración sobre arrays</li>
+          </ul>
+        </div>
+
+        <div class="tema-card">
+          <h3>❓ Tema 3: Nullish Coalescing</h3>
+          <ul>
+            <li>Operador ?? (Nullish Coalescing)</li>
+            <li>Diferencia con operador ||</li>
+            <li>Manejo de valores null/undefined</li>
+            <li>Valores falsy vs nullish</li>
+            <li>Casos de uso prácticos</li>
+            <li>Condiciones anidadas avanzadas</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="conceptos-extra">
+        <h3>💡 Conceptos Adicionales</h3>
+        <ul>
+          <li><strong>DOM Manipulation:</strong> Interacción con elementos HTML</li>
+          <li><strong>Event Handling:</strong> Manejo de eventos de usuario</li>
+          <li><strong>Form Validation:</strong> Validación de formularios</li>
+          <li><strong>Dynamic Content:</strong> Contenido dinámico en la página</li>
+          <li><strong>CSS Integration:</strong> Estilos dinámicos</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Referencia Completa de JavaScript -->
+    <section class="referencia-completa">
+      <h2>📖 Referencia Completa de JavaScript</h2>
+      
+      <div class="referencia-grid">
+        <!-- FUNDAMENTOS -->
+        <div class="referencia-categoria">
+          <h3>🔰 Fundamentos Básicos</h3>
+          <div class="conceptos-lista">
+            <div class="concepto-item">
+              <h4>Variables y Tipos de Datos</h4>
+              <ul>
+                <li>var, let, const</li>
+                <li>String, Number, Boolean</li>
+                <li>null, undefined</li>
+                <li>Symbol, BigInt</li>
+                <li>Type coercion</li>
+              </ul>
+            </div>
+            
+            <div class="concepto-item">
+              <h4>Operadores</h4>
+              <ul>
+                <li>Aritméticos (+, -, *, /, %, **)</li>
+                <li>Asignación (=, +=, -=, etc.)</li>
+                <li>Comparación (==, ===, !=, !==)</li>
+                <li>Lógicos (&&, ||, !)</li>
+                <li>Bitwise (&, |, ^, ~, <<, >>)</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Estructuras de Control</h4>
+              <ul>
+                <li>if/else/else if</li>
+                <li>switch/case</li>
+                <li>Operador ternario (?:)</li>
+                <li>try/catch/finally</li>
+                <li>throw</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- FUNCIONES -->
+        <div class="referencia-categoria">
+          <h3>⚙️ Funciones</h3>
+          <div class="conceptos-lista">
+            <div class="concepto-item">
+              <h4>Declaración de Funciones</h4>
+              <ul>
+                <li>Function declaration</li>
+                <li>Function expression</li>
+                <li>Arrow functions (=>)</li>
+                <li>IIFE (Immediately Invoked)</li>
+                <li>Generator functions</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Parámetros y Scope</h4>
+              <ul>
+                <li>Parámetros por defecto</li>
+                <li>Rest parameters (...)</li>
+                <li>Scope global y local</li>
+                <li>Closure</li>
+                <li>Hoisting</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Funciones Avanzadas</h4>
+              <ul>
+                <li>Callbacks</li>
+                <li>Promises</li>
+                <li>async/await</li>
+                <li>Higher-order functions</li>
+                <li>Pure functions</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ARRAYS Y OBJETOS -->
+        <div class="referencia-categoria">
+          <h3>📦 Arrays y Objetos</h3>
+          <div class="conceptos-lista">
+            <div class="concepto-item">
+              <h4>Arrays</h4>
+              <ul>
+                <li>Creación y manipulación</li>
+                <li>Métodos: push, pop, shift, unshift</li>
+                <li>Métodos: slice, splice, concat</li>
+                <li>Métodos: map, filter, reduce</li>
+                <li>Métodos: find, findIndex, includes</li>
+                <li>Spread operator (...)</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Objetos</h4>
+              <ul>
+                <li>Object literals</li>
+                <li>Propiedades y métodos</li>
+                <li>Object destructuring</li>
+                <li>Object.assign()</li>
+                <li>Object.keys(), values(), entries()</li>
+                <li>JSON.parse() y JSON.stringify()</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Estructuras de Datos</h4>
+              <ul>
+                <li>Set y WeakSet</li>
+                <li>Map y WeakMap</li>
+                <li>TypedArrays</li>
+                <li>ArrayBuffer</li>
+                <li>DataView</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROGRAMACIÓN ORIENTADA A OBJETOS -->
+        <div class="referencia-categoria">
+          <h3>🏗️ Programación Orientada a Objetos</h3>
+          <div class="conceptos-lista">
+            <div class="concepto-item">
+              <h4>Clases y Herencia</h4>
+              <ul>
+                <li>class declaration</li>
+                <li>constructor</li>
+                <li>extends (herencia)</li>
+                <li>super()</li>
+                <li>static methods</li>
+                <li>getters y setters</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Prototipos</h4>
+              <ul>
+                <li>Prototype chain</li>
+                <li>Object.create()</li>
+                <li>hasOwnProperty()</li>
+                <li>instanceof</li>
+                <li>Object.getPrototypeOf()</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Patrones de Diseño</h4>
+              <ul>
+                <li>Singleton</li>
+                <li>Factory</li>
+                <li>Module pattern</li>
+                <li>Observer pattern</li>
+                <li>Mixin pattern</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- DOM Y WEB APIs -->
+        <div class="referencia-categoria">
+          <h3>🌐 DOM y Web APIs</h3>
+          <div class="conceptos-lista">
+            <div class="concepto-item">
+              <h4>DOM Manipulation</h4>
+              <ul>
+                <li>querySelector/querySelectorAll</li>
+                <li>getElementById/getElementsByClassName</li>
+                <li>createElement/appendChild</li>
+                <li>innerHTML/textContent</li>
+                <li>classList</li>
+                <li>dataset</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Eventos</h4>
+              <ul>
+                <li>addEventListener/removeEventListener</li>
+                <li>Event bubbling y capturing</li>
+                <li>preventDefault()</li>
+                <li>stopPropagation()</li>
+                <li>Event delegation</li>
+                <li>Custom events</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Web APIs</h4>
+              <ul>
+                <li>localStorage/sessionStorage</li>
+                <li>fetch API</li>
+                <li>XMLHttpRequest</li>
+                <li>WebSockets</li>
+                <li>Service Workers</li>
+                <li>Web Workers</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ES6+ FEATURES -->
+        <div class="referencia-categoria">
+          <h3>🚀 ES6+ Features</h3>
+          <div class="conceptos-lista">
+            <div class="concepto-item">
+              <h4>Variables y Scope</h4>
+              <ul>
+                <li>let y const</li>
+                <li>Block scope</li>
+                <li>Temporal dead zone</li>
+                <li>Template literals</li>
+                <li>Tagged templates</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Destructuring</h4>
+              <ul>
+                <li>Array destructuring</li>
+                <li>Object destructuring</li>
+                <li>Default values</li>
+                <li>Nested destructuring</li>
+                <li>Rest operator</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Módulos</h4>
+              <ul>
+                <li>import/export</li>
+                <li>Default exports</li>
+                <li>Named exports</li>
+                <li>Dynamic imports</li>
+                <li>Module bundlers</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ASINCRONÍA -->
+        <div class="referencia-categoria">
+          <h3>⏱️ Asincronía</h3>
+          <div class="conceptos-lista">
+            <div class="concepto-item">
+              <h4>Callbacks</h4>
+              <ul>
+                <li>Callback functions</li>
+                <li>Callback hell</li>
+                <li>Error handling</li>
+                <li>setTimeout/setInterval</li>
+                <li>Event loop</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Promises</h4>
+              <ul>
+                <li>Promise constructor</li>
+                <li>.then() y .catch()</li>
+                <li>Promise.all()</li>
+                <li>Promise.race()</li>
+                <li>Promise.resolve/reject</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Async/Await</h4>
+              <ul>
+                <li>async functions</li>
+                <li>await operator</li>
+                <li>Error handling con try/catch</li>
+                <li>Parallel execution</li>
+                <li>Top-level await</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- ERRORES Y DEBUGGING -->
+        <div class="referencia-categoria">
+          <h3>🐛 Errores y Debugging</h3>
+          <div class="conceptos-lista">
+            <div class="concepto-item">
+              <h4>Manejo de Errores</h4>
+              <ul>
+                <li>try/catch/finally</li>
+                <li>throw statement</li>
+                <li>Error types</li>
+                <li>Custom errors</li>
+                <li>Error boundaries</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Debugging</h4>
+              <ul>
+                <li>console.log/warn/error</li>
+                <li>debugger statement</li>
+                <li>Browser dev tools</li>
+                <li>Source maps</li>
+                <li>Performance profiling</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Testing</h4>
+              <ul>
+                <li>Unit testing</li>
+                <li>Jest framework</li>
+                <li>Mocha/Chai</li>
+                <li>Test-driven development</li>
+                <li>Mocking</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- FRAMEWORKS Y LIBRERÍAS -->
+        <div class="referencia-categoria">
+          <h3>🛠️ Frameworks y Librerías</h3>
+          <div class="conceptos-lista">
+            <div class="concepto-item">
+              <h4>Frontend Frameworks</h4>
+              <ul>
+                <li>React.js</li>
+                <li>Vue.js</li>
+                <li>Angular</li>
+                <li>Svelte</li>
+                <li>Alpine.js</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Backend</h4>
+              <ul>
+                <li>Node.js</li>
+                <li>Express.js</li>
+                <li>Koa.js</li>
+                <li>Fastify</li>
+                <li>NestJS</li>
+              </ul>
+            </div>
+
+            <div class="concepto-item">
+              <h4>Herramientas</h4>
+              <ul>
+                <li>npm/yarn</li>
+                <li>Webpack/Vite</li>
+                <li>Babel</li>
+                <li>ESLint/Prettier</li>
+                <li>TypeScript</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section>
       <h2>Tema 1: Condicionales</h2>
       <p>Responde las preguntas para ver los resultados en la consola.</p>
