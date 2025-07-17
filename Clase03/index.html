@@ -1,12 +1,218 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Clase JavaScript - Funciones</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clase 03 - Funciones y Scope en JavaScript</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Clase de JavaScript - Funciones y Scope</h1>
+  <div class="container">
+    <header class="header">
+      <h1>🚀 Clase 03 - Funciones y Scope</h1>
+      <p class="subtitle">Aprende sobre funciones, scope de variables y funciones flecha en JavaScript</p>
+    </header>
+
+    <!-- Índice de Temas -->
+    <section class="indice">
+      <h2>📚 Temas de la Clase</h2>
+      
+      <div class="temas-grid">
+        <div class="tema-card">
+          <h3>⚙️ Funciones Básicas</h3>
+          <ul>
+            <li>Declaración de funciones</li>
+            <li>Parámetros y argumentos</li>
+            <li>Return y valores de retorno</li>
+            <li>Validación de datos</li>
+            <li>Funciones con lógica compleja</li>
+          </ul>
+        </div>
+
+        <div class="tema-card">
+          <h3>🔍 Scope de Variables</h3>
+          <ul>
+            <li>Scope global vs local</li>
+            <li>let vs var vs const</li>
+            <li>Scope de bloque</li>
+            <li>Hoisting</li>
+            <li>Closure básico</li>
+          </ul>
+        </div>
+
+        <div class="tema-card">
+          <h3>🏹 Funciones Flecha</h3>
+          <ul>
+            <li>Sintaxis arrow function</li>
+            <li>Funciones anónimas</li>
+            <li>Return implícito</li>
+            <li>Uso con arrays</li>
+            <li>Diferencias con funciones tradicionales</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ejercicios Interactivos -->
+    <section class="ejercicios">
+      <h2>🎯 Ejercicios Interactivos</h2>
+      
+      <!-- Ejercicio 1: Funciones Básicas -->
+      <div class="ejercicio-card">
+        <h3>1. Funciones Básicas</h3>
+        <p>Prueba diferentes tipos de funciones con parámetros y validaciones.</p>
+        
+        <div class="input-group">
+          <label for="dividendo">Dividendo:</label>
+          <input type="number" id="dividendo" placeholder="Ej: 10">
+          
+          <label for="divisor">Divisor:</label>
+          <input type="number" id="divisor" placeholder="Ej: 2">
+          
+          <button onclick="ejecutarDivision()" class="btn-primary">Dividir</button>
+        </div>
+
+        <div class="input-group">
+          <label for="peso">Peso (kg):</label>
+          <input type="number" id="peso" placeholder="Ej: 68" step="0.1">
+          
+          <label for="altura">Altura (m):</label>
+          <input type="number" id="altura" placeholder="Ej: 1.7" step="0.01">
+          
+          <button onclick="calcularIMC()" class="btn-primary">Calcular IMC</button>
+        </div>
+      </div>
+
+      <!-- Ejercicio 2: Scope -->
+      <div class="ejercicio-card">
+        <h3>2. Scope de Variables</h3>
+        <p>Explora cómo funciona el scope con diferentes tipos de variables.</p>
+        
+        <div class="scope-demo">
+          <div class="scope-item">
+            <h4>Variable Global</h4>
+            <input type="text" id="variableGlobal" placeholder="Variable global" value="JavaScript">
+            <button onclick="probarScopeGlobal()" class="btn-secondary">Probar Global</button>
+          </div>
+          
+          <div class="scope-item">
+            <h4>Scope de Bloque</h4>
+            <button onclick="probarScopeBloque()" class="btn-secondary">Probar let vs var</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 3: Funciones Flecha -->
+      <div class="ejercicio-card">
+        <h3>3. Funciones Flecha</h3>
+        <p>Experimenta con funciones flecha y funciones anónimas.</p>
+        
+        <div class="input-group">
+          <label for="base">Base:</label>
+          <input type="number" id="base" placeholder="Ej: 2">
+          
+          <label for="exponente">Exponente:</label>
+          <input type="number" id="exponente" placeholder="Ej: 3">
+          
+          <button onclick="calcularPotencia()" class="btn-primary">Calcular Potencia</button>
+        </div>
+
+        <div class="input-group">
+          <label for="nombres">Nombres (separados por comas):</label>
+          <input type="text" id="nombres" placeholder="Ana, Luis, Pedro">
+          
+          <button onclick="generarSaludos()" class="btn-primary">Generar Saludos</button>
+        </div>
+      </div>
+
+      <!-- Ejercicio 4: Actividad Completa -->
+      <div class="ejercicio-card">
+        <h3>4. Actividad Completa</h3>
+        <p>Algoritmo completo: entrada → procesamiento → salida</p>
+        
+        <div class="actividad-completa">
+          <div class="paso">
+            <h4>Paso 1: Entrada de Datos</h4>
+            <button onclick="iniciarActividad()" class="btn-success">Iniciar Actividad</button>
+          </div>
+          
+          <div class="paso">
+            <h4>Paso 2: Procesamiento</h4>
+            <div id="procesamiento" class="procesamiento-area">
+              <p>Los datos se procesarán automáticamente...</p>
+            </div>
+          </div>
+          
+          <div class="paso">
+            <h4>Paso 3: Resultado</h4>
+            <div id="resultadoFinal" class="resultado-area">
+              <p>El resultado aparecerá aquí...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demostraciones Automáticas -->
+    <section class="demostraciones">
+      <h2>🔬 Demostraciones Automáticas</h2>
+      
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h3>Scope en Bucles</h3>
+          <p>Diferencia entre var y let en bucles con setTimeout</p>
+          <button onclick="demostrarScopeBucles()" class="btn-demo">Ver Demostración</button>
+          <div id="demoBucles" class="demo-resultado"></div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Funciones Anónimas</h3>
+          <p>Comparación entre funciones tradicionales y anónimas</p>
+          <button onclick="demostrarFuncionesAnonimas()" class="btn-demo">Ver Demostración</button>
+          <div id="demoAnonimas" class="demo-resultado"></div>
+        </div>
+
+        <div class="demo-card">
+          <h3>Arrow Functions</h3>
+          <p>Uso de arrow functions con arrays</p>
+          <button onclick="demostrarArrowFunctions()" class="btn-demo">Ver Demostración</button>
+          <div id="demoArrow" class="demo-resultado"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resultados -->
+    <section class="resultados">
+      <h2>📊 Resultados</h2>
+      <div id="resultados" class="resultados-container">
+        <p class="placeholder">Los resultados de los ejercicios aparecerán aquí...</p>
+      </div>
+      <button onclick="limpiarResultados()" class="btn-clear">Limpiar Resultados</button>
+    </section>
+
+    <!-- Información Adicional -->
+    <section class="info-extra">
+      <h2>💡 Conceptos Clave</h2>
+      
+      <div class="conceptos-grid">
+        <div class="concepto">
+          <h3>¿Qué es una función?</h3>
+          <p>Una función es un bloque de código reutilizable que puede recibir datos (parámetros) y devolver resultados. Mejora la organización del código y evita repeticiones.</p>
+        </div>
+
+        <div class="concepto">
+          <h3>Scope de Variables</h3>
+          <p>El scope define dónde una variable es accesible. <code>let</code> y <code>const</code> tienen scope de bloque, mientras que <code>var</code> tiene scope de función.</p>
+        </div>
+
+        <div class="concepto">
+          <h3>Arrow Functions</h3>
+          <p>Las funciones flecha tienen sintaxis más compacta y no tienen su propio <code>this</code>. Son ideales para callbacks y funciones simples.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
