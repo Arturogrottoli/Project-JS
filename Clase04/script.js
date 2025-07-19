@@ -1,24 +1,82 @@
+// ======================
+// 📚 GUÍA DIDÁCTICA PARA LA CLASE
+// ======================
+// 
+// 🎯 OBJETIVOS DE LA CLASE:
+// 1. Comprender qué son los arrays y cómo funcionan
+// 2. Aprender a manipular arrays con bucles tradicionales
+// 3. Entender los objetos literales y su estructura
+// 4. Practicar con arrays de objetos
+// 5. Resolver problemas reales combinando ambos conceptos
+//
+// 📖 ESTRUCTURA DE LA CLASE:
+// - 4.1: Fundamentos de Arrays (15 min)
+// - 4.2: Métodos y Propiedades (20 min)
+// - 4.3: Objetos Literales (15 min)
+// - 4.4-4.9: Actividades Prácticas (30 min)
+// - 4.10: Ejercicio Integrador (20 min)
+// - Ejercicios Extra (20 min)
+//
+// 🔧 CONCEPTOS CLAVE A ENSEÑAR:
+// - Índices (empiezan en 0)
+// - Propiedad length
+// - Bucles for tradicionales
+// - Acceso a propiedades de objetos
+// - Arrays de objetos
+// - Algoritmos básicos (filtrado, búsqueda, acumulación)
+//
+// 💡 TIPS PARA LA EXPLICACIÓN:
+// - Usar analogías (cajón con compartimentos numerados)
+// - Mostrar ejemplos visuales en la consola
+// - Hacer preguntas interactivas
+// - Relacionar con situaciones reales
+// - Enfatizar la importancia de los bucles
+
 // ✅ 4.1 Fundamentos de Arrays
 // 🔸 Teoría:
 // Un array es una estructura que nos permite guardar varios valores en una sola variable.
 // Los elementos están ordenados por índices (comienzan en 0).
 // Podemos acceder, recorrer, modificar o eliminar elementos de un array.
 
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Imaginen un cajón con compartimentos numerados del 0 en adelante.
+// En cada compartimento podemos guardar algo diferente: texto, números, etc."
+
 const frutas = ["manzana", "banana", "pera"];
 console.log("Ejemplo básico de array:", frutas[1]); // Accedemos a la banana (índice 1)
+
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué frutas[1] nos da 'banana' y no 'manzana'?"
+// RESPUESTA: Porque los índices empiezan en 0, no en 1
 
 const mezcla = ["texto", 42, true, [1, 2]]; // Arrays pueden tener distintos tipos de datos
 console.log("Array con tipos mixtos:", mezcla);
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Qué tipos de datos pueden contener los arrays?"
+// RESPUESTA: Cualquier tipo: strings, números, booleanos, otros arrays, objetos, etc.
+
 // 🔸 Recorriendo un array con un bucle:
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Para ver todos los elementos, necesitamos recorrer el array uno por uno.
+// Usamos un bucle for que va desde 0 hasta el final del array."
+
 for (let i = 0; i < frutas.length; i++) {
   console.log(`Fruta en posición ${i}: ${frutas[i]}`);
 }
+
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué usamos frutas.length en lugar de un número fijo?"
+// RESPUESTA: Para que funcione con cualquier tamaño de array
 
 // ✅ 4.2 Métodos y Propiedades de los Arrays
 // 🔸 Teoría:
 // Los arrays tienen métodos que permiten transformarlos, modificarlos o filtrarlos.
 // Como no vamos a usar funciones como map/filter/reduce, vamos a simular su comportamiento con bucles.
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Los arrays tienen 'herramientas' incorporadas, pero hoy vamos a crear las nuestras
+// usando solo bucles for. Esto nos ayuda a entender cómo funcionan por dentro."
 
 // push → agrega un elemento al final
 // pop → quita el último elemento
@@ -28,11 +86,21 @@ for (let i = 0; i < frutas.length; i++) {
 
 const numeros = [10, 20, 30, 40, 50];
 
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Vamos a simular el método 'push' que agrega elementos al final del array"
+
 // Simulamos push (agregar al final):
 numeros[numeros.length] = 60; // agregamos el 60 al final
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué numeros.length nos da la posición correcta para agregar?"
+// RESPUESTA: Porque length es el número de elementos, y los índices van de 0 a length-1
+
 // Simulamos pop (quitar último):
 numeros.length = numeros.length - 1; // quitamos el último (60)
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Reducir la longitud del array elimina los últimos elementos"
 
 // Simulamos slice (extraer parte del array del índice 1 al 3):
 let parte = [];
@@ -41,12 +109,19 @@ for (let i = 1; i < 4; i++) {
 }
 console.log("Slice manual:", parte);
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Qué elementos obtendremos con este slice?"
+// RESPUESTA: Los elementos en las posiciones 1, 2 y 3 (20, 30, 40)
+
 // Simulamos map (duplicar cada número):
 let dobles = [];
 for (let i = 0; i < numeros.length; i++) {
   dobles[dobles.length] = numeros[i] * 2;
 }
 console.log("Doble de cada número:", dobles);
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Map transforma cada elemento. Aquí multiplicamos cada número por 2"
 
 // Simulamos filter (solo mayores a 25):
 let filtrados = [];
@@ -57,10 +132,18 @@ for (let i = 0; i < numeros.length; i++) {
 }
 console.log("Mayores a 25:", filtrados);
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué necesitamos la condición if dentro del bucle?"
+// RESPUESTA: Para decidir cuáles elementos incluir en el nuevo array
+
 // ✅ 4.3 Objetos Literales y su Relación con Arrays
 // 🔸 Teoría:
 // Un objeto es una colección de propiedades con claves y valores.
 // Se usan para representar entidades más estructuradas (persona, producto, usuario, etc).
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Los objetos son como fichas de información. Cada propiedad tiene un nombre y un valor.
+// Es como tener una tarjeta de identidad con nombre, edad, etc."
 
 const persona = {
   nombre: "Ana",
@@ -69,7 +152,15 @@ const persona = {
 };
 console.log("Nombre de la persona:", persona.nombre);
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Cómo accedemos a las propiedades de un objeto?"
+// RESPUESTA: Con punto (persona.nombre) o corchetes (persona["nombre"])
+
 // 🔸 Array de objetos
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Ahora combinamos lo mejor de ambos: un array que contiene objetos.
+// Esto es muy útil para manejar listas de personas, productos, etc."
+
 const productos = [
   { nombre: "lápiz", precio: 100 },
   { nombre: "cuaderno", precio: 300 }
@@ -80,10 +171,18 @@ for (let i = 0; i < productos.length; i++) {
   console.log(`${productos[i].nombre} cuesta $${productos[i].precio}`);
 }
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué usamos productos[i].nombre en lugar de productos.nombre?"
+// RESPUESTA: Porque productos[i] es el objeto en la posición i, y .nombre accede a su propiedad
+
 // ✅ 4.4 Actividad práctica
 // 🔸 Consigna:
 // Crear un array de objetos con datos de usuarios. Mostrar todos los usuarios, filtrar por edad >= 21
 // y agregar un nuevo usuario, sin usar funciones ni métodos como filter/map.
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Ahora vamos a resolver un problema real: gestionar una lista de usuarios.
+// Vamos paso a paso: primero creamos, luego mostramos, después filtramos y finalmente agregamos."
 
 let listaUsuarios = [
   { nombre: "Carlos", edad: 30 },
@@ -91,11 +190,17 @@ let listaUsuarios = [
   { nombre: "Sofía", edad: 18 }
 ];
 
+// 📝 PASO 1: Mostrar todos los usuarios
 console.log("Listado de usuarios:");
 for (let i = 0; i < listaUsuarios.length; i++) {
   console.log(`${listaUsuarios[i].nombre}, ${listaUsuarios[i].edad} años`);
 }
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Qué información mostramos de cada usuario?"
+// RESPUESTA: Nombre y edad
+
+// 📝 PASO 2: Filtrar usuarios mayores de 21 años
 let usuariosMayores = [];
 for (let i = 0; i < listaUsuarios.length; i++) {
   if (listaUsuarios[i].edad >= 21) {
@@ -107,6 +212,11 @@ for (let i = 0; i < usuariosMayores.length; i++) {
   console.log(`${usuariosMayores[i].nombre}, ${usuariosMayores[i].edad} años`);
 }
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué creamos un nuevo array usuariosMayores?"
+// RESPUESTA: Para guardar solo los usuarios que cumplen la condición
+
+// 📝 PASO 3: Agregar un nuevo usuario
 let nuevoUsuario = { nombre: "Elena", edad: 25 };
 listaUsuarios[listaUsuarios.length] = nuevoUsuario;
 
@@ -115,9 +225,17 @@ for (let i = 0; i < listaUsuarios.length; i++) {
   console.log(`${listaUsuarios[i].nombre}, ${listaUsuarios[i].edad} años`);
 }
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Cómo sabemos que Elena se agregó correctamente?"
+// RESPUESTA: Porque aparece en la lista final y el array tiene un elemento más
+
 // ✅ 4.5 Ejemplo: Calcular el stock total de artículos
 // 🔸 Teoría:
 // Podemos recorrer un array de objetos y acumular los valores de una propiedad.
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Ahora vamos a resolver un problema de inventario: sumar todo el stock disponible.
+// Esto es muy común en aplicaciones reales."
 
 const articulos = [
   { nombre: "Notebook", stock: 12 },
@@ -131,9 +249,16 @@ for (let i = 0; i < articulos.length; i++) {
 }
 console.log("Stock total:", stockTotal); // Resultado: 64
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué inicializamos stockTotal en 0?"
+// RESPUESTA: Porque necesitamos empezar desde cero para sumar
+
 // ✅ 4.6 Ejemplo: Agrupar personas por rol
 // 🔸 Teoría:
 // Podemos agrupar elementos de un array en un objeto clave-valor.
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Ahora vamos a organizar personas por su rol. Esto es útil para sistemas de permisos."
 
 const personal = [
   { nombre: "Ana", rol: "admin" },
@@ -157,9 +282,16 @@ for (let i = 0; i < personal.length; i++) {
 
 console.log("Personas agrupadas por rol:", personasPorRol);
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Qué hace la línea 'if (!personasPorRol[rol])'?"
+// RESPUESTA: Verifica si ya existe un array para ese rol, si no, lo crea
+
 // ✅ 4.7 Actividad: Filtrar estudiantes aprobados
 // 🔸 Consigna:
 // Dado un array con nombre y nota de estudiantes, mostrar solo los nombres de los que aprobaron (nota >= 6)
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Vamos a resolver un problema escolar: identificar quiénes aprobaron el curso."
 
 const estudiantes = [
   { nombre: "Lucía", nota: 8 },
@@ -178,9 +310,16 @@ for (let i = 0; i < estudiantes.length; i++) {
 
 console.log("Estudiantes aprobados:", estudiantesAprobados); // ["Lucía", "Valentina"]
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué guardamos solo el nombre y no todo el objeto?"
+// RESPUESTA: Porque la consigna pide solo los nombres
+
 // ✅ 4.8 Actividad: Contar tareas completas y pendientes
 // 🔸 Consigna:
 // Dado un array de tareas con estado, contar cuántas están completas y cuántas pendientes.
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Ahora vamos a crear un sistema de gestión de tareas. Contaremos cuántas están hechas."
 
 const tareasLista = [
   { titulo: "Estudiar arrays", completa: true },
@@ -204,9 +343,16 @@ console.log("Resumen de tareas:");
 console.log("Completas:", completas);
 console.log("Pendientes:", pendientes);
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué usamos dos contadores separados?"
+// RESPUESTA: Para llevar la cuenta de cada tipo de tarea por separado
+
 // ✅ 4.9 Actividad: Producto más caro
 // 🔸 Consigna:
 // Dado un array con nombre y precio de productos, encontrar cuál es el más caro.
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Ahora vamos a encontrar el producto más caro. Esto es útil para análisis de precios."
 
 const catalogo = [
   { nombre: "Zapatillas", precio: 15000 },
@@ -224,6 +370,10 @@ for (let i = 1; i < catalogo.length; i++) {
 
 console.log("Producto más caro:", masCaro.nombre, "($", masCaro.precio, ")");
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué empezamos con masCaro = catalogo[0]?"
+// RESPUESTA: Necesitamos un punto de partida para comparar
+
 // ✅ 4.10 Ejercicio integrador final
 // 🔸 Consigna:
 // Crear un array de objetos llamado 'empleados', cada uno con las propiedades:
@@ -235,6 +385,10 @@ console.log("Producto más caro:", masCaro.nombre, "($", masCaro.precio, ")");
 // 4) Mostrar el nombre del empleado más joven.
 // 5) Agregar un nuevo empleado al array.
 
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Este es nuestro ejercicio más completo. Vamos a crear un sistema de gestión de empleados
+// que combine todo lo que hemos aprendido."
+
 let empleados = [
   { nombre: "Juan", edad: 28, departamento: "Ventas", salario: 50000 },
   { nombre: "Ana", edad: 34, departamento: "Marketing", salario: 60000 },
@@ -242,13 +396,17 @@ let empleados = [
   { nombre: "Marta", edad: 30, departamento: "Desarrollo", salario: 70000 }
 ];
 
-// 1) Mostrar la lista completa
+// 📝 PASO 1: Mostrar la lista completa
 console.log("Lista completa de empleados:");
 for (let i = 0; i < empleados.length; i++) {
   console.log(`${empleados[i].nombre}, ${empleados[i].edad} años, depto: ${empleados[i].departamento}, salario: $${empleados[i].salario}`);
 }
 
-// 2) Filtrar empleados de Ventas
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Qué información mostramos de cada empleado?"
+// RESPUESTA: Nombre, edad, departamento y salario
+
+// 📝 PASO 2: Filtrar empleados de Ventas
 let empleadosVentas = [];
 for (let i = 0; i < empleados.length; i++) {
   if (empleados[i].departamento === "Ventas") {
@@ -260,14 +418,22 @@ for (let i = 0; i < empleadosVentas.length; i++) {
   console.log(`${empleadosVentas[i].nombre}, ${empleadosVentas[i].edad} años`);
 }
 
-// 3) Calcular salario total
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué usamos === en lugar de ==?"
+// RESPUESTA: Para comparación estricta (tipo y valor)
+
+// 📝 PASO 3: Calcular salario total
 let salarioTotal = 0;
 for (let i = 0; i < empleados.length; i++) {
   salarioTotal += empleados[i].salario;
 }
 console.log("Salario total de empleados: $", salarioTotal);
 
-// 4) Nombre del empleado más joven
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Qué operador usamos para sumar?"
+// RESPUESTA: += (operador de asignación compuesta)
+
+// 📝 PASO 4: Nombre del empleado más joven
 let empleadoMasJoven = empleados[0];
 for (let i = 1; i < empleados.length; i++) {
   if (empleados[i].edad < empleadoMasJoven.edad) {
@@ -276,7 +442,11 @@ for (let i = 1; i < empleados.length; i++) {
 }
 console.log("Empleado más joven:", empleadoMasJoven.nombre, empleadoMasJoven.edad, "años");
 
-// 5) Agregar nuevo empleado
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué comparamos con < en lugar de >?"
+// RESPUESTA: Porque buscamos el más joven (menor edad)
+
+// 📝 PASO 5: Agregar nuevo empleado
 let nuevoEmpleado = { nombre: "Sofía", edad: 26, departamento: "Marketing", salario: 55000 };
 empleados[empleados.length] = nuevoEmpleado;
 
@@ -285,29 +455,51 @@ for (let i = 0; i < empleados.length; i++) {
   console.log(`${empleados[i].nombre}, ${empleados[i].edad} años, depto: ${empleados[i].departamento}, salario: $${empleados[i].salario}`);
 }
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Qué pasaría si intentáramos agregar un empleado sin todas las propiedades?"
+// RESPUESTA: Podría causar errores al intentar acceder a propiedades undefined
 
 // ======================
 // 🔔 RESUMEN TEÓRICO FINAL
 // ======================
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Vamos a repasar los conceptos más importantes que hemos visto hoy"
 
 // 1) Array:
 // - Estructura para guardar colecciones ordenadas de elementos.
 // - Los índices empiezan en 0.
 // - Podemos acceder, modificar, recorrer sus elementos usando índices y bucles.
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué los índices empiezan en 0?"
+// RESPUESTA: Es una convención en programación que facilita los cálculos
+
 // 2) Propiedades y métodos básicos:
 // - length: propiedad que indica la cantidad de elementos.
 // - push/pop: agregan o quitan elementos al final (aquí simulados con length).
 // - slice, map, filter: permiten extraer, transformar o filtrar arrays (aquí simulados con bucles).
+
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Cuál es la diferencia entre propiedades y métodos?"
+// RESPUESTA: Las propiedades son valores, los métodos son funciones
 
 // 3) Objetos literales:
 // - Colección de pares clave:valor.
 // - Usados para representar entidades con características (persona, producto, etc).
 // - Se accede con objeto.propiedad o objeto["propiedad"].
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Cuándo usaríamos objeto['propiedad'] en lugar de objeto.propiedad?"
+// RESPUESTA: Cuando el nombre de la propiedad tiene espacios o caracteres especiales
+
 // 4) Array de objetos:
 // - Muy útil para manejar listas de entidades con múltiples atributos.
 // - Podemos recorrerlo con bucles para leer o modificar.
+
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué son tan útiles los arrays de objetos?"
+// RESPUESTA: Porque permiten manejar datos complejos de manera organizada
 
 // 5) Algoritmos básicos con arrays y objetos:
 // - Recorrer para filtrar según condición.
@@ -315,12 +507,23 @@ for (let i = 0; i < empleados.length; i++) {
 // - Encontrar máximos o mínimos.
 // - Agrupar datos en objetos clave-valor.
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Qué otros algoritmos podríamos implementar?"
+// RESPUESTA: Ordenamiento, búsqueda, eliminación de duplicados, etc.
+
 // 6) Restricción sin métodos:
 // - Si no se usan métodos avanzados (map, filter, reduce), se deben usar bucles tradicionales para resolver.
+
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué es importante entender los bucles antes de usar métodos avanzados?"
+// RESPUESTA: Porque los métodos avanzados usan bucles internamente
 
 // ======================
 // 🔔 EJERCICIO EXTRA 1
 // ======================
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Ahora vamos a practicar con ejercicios adicionales para reforzar lo aprendido"
 
 // Consigna:
 // Dado un array de productos con nombre y cantidad en stock,
@@ -346,12 +549,20 @@ for (let i = 0; i < productosExtra.length; i++) {
   console.log(`${productosExtra[i].nombre}, stock: ${productosExtra[i].stock}`);
 }
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Qué información mostramos de cada producto?"
+// RESPUESTA: Nombre y cantidad en stock
+
 // b) Sumar total stock
 let stockTotalExtra = 0;
 for (let i = 0; i < productosExtra.length; i++) {
   stockTotalExtra += productosExtra[i].stock;
 }
 console.log("Stock total disponible:", stockTotalExtra);
+
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué usamos += en lugar de =?"
+// RESPUESTA: Para acumular la suma, no reemplazar el valor
 
 // c) Productos con stock menor a 10
 console.log("Productos con stock menor a 10:");
@@ -361,10 +572,16 @@ for (let i = 0; i < productosExtra.length; i++) {
   }
 }
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Cuántos productos tienen stock menor a 10?"
+// RESPUESTA: 2 (Pantalón y Corbata)
 
 // ======================
 // 🔔 EJERCICIO EXTRA 2
 // ======================
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Ahora vamos a calcular promedios, que es muy común en aplicaciones reales"
 
 // Consigna:
 // Dado un array de estudiantes con nombre y notas,
@@ -390,6 +607,10 @@ for (let i = 0; i < estudiantesExtra.length; i++) {
 let promedio = sumaNotas / estudiantesExtra.length;
 console.log("Promedio general:", promedio.toFixed(2));
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Qué hace toFixed(2)?"
+// RESPUESTA: Limita el número a 2 decimales
+
 // Mostrar estudiantes con nota > promedio
 console.log("Estudiantes con nota mayor al promedio:");
 for (let i = 0; i < estudiantesExtra.length; i++) {
@@ -398,9 +619,16 @@ for (let i = 0; i < estudiantesExtra.length; i++) {
   }
 }
 
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Cuántos estudiantes están por encima del promedio?"
+// RESPUESTA: 2 (Sofia y Clara)
+
 // ======================
 // 🔔 EJERCICIO EXTRA 3
 // ======================
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Finalmente, vamos a resolver un problema de nómina que es muy práctico"
 
 // Consigna:
 // Dado un array con empleados que tienen nombre, horas trabajadas y tarifa por hora,
@@ -425,6 +653,28 @@ for (let i = 0; i < empleadosExtra.length; i++) {
   console.log(`${empleadosExtra[i].nombre} - Pago: $${pago}`);
 }
 console.log("Total a pagar a todos los empleados: $", pagoTotal);
+
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Qué operación matemática usamos para calcular el pago individual?"
+// RESPUESTA: Multiplicación (horas * tarifa)
+
+// ======================
+// 🎯 CIERRE DE LA CLASE
+// ======================
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Hemos cubierto los fundamentos de arrays y objetos. Estos conceptos son la base
+// para muchas aplicaciones web y de programación en general."
+
+// 💬 PREGUNTAS FINALES PARA LA CLASE:
+// 1. "¿Qué aprendieron hoy que les pareció más útil?"
+// 2. "¿En qué situaciones reales usarían arrays de objetos?"
+// 3. "¿Qué dudas les quedaron sobre los conceptos vistos?"
+
+// 🔧 PRÓXIMOS PASOS:
+// - Practicar con más ejercicios
+// - Explorar métodos avanzados (map, filter, reduce)
+// - Aplicar estos conceptos en proyectos reales
 
 // ======================
 // 🔔 INTERFAZ WEB - FUNCIONALIDAD
