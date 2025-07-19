@@ -2,10 +2,136 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Clase 4: Arrays y Objetos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clase 4: Arrays y Objetos - JavaScript</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <h1>Clase 4: Arrays y Objetos</h1>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <h1><i class="fas fa-code"></i> Clase 4: Arrays y Objetos</h1>
+        <p>Fundamentos de JavaScript - Manipulación de datos estructurados</p>
+      </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+      <button class="nav-btn active" data-section="fundamentos">Fundamentos</button>
+      <button class="nav-btn" data-section="metodos">Métodos</button>
+      <button class="nav-btn" data-section="objetos">Objetos</button>
+      <button class="nav-btn" data-section="actividades">Actividades</button>
+      <button class="nav-btn" data-section="ejercicios">Ejercicios Extra</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Fundamentos Section -->
+      <section id="fundamentos" class="content-section active">
+        <div class="section-header">
+          <h2><i class="fas fa-cube"></i> Fundamentos de Arrays</h2>
+          <p>Estructuras para almacenar colecciones de datos</p>
+        </div>
+        <div class="code-example">
+          <h3>Ejemplo Básico</h3>
+          <div class="output" id="fundamentos-output"></div>
+        </div>
+      </section>
+
+      <!-- Métodos Section -->
+      <section id="metodos" class="content-section">
+        <div class="section-header">
+          <h2><i class="fas fa-tools"></i> Métodos y Propiedades</h2>
+          <p>Manipulación de arrays con bucles tradicionales</p>
+        </div>
+        <div class="code-example">
+          <h3>Simulación de Métodos</h3>
+          <div class="output" id="metodos-output"></div>
+        </div>
+      </section>
+
+      <!-- Objetos Section -->
+      <section id="objetos" class="content-section">
+        <div class="section-header">
+          <h2><i class="fas fa-database"></i> Objetos Literales</h2>
+          <p>Estructuras de datos con propiedades y valores</p>
+        </div>
+        <div class="code-example">
+          <h3>Objetos y Arrays de Objetos</h3>
+          <div class="output" id="objetos-output"></div>
+        </div>
+      </section>
+
+      <!-- Actividades Section -->
+      <section id="actividades" class="content-section">
+        <div class="section-header">
+          <h2><i class="fas fa-tasks"></i> Actividades Prácticas</h2>
+          <p>Ejercicios de aplicación con arrays y objetos</p>
+        </div>
+        <div class="activities-grid">
+          <div class="activity-card">
+            <h3>Gestión de Usuarios</h3>
+            <div class="output" id="usuarios-output"></div>
+          </div>
+          <div class="activity-card">
+            <h3>Control de Stock</h3>
+            <div class="output" id="stock-output"></div>
+          </div>
+          <div class="activity-card">
+            <h3>Agrupación por Rol</h3>
+            <div class="output" id="roles-output"></div>
+          </div>
+          <div class="activity-card">
+            <h3>Estudiantes Aprobados</h3>
+            <div class="output" id="estudiantes-output"></div>
+          </div>
+          <div class="activity-card">
+            <h3>Control de Tareas</h3>
+            <div class="output" id="tareas-output"></div>
+          </div>
+          <div class="activity-card">
+            <h3>Producto Más Caro</h3>
+            <div class="output" id="productos-output"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Ejercicios Extra Section -->
+      <section id="ejercicios" class="content-section">
+        <div class="section-header">
+          <h2><i class="fas fa-star"></i> Ejercicios Integradores</h2>
+          <p>Problemas complejos combinando arrays y objetos</p>
+        </div>
+        <div class="exercises-grid">
+          <div class="exercise-card">
+            <h3>Ejercicio Integrador Final</h3>
+            <div class="output" id="empleados-output"></div>
+          </div>
+          <div class="exercise-card">
+            <h3>Control de Productos</h3>
+            <div class="output" id="productos-extra-output"></div>
+          </div>
+          <div class="exercise-card">
+            <h3>Promedio de Estudiantes</h3>
+            <div class="output" id="estudiantes-extra-output"></div>
+          </div>
+          <div class="exercise-card">
+            <h3>Cálculo de Pagos</h3>
+            <div class="output" id="pagos-output"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>&copy; 2024 Curso JavaScript - Arrays y Objetos</p>
+    </footer>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
