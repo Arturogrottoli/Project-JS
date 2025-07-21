@@ -1,94 +1,164 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Funciones Constructoras y LocalStorage</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    input, button { padding: 5px; margin: 5px; }
-    ul { list-style-type: none; padding: 0; }
-    li { margin: 5px 0; }
-    button.eliminar { margin-left: 10px; color: white; background-color: red; border: none; padding: 3px 6px; cursor: pointer; }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clase 5: Funciones Constructoras y Almacenamiento - JavaScript</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <h1><i class="fas fa-cogs"></i> Clase 5: Funciones Constructoras y Almacenamiento</h1>
+        <p>Creación de objetos y persistencia de datos con localStorage</p>
+      </div>
+    </header>
 
-  <h1>Gestor de Productos</h1>
+    <!-- Navigation -->
+    <nav class="nav">
+      <button class="nav-btn active" data-section="fundamentos">Fundamentos</button>
+      <button class="nav-btn" data-section="localstorage">LocalStorage</button>
+      <button class="nav-btn" data-section="json">JSON</button>
+      <button class="nav-btn" data-section="actividades">Actividades</button>
+      <button class="nav-btn" data-section="ejercicios">Ejercicios Extra</button>
+      <button class="nav-btn" data-section="practica">Práctica Interactiva</button>
+    </nav>
 
-  <form id="formProducto">
-    <input type="text" id="nombre" placeholder="Nombre del producto" required />
-    <input type="number" id="precio" placeholder="Precio" required min="0" />
-    <button type="submit">Agregar Producto</button>
-  </form>
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Fundamentos Section -->
+      <section id="fundamentos" class="content-section active">
+        <div class="section-header">
+          <h2><i class="fas fa-magic"></i> Funciones Constructoras</h2>
+          <p>Crear "moldes" para objetos con estructura similar</p>
+        </div>
+        <div class="code-example">
+          <h3>Concepto Básico</h3>
+          <div class="output" id="fundamentos-output"></div>
+        </div>
+        <div class="code-example">
+          <h3>Métodos con Prototype</h3>
+          <div class="output" id="prototype-output"></div>
+        </div>
+      </section>
 
-  <h2>Lista de Productos</h2>
-  <ul id="listaProductos"></ul>
+      <!-- LocalStorage Section -->
+      <section id="localstorage" class="content-section">
+        <div class="section-header">
+          <h2><i class="fas fa-database"></i> LocalStorage</h2>
+          <p>Almacenamiento persistente en el navegador</p>
+        </div>
+        <div class="code-example">
+          <h3>Guardar y Recuperar Datos</h3>
+          <div class="output" id="localstorage-output"></div>
+        </div>
+        <div class="code-example">
+          <h3>Eliminar Datos</h3>
+          <div class="output" id="eliminar-output"></div>
+        </div>
+      </section>
+
+      <!-- JSON Section -->
+      <section id="json" class="content-section">
+        <div class="section-header">
+          <h2><i class="fas fa-exchange-alt"></i> JSON y Objetos</h2>
+          <p>Conversión entre objetos y strings para almacenamiento</p>
+        </div>
+        <div class="code-example">
+          <h3>Arrays de Objetos</h3>
+          <div class="output" id="json-output"></div>
+        </div>
+        <div class="code-example">
+          <h3>Agregar Elementos</h3>
+          <div class="output" id="agregar-output"></div>
+        </div>
+      </section>
+
+      <!-- Actividades Section -->
+      <section id="actividades" class="content-section">
+        <div class="section-header">
+          <h2><i class="fas fa-tasks"></i> Actividades Prácticas</h2>
+          <p>Sistemas completos con funciones constructoras y localStorage</p>
+        </div>
+        <div class="activities-grid">
+          <div class="activity-card">
+            <h3>Sistema de Productos</h3>
+            <div class="output" id="productos-output"></div>
+          </div>
+          <div class="activity-card">
+            <h3>Validación de Datos</h3>
+            <div class="output" id="validacion-output"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Ejercicios Extra Section -->
+      <section id="ejercicios" class="content-section">
+        <div class="section-header">
+          <h2><i class="fas fa-star"></i> Ejercicios Integradores</h2>
+          <p>Problemas complejos combinando todos los conceptos</p>
+        </div>
+        <div class="exercises-grid">
+          <div class="exercise-card">
+            <h3>Ejercicio Propuesto: Libros</h3>
+            <div class="output" id="libros-output"></div>
+          </div>
+          <div class="exercise-card">
+            <h3>Ejercicio Extra 1: Mascotas</h3>
+            <div class="output" id="mascotas-output"></div>
+          </div>
+          <div class="exercise-card">
+            <h3>Ejercicio Extra 2: Tareas Pendientes</h3>
+            <div class="output" id="tareas-output"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Práctica Interactiva Section -->
+      <section id="practica" class="content-section">
+        <div class="section-header">
+          <h2><i class="fas fa-mouse-pointer"></i> Práctica Interactiva</h2>
+          <p>Gestiona productos en tiempo real con localStorage</p>
+        </div>
+        
+        <div class="interactive-section">
+          <div class="form-container">
+            <h3>Agregar Nuevo Producto</h3>
+            <form id="formProducto" class="product-form">
+              <div class="form-group">
+                <label for="nombre">Nombre del producto:</label>
+                <input type="text" id="nombre" placeholder="Ej: Camiseta" required />
+              </div>
+              <div class="form-group">
+                <label for="precio">Precio:</label>
+                <input type="number" id="precio" placeholder="Ej: 1200" required min="0" step="0.01" />
+              </div>
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-plus"></i> Agregar Producto
+              </button>
+            </form>
+          </div>
+
+          <div class="products-container">
+            <h3>Lista de Productos</h3>
+            <div class="products-list" id="listaProductos">
+              <!-- Los productos se mostrarán aquí dinámicamente -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>&copy; 2024 Curso JavaScript - Funciones Constructoras y Almacenamiento</p>
+    </footer>
+  </div>
 
   <script src="funciones.js"></script>
-  <script>
-    // Variables y funciones del JS externo que definimos antes:
-    // La función constructora Producto, y las funciones agregarProducto, mostrarProductos, eliminarProducto.
-
-    // Selección elementos DOM
-    const form = document.getElementById("formProducto");
-    const ulLista = document.getElementById("listaProductos");
-
-    // Función para renderizar la lista en el UL
-    function renderizarLista() {
-      ulLista.innerHTML = "";
-      if (listaProductos.length === 0) {
-        ulLista.innerHTML = "<li>No hay productos guardados.</li>";
-        return;
-      }
-      listaProductos.forEach((prod, index) => {
-        const li = document.createElement("li");
-        li.textContent = `${prod.nombre} - $${prod.precio}`;
-        // Botón eliminar
-        const btnEliminar = document.createElement("button");
-        btnEliminar.textContent = "Eliminar";
-        btnEliminar.className = "eliminar";
-        btnEliminar.addEventListener("click", () => {
-          eliminarProducto(prod.nombre);
-          renderizarLista();
-        });
-        li.appendChild(btnEliminar);
-        ulLista.appendChild(li);
-      });
-    }
-
-    // Modificamos las funciones para actualizar la interfaz también:
-
-    function agregarProducto(nombre, precio) {
-      const producto = new Producto(nombre, precio);
-      listaProductos.push(producto);
-      localStorage.setItem("productos", JSON.stringify(listaProductos));
-      console.log(`Producto agregado: ${nombre} - $${precio}`);
-      renderizarLista();
-    }
-
-    function eliminarProducto(nombre) {
-      listaProductos = listaProductos.filter(prod => prod.nombre !== nombre);
-      localStorage.setItem("productos", JSON.stringify(listaProductos));
-      console.log(`Producto eliminado: ${nombre}`);
-    }
-
-    // Carga inicial desde localStorage
-    listaProductos = JSON.parse(localStorage.getItem("productos")) || [];
-    renderizarLista();
-
-    // Evento submit del form
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const nombre = document.getElementById("nombre").value.trim();
-      const precio = parseFloat(document.getElementById("precio").value);
-      if (nombre && !isNaN(precio) && precio >= 0) {
-        agregarProducto(nombre, precio);
-        form.reset();
-      } else {
-        alert("Por favor, completa ambos campos correctamente.");
-      }
-    });
-  </script>
 </body>
 </html>

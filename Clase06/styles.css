@@ -1,0 +1,90 @@
+/* =============================
+   Clase 6 - Estilos Generales
+   ============================= */
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f7f9fb;
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background: #2d6cdf;
+  color: #fff;
+  padding: 2rem 1rem 1rem 1rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(44, 108, 223, 0.08);
+}
+
+header h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+}
+
+.subtitulo {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin: 0;
+}
+
+main {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+section {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(44, 108, 223, 0.06);
+  margin-bottom: 2rem;
+  padding: 1.5rem 1.2rem;
+}
+
+section h2 {
+  margin-top: 0;
+  color: #2d6cdf;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+#resultados-output {
+  background: #f0f4fa;
+  border-radius: 6px;
+  padding: 1rem;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  font-size: 1rem;
+  color: #1a2a3a;
+  min-height: 60px;
+  white-space: pre-wrap;
+}
+
+footer {
+  text-align: center;
+  padding: 1.2rem 0 1.5rem 0;
+  background: #eaf0fa;
+  color: #2d6cdf;
+  font-size: 1rem;
+  margin-top: 2rem;
+  border-top: 1px solid #dbe6f7;
+}
+
+@media (max-width: 600px) {
+  main {
+    padding: 0 0.3rem;
+  }
+  section {
+    padding: 1rem 0.5rem;
+  }
+  header h1 {
+    font-size: 1.3rem;
+  }
+  section h2 {
+    font-size: 1.05rem;
+  }
+} 
