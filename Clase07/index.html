@@ -1,11 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Clase 7 - DOM JavaScript</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <i class="fas fa-code"></i>
+                    Clase 7 - DOM JavaScript
+                </h1>
+                <p class="subtitle">Manipulación del Document Object Model</p>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <div class="nav-content">
+                <button class="nav-btn active" onclick="seccionIntroDOM()">
+                    <i class="fas fa-book"></i>
+                    <span>7.1 Introducción</span>
+                </button>
+                <button class="nav-btn" onclick="seccionCrearElementos()">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>7.2 Crear Elementos</span>
+                </button>
+                <button class="nav-btn" onclick="seccionListaDinamica()">
+                    <i class="fas fa-list"></i>
+                    <span>7.3 Lista Dinámica</span>
+                </button>
+                <button class="nav-btn" onclick="seccionSeleccionModificacion()">
+                    <i class="fas fa-edit"></i>
+                    <span>7.4 Selección</span>
+                </button>
+                <button class="nav-btn" onclick="seccionPlantillasLiterales()">
+                    <i class="fas fa-quote-left"></i>
+                    <span>7.5 Plantillas</span>
+                </button>
+                <button class="nav-btn" onclick="seccionEjercicio()">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>7.6 Ejercicio</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Console Section -->
+            <section class="console-section">
+                <div class="console-header">
+                    <h3><i class="fas fa-terminal"></i> Consola de Teoría</h3>
+                    <button class="clear-btn" onclick="limpiarConsolaDOM()">
+                        <i class="fas fa-trash"></i> Limpiar
+                    </button>
+                </div>
+                <div id="consoleDom" class="console"></div>
+            </section>
+
+            <!-- Example Section -->
+            <section class="example-section">
+                <div class="example-header">
+                    <h3><i class="fas fa-flask"></i> Zona de Ejemplos</h3>
+                    <button class="clear-btn" onclick="limpiarZonaEjemplo()">
+                        <i class="fas fa-eraser"></i> Limpiar
+                    </button>
+                </div>
+                <div id="zonaEjemplo" class="example-zone"></div>
+            </section>
+
+            <!-- Info Cards -->
+            <section class="info-cards">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <h4>¿Qué es el DOM?</h4>
+                    <p>El Document Object Model es una interfaz que representa la estructura HTML como un árbol de nodos, permitiendo manipular elementos con JavaScript.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h4>¿Por qué es útil?</h4>
+                    <p>Permite crear páginas web dinámicas e interactivas sin necesidad de recargar la página, mejorando la experiencia del usuario.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h4>Métodos principales</h4>
+                    <p>createElement(), appendChild(), getElementById(), querySelector(), innerHTML, textContent, y muchos más para manipular el DOM.</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Curso JavaScript Coderhouse - Clase 7 DOM</p>
+        </footer>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
