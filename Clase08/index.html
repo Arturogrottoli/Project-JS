@@ -1,11 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Clase 8 - Asincronismo y Errores JavaScript</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-        <script src="script.js"></script>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <i class="fas fa-clock"></i>
+                    Clase 8 - Asincronismo y Errores
+                </h1>
+                <p class="subtitle">Manejo de operaciones asíncronas y control de errores</p>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <div class="nav-content">
+                <button class="nav-btn active" onclick="seccionFundamentos()">
+                    <i class="fas fa-play"></i>
+                    <span>8.1 Fundamentos</span>
+                </button>
+                <button class="nav-btn" onclick="seccionProfundizando()">
+                    <i class="fas fa-layer-group"></i>
+                    <span>8.2 Profundizando</span>
+                </button>
+                <button class="nav-btn" onclick="seccionTemporizadores()">
+                    <i class="fas fa-stopwatch"></i>
+                    <span>8.3 Temporizadores</span>
+                </button>
+                <button class="nav-btn" onclick="seccionErrores()">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>8.4 Control de Errores</span>
+                </button>
+                <button class="nav-btn" onclick="seccionPractica()">
+                    <i class="fas fa-code"></i>
+                    <span>8.5 Actividad Práctica</span>
+                </button>
+                <button class="nav-btn" onclick="seccionRecursos()">
+                    <i class="fas fa-book"></i>
+                    <span>8.6 Recursos</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Console Section -->
+            <section class="console-section">
+                <div class="console-header">
+                    <h3><i class="fas fa-terminal"></i> Consola de Ejecución</h3>
+                    <button class="clear-btn" onclick="limpiarConsola()">
+                        <i class="fas fa-trash"></i> Limpiar
+                    </button>
+                </div>
+                <div id="consoleOutput" class="console"></div>
+            </section>
+
+            <!-- Example Section -->
+            <section class="example-section">
+                <div class="example-header">
+                    <h3><i class="fas fa-flask"></i> Zona de Ejemplos</h3>
+                    <button class="clear-btn" onclick="limpiarZonaEjemplo()">
+                        <i class="fas fa-eraser"></i> Limpiar
+                    </button>
+                </div>
+                <div id="zonaEjemplo" class="example-zone"></div>
+            </section>
+
+            <!-- Info Cards -->
+            <section class="info-cards">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h4>¿Qué es el Asincronismo?</h4>
+                    <p>Permite que JavaScript ejecute tareas en segundo plano sin bloquear el resto del programa, esencial para operaciones como peticiones HTTP, temporizadores y lectura de archivos.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4>Control de Errores</h4>
+                    <p>El manejo de errores con try/catch y Promises permite que tu aplicación continúe funcionando incluso cuando algo sale mal, mejorando la experiencia del usuario.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h4>Event Loop</h4>
+                    <p>El motor de JavaScript usa el Event Loop para manejar operaciones asíncronas, permitiendo que el código no se bloquee mientras espera respuestas externas.</p>
+                </div>
+            </section>
+
+            <!-- Status Section -->
+            <section class="status-section">
+                <div class="status-header">
+                    <h3><i class="fas fa-chart-line"></i> Estado de Operaciones</h3>
+                </div>
+                <div id="statusZone" class="status-zone">
+                    <div class="status-item">
+                        <span class="status-label">Event Loop:</span>
+                        <span class="status-value" id="eventLoopStatus">Activo</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Promesas Pendientes:</span>
+                        <span class="status-value" id="promisesStatus">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Temporizadores:</span>
+                        <span class="status-value" id="timersStatus">0</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Curso JavaScript Coderhouse - Clase 8 Asincronismo</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
