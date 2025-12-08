@@ -400,6 +400,325 @@ console.log("Estudiante 2 aprobado:", est2.aprobado()); // false
 // RESPUESTA: Porque tiene datos inválidos (nombre vacío y nota fuera de rango)
 
 // ===============================
+// Ejemplo adicional: Función constructora con múltiples métodos
+// ===============================
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Ahora vamos a crear una función constructora más compleja con varios métodos.
+// Esto muestra cómo podemos construir objetos con múltiples funcionalidades."
+
+// Ejemplo: Carrito de compras con métodos para agregar, eliminar y calcular total
+function Carrito() {
+  this.productos = [];
+  this.fechaCreacion = new Date().toLocaleDateString();
+}
+
+// Método para agregar productos al carrito
+Carrito.prototype.agregarProducto = function(producto) {
+  this.productos.push(producto);
+  console.log(`Producto "${producto.nombre}" agregado al carrito`);
+};
+
+// Método para eliminar producto por nombre
+Carrito.prototype.eliminarProducto = function(nombre) {
+  const cantidadAntes = this.productos.length;
+  this.productos = this.productos.filter(prod => prod.nombre !== nombre);
+  const cantidadDespues = this.productos.length;
+  
+  if (cantidadAntes > cantidadDespues) {
+    console.log(`Producto "${nombre}" eliminado del carrito`);
+  } else {
+    console.log(`No se encontró el producto "${nombre}"`);
+  }
+};
+
+// Método para calcular el total del carrito
+Carrito.prototype.calcularTotal = function() {
+  const total = this.productos.reduce((suma, producto) => {
+    return suma + producto.precio;
+  }, 0);
+  return total;
+};
+
+// Método para mostrar resumen del carrito
+Carrito.prototype.mostrarResumen = function() {
+  console.log(`=== Resumen del Carrito ===`);
+  console.log(`Fecha: ${this.fechaCreacion}`);
+  console.log(`Productos: ${this.productos.length}`);
+  this.productos.forEach((prod, index) => {
+    console.log(`${index + 1}. ${prod.nombre} - $${prod.precio}`);
+  });
+  console.log(`Total: $${this.calcularTotal()}`);
+};
+
+// Ejemplo de uso:
+const miCarrito = new Carrito();
+miCarrito.agregarProducto(new Producto("Zapatillas", 5000));
+miCarrito.agregarProducto(new Producto("Remera", 2000));
+miCarrito.mostrarResumen();
+miCarrito.eliminarProducto("Remera");
+miCarrito.mostrarResumen();
+
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Cuántos métodos tiene el objeto Carrito y para qué sirve cada uno?"
+// RESPUESTA: 4 métodos - agregar, eliminar, calcular total y mostrar resumen
+
+// ===============================
+// Ejemplo adicional: localStorage con objetos complejos
+// ===============================
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "A veces necesitamos guardar objetos más complejos con propiedades anidadas.
+// Veamos cómo hacerlo correctamente."
+
+// Ejemplo: Guardar configuración de usuario con preferencias
+const configuracionUsuario = {
+  usuario: "Juan",
+  tema: "oscuro",
+  notificaciones: {
+    email: true,
+    push: false,
+    sms: true
+  },
+  preferencias: {
+    idioma: "es",
+    moneda: "ARS",
+    zonaHoraria: "America/Argentina/Buenos_Aires"
+  },
+  ultimaSesion: new Date().toISOString()
+};
+
+// Guardar configuración completa
+localStorage.setItem("configUsuario", JSON.stringify(configuracionUsuario));
+console.log("Configuración guardada:", localStorage.getItem("configUsuario"));
+
+// Recuperar y usar la configuración
+const configRecuperada = JSON.parse(localStorage.getItem("configUsuario"));
+console.log("Usuario:", configRecuperada.usuario);
+console.log("Tema:", configRecuperada.tema);
+console.log("Notificaciones por email:", configRecuperada.notificaciones.email);
+
+// Función para actualizar solo una parte de la configuración
+function actualizarPreferenciaUsuario(clave, valor) {
+  const config = JSON.parse(localStorage.getItem("configUsuario")) || {};
+  
+  // Actualizar la propiedad específica
+  if (clave.includes('.')) {
+    // Manejar propiedades anidadas (ej: "notificaciones.email")
+    const partes = clave.split('.');
+    let objeto = config;
+    for (let i = 0; i < partes.length - 1; i++) {
+      if (!objeto[partes[i]]) {
+        objeto[partes[i]] = {};
+      }
+      objeto = objeto[partes[i]];
+    }
+    objeto[partes[partes.length - 1]] = valor;
+  } else {
+    config[clave] = valor;
+  }
+  
+  // Guardar la configuración actualizada
+  localStorage.setItem("configUsuario", JSON.stringify(config));
+  console.log(`Preferencia "${clave}" actualizada a:`, valor);
+}
+
+// Ejemplo de actualización
+actualizarPreferenciaUsuario("tema", "claro");
+actualizarPreferenciaUsuario("notificaciones.push", true);
+
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué necesitamos manejar propiedades anidadas de forma especial?"
+// RESPUESTA: Porque necesitamos navegar por el objeto para actualizar solo una parte
+
+// ===============================
+// Ejemplo adicional: Sistema de estadísticas con localStorage
+// ===============================
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Podemos usar localStorage para guardar estadísticas o contadores que persistan
+// entre sesiones. Esto es útil para analizar el comportamiento del usuario."
+
+// Función constructora para estadísticas
+function Estadisticas() {
+  this.visitas = 0;
+  this.ultimaVisita = null;
+  this.acciones = [];
+}
+
+// Método para registrar una visita
+Estadisticas.prototype.registrarVisita = function() {
+  this.visitas++;
+  this.ultimaVisita = new Date().toISOString();
+  this.guardar();
+  console.log(`Visita #${this.visitas} registrada`);
+};
+
+// Método para registrar una acción específica
+Estadisticas.prototype.registrarAccion = function(accion) {
+  this.acciones.push({
+    tipo: accion,
+    fecha: new Date().toISOString()
+  });
+  this.guardar();
+  console.log(`Acción "${accion}" registrada`);
+};
+
+// Método para guardar en localStorage
+Estadisticas.prototype.guardar = function() {
+  localStorage.setItem("estadisticas", JSON.stringify(this));
+};
+
+// Método para cargar desde localStorage
+Estadisticas.prototype.cargar = function() {
+  const datos = localStorage.getItem("estadisticas");
+  if (datos) {
+    const stats = JSON.parse(datos);
+    this.visitas = stats.visitas || 0;
+    this.ultimaVisita = stats.ultimaVisita || null;
+    this.acciones = stats.acciones || [];
+  }
+};
+
+// Método para mostrar estadísticas
+Estadisticas.prototype.mostrar = function() {
+  console.log("=== Estadísticas ===");
+  console.log(`Total de visitas: ${this.visitas}`);
+  console.log(`Última visita: ${this.ultimaVisita || "Nunca"}`);
+  console.log(`Total de acciones: ${this.acciones.length}`);
+  
+  // Contar acciones por tipo
+  const accionesPorTipo = {};
+  this.acciones.forEach(accion => {
+    accionesPorTipo[accion.tipo] = (accionesPorTipo[accion.tipo] || 0) + 1;
+  });
+  
+  console.log("Acciones por tipo:");
+  Object.keys(accionesPorTipo).forEach(tipo => {
+    console.log(`  ${tipo}: ${accionesPorTipo[tipo]}`);
+  });
+};
+
+// Ejemplo de uso:
+const stats = new Estadisticas();
+stats.cargar(); // Cargar estadísticas previas si existen
+stats.registrarVisita();
+stats.registrarAccion("producto_visto");
+stats.registrarAccion("producto_agregado");
+stats.registrarAccion("producto_visto");
+stats.mostrar();
+
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Qué tipo de información podríamos rastrear con este sistema de estadísticas?"
+// RESPUESTA: Visitas, clicks, productos vistos, tiempo en página, etc.
+
+// ===============================
+// Ejemplo adicional: Sistema de favoritos
+// ===============================
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Vamos a crear un sistema completo de favoritos que combine funciones constructoras
+// y localStorage. Esto es muy común en aplicaciones web."
+
+// Función constructora para items favoritos
+function Favorito(id, nombre, categoria) {
+  this.id = id;
+  this.nombre = nombre;
+  this.categoria = categoria;
+  this.fechaAgregado = new Date().toISOString();
+}
+
+// Sistema de gestión de favoritos
+const SistemaFavoritos = {
+  // Obtener todos los favoritos
+  obtenerFavoritos: function() {
+    const favoritos = localStorage.getItem("favoritos");
+    return favoritos ? JSON.parse(favoritos) : [];
+  },
+  
+  // Agregar un favorito
+  agregarFavorito: function(id, nombre, categoria) {
+    const favoritos = this.obtenerFavoritos();
+    
+    // Verificar si ya existe
+    if (favoritos.some(fav => fav.id === id)) {
+      console.log(`"${nombre}" ya está en favoritos`);
+      return false;
+    }
+    
+    // Crear nuevo favorito
+    const nuevoFavorito = new Favorito(id, nombre, categoria);
+    favoritos.push(nuevoFavorito);
+    
+    // Guardar en localStorage
+    localStorage.setItem("favoritos", JSON.stringify(favoritos));
+    console.log(`"${nombre}" agregado a favoritos`);
+    return true;
+  },
+  
+  // Eliminar un favorito
+  eliminarFavorito: function(id) {
+    let favoritos = this.obtenerFavoritos();
+    const cantidadAntes = favoritos.length;
+    
+    favoritos = favoritos.filter(fav => fav.id !== id);
+    
+    if (favoritos.length < cantidadAntes) {
+      localStorage.setItem("favoritos", JSON.stringify(favoritos));
+      console.log(`Favorito con ID ${id} eliminado`);
+      return true;
+    } else {
+      console.log(`No se encontró favorito con ID ${id}`);
+      return false;
+    }
+  },
+  
+  // Verificar si un item es favorito
+  esFavorito: function(id) {
+    const favoritos = this.obtenerFavoritos();
+    return favoritos.some(fav => fav.id === id);
+  },
+  
+  // Obtener favoritos por categoría
+  obtenerPorCategoria: function(categoria) {
+    const favoritos = this.obtenerFavoritos();
+    return favoritos.filter(fav => fav.categoria === categoria);
+  },
+  
+  // Mostrar todos los favoritos
+  mostrarFavoritos: function() {
+    const favoritos = this.obtenerFavoritos();
+    
+    if (favoritos.length === 0) {
+      console.log("No hay favoritos guardados");
+      return;
+    }
+    
+    console.log(`=== Favoritos (${favoritos.length}) ===`);
+    favoritos.forEach((fav, index) => {
+      console.log(`${index + 1}. [${fav.categoria}] ${fav.nombre} (ID: ${fav.id})`);
+      console.log(`   Agregado: ${new Date(fav.fechaAgregado).toLocaleDateString()}`);
+    });
+  }
+};
+
+// Ejemplo de uso del sistema de favoritos
+SistemaFavoritos.agregarFavorito(1, "Camisa Azul", "ropa");
+SistemaFavoritos.agregarFavorito(2, "Pantalón Negro", "ropa");
+SistemaFavoritos.agregarFavorito(3, "JavaScript: Guía Completa", "libros");
+SistemaFavoritos.mostrarFavoritos();
+
+console.log("¿El producto 1 es favorito?", SistemaFavoritos.esFavorito(1));
+console.log("Favoritos de ropa:", SistemaFavoritos.obtenerPorCategoria("ropa"));
+
+SistemaFavoritos.eliminarFavorito(2);
+SistemaFavoritos.mostrarFavoritos();
+
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Qué otras funcionalidades podríamos agregar al sistema de favoritos?"
+// RESPUESTA: Ordenar por fecha, buscar, exportar, compartir, etc.
+
+// ===============================
 // Un poco más de teoría
 // ===============================
 
@@ -504,6 +823,14 @@ function capturarConsoleLog() {
       seccionActual = 'fundamentos-output';
     } else if (mensaje.includes('Persona guardada') || mensaje.includes('Persona recuperada')) {
       seccionActual = 'localstorage-output';
+    } else if (mensaje.includes('Resumen del Carrito') || mensaje.includes('agregado al carrito')) {
+      seccionActual = 'productos-output';
+    } else if (mensaje.includes('Configuración guardada') || mensaje.includes('Usuario:') || mensaje.includes('Tema:')) {
+      seccionActual = 'localstorage-output';
+    } else if (mensaje.includes('Estadísticas') || mensaje.includes('Visita #') || mensaje.includes('Acción')) {
+      seccionActual = 'json-output';
+    } else if (mensaje.includes('Favoritos') || mensaje.includes('agregado a favoritos')) {
+      seccionActual = 'productos-output';
     }
     
     // Acumular mensajes por sección
@@ -759,6 +1086,223 @@ function ejecutarCodigoCompleto() {
 
   console.log("Estudiante 1 aprobado:", est1.aprobado());
   console.log("Estudiante 2 aprobado:", est2.aprobado());
+
+  // ✅ Ejemplo adicional: Carrito con múltiples métodos
+  function Carrito() {
+    this.productos = [];
+    this.fechaCreacion = new Date().toLocaleDateString();
+  }
+
+  Carrito.prototype.agregarProducto = function(producto) {
+    this.productos.push(producto);
+    console.log(`Producto "${producto.nombre}" agregado al carrito`);
+  };
+
+  Carrito.prototype.eliminarProducto = function(nombre) {
+    const cantidadAntes = this.productos.length;
+    this.productos = this.productos.filter(prod => prod.nombre !== nombre);
+    const cantidadDespues = this.productos.length;
+    
+    if (cantidadAntes > cantidadDespues) {
+      console.log(`Producto "${nombre}" eliminado del carrito`);
+    } else {
+      console.log(`No se encontró el producto "${nombre}"`);
+    }
+  };
+
+  Carrito.prototype.calcularTotal = function() {
+    const total = this.productos.reduce((suma, producto) => {
+      return suma + producto.precio;
+    }, 0);
+    return total;
+  };
+
+  Carrito.prototype.mostrarResumen = function() {
+    console.log(`=== Resumen del Carrito ===`);
+    console.log(`Fecha: ${this.fechaCreacion}`);
+    console.log(`Productos: ${this.productos.length}`);
+    this.productos.forEach((prod, index) => {
+      console.log(`${index + 1}. ${prod.nombre} - $${prod.precio}`);
+    });
+    console.log(`Total: $${this.calcularTotal()}`);
+  };
+
+  const miCarrito = new Carrito();
+  miCarrito.agregarProducto(new Producto("Zapatillas", 5000));
+  miCarrito.agregarProducto(new Producto("Remera", 2000));
+  miCarrito.mostrarResumen();
+  miCarrito.eliminarProducto("Remera");
+  miCarrito.mostrarResumen();
+
+  // ✅ Ejemplo adicional: localStorage con objetos complejos
+  const configuracionUsuario = {
+    usuario: "Juan",
+    tema: "oscuro",
+    notificaciones: {
+      email: true,
+      push: false,
+      sms: true
+    },
+    preferencias: {
+      idioma: "es",
+      moneda: "ARS",
+      zonaHoraria: "America/Argentina/Buenos_Aires"
+    },
+    ultimaSesion: new Date().toISOString()
+  };
+
+  localStorage.setItem("configUsuario", JSON.stringify(configuracionUsuario));
+  console.log("Configuración guardada:", localStorage.getItem("configUsuario"));
+
+  const configRecuperada = JSON.parse(localStorage.getItem("configUsuario"));
+  console.log("Usuario:", configRecuperada.usuario);
+  console.log("Tema:", configRecuperada.tema);
+  console.log("Notificaciones por email:", configRecuperada.notificaciones.email);
+
+  // ✅ Ejemplo adicional: Sistema de estadísticas
+  function Estadisticas() {
+    this.visitas = 0;
+    this.ultimaVisita = null;
+    this.acciones = [];
+  }
+
+  Estadisticas.prototype.registrarVisita = function() {
+    this.visitas++;
+    this.ultimaVisita = new Date().toISOString();
+    this.guardar();
+    console.log(`Visita #${this.visitas} registrada`);
+  };
+
+  Estadisticas.prototype.registrarAccion = function(accion) {
+    this.acciones.push({
+      tipo: accion,
+      fecha: new Date().toISOString()
+    });
+    this.guardar();
+    console.log(`Acción "${accion}" registrada`);
+  };
+
+  Estadisticas.prototype.guardar = function() {
+    localStorage.setItem("estadisticas", JSON.stringify(this));
+  };
+
+  Estadisticas.prototype.cargar = function() {
+    const datos = localStorage.getItem("estadisticas");
+    if (datos) {
+      const stats = JSON.parse(datos);
+      this.visitas = stats.visitas || 0;
+      this.ultimaVisita = stats.ultimaVisita || null;
+      this.acciones = stats.acciones || [];
+    }
+  };
+
+  Estadisticas.prototype.mostrar = function() {
+    console.log("=== Estadísticas ===");
+    console.log(`Total de visitas: ${this.visitas}`);
+    console.log(`Última visita: ${this.ultimaVisita || "Nunca"}`);
+    console.log(`Total de acciones: ${this.acciones.length}`);
+    
+    const accionesPorTipo = {};
+    this.acciones.forEach(accion => {
+      accionesPorTipo[accion.tipo] = (accionesPorTipo[accion.tipo] || 0) + 1;
+    });
+    
+    console.log("Acciones por tipo:");
+    Object.keys(accionesPorTipo).forEach(tipo => {
+      console.log(`  ${tipo}: ${accionesPorTipo[tipo]}`);
+    });
+  };
+
+  const stats = new Estadisticas();
+  stats.cargar();
+  stats.registrarVisita();
+  stats.registrarAccion("producto_visto");
+  stats.registrarAccion("producto_agregado");
+  stats.registrarAccion("producto_visto");
+  stats.mostrar();
+
+  // ✅ Ejemplo adicional: Sistema de favoritos
+  function Favorito(id, nombre, categoria) {
+    this.id = id;
+    this.nombre = nombre;
+    this.categoria = categoria;
+    this.fechaAgregado = new Date().toISOString();
+  }
+
+  const SistemaFavoritos = {
+    obtenerFavoritos: function() {
+      const favoritos = localStorage.getItem("favoritos");
+      return favoritos ? JSON.parse(favoritos) : [];
+    },
+    
+    agregarFavorito: function(id, nombre, categoria) {
+      const favoritos = this.obtenerFavoritos();
+      
+      if (favoritos.some(fav => fav.id === id)) {
+        console.log(`"${nombre}" ya está en favoritos`);
+        return false;
+      }
+      
+      const nuevoFavorito = new Favorito(id, nombre, categoria);
+      favoritos.push(nuevoFavorito);
+      
+      localStorage.setItem("favoritos", JSON.stringify(favoritos));
+      console.log(`"${nombre}" agregado a favoritos`);
+      return true;
+    },
+    
+    eliminarFavorito: function(id) {
+      let favoritos = this.obtenerFavoritos();
+      const cantidadAntes = favoritos.length;
+      
+      favoritos = favoritos.filter(fav => fav.id !== id);
+      
+      if (favoritos.length < cantidadAntes) {
+        localStorage.setItem("favoritos", JSON.stringify(favoritos));
+        console.log(`Favorito con ID ${id} eliminado`);
+        return true;
+      } else {
+        console.log(`No se encontró favorito con ID ${id}`);
+        return false;
+      }
+    },
+    
+    esFavorito: function(id) {
+      const favoritos = this.obtenerFavoritos();
+      return favoritos.some(fav => fav.id === id);
+    },
+    
+    obtenerPorCategoria: function(categoria) {
+      const favoritos = this.obtenerFavoritos();
+      return favoritos.filter(fav => fav.categoria === categoria);
+    },
+    
+    mostrarFavoritos: function() {
+      const favoritos = this.obtenerFavoritos();
+      
+      if (favoritos.length === 0) {
+        console.log("No hay favoritos guardados");
+        return;
+      }
+      
+      console.log(`=== Favoritos (${favoritos.length}) ===`);
+      favoritos.forEach((fav, index) => {
+        console.log(`${index + 1}. [${fav.categoria}] ${fav.nombre} (ID: ${fav.id})`);
+        console.log(`   Agregado: ${new Date(fav.fechaAgregado).toLocaleDateString()}`);
+      });
+    }
+  };
+
+  SistemaFavoritos.agregarFavorito(1, "Camisa Azul", "ropa");
+  SistemaFavoritos.agregarFavorito(2, "Pantalón Negro", "ropa");
+  SistemaFavoritos.agregarFavorito(3, "JavaScript: Guía Completa", "libros");
+  SistemaFavoritos.mostrarFavoritos();
+
+  console.log("¿El producto 1 es favorito?", SistemaFavoritos.esFavorito(1));
+  console.log("Favoritos de ropa:", SistemaFavoritos.obtenerPorCategoria("ropa"));
+
+  SistemaFavoritos.eliminarFavorito(2);
+  SistemaFavoritos.mostrarFavoritos();
 }
 
 // Función para inicializar la práctica interactiva
