@@ -719,6 +719,393 @@ SistemaFavoritos.mostrarFavoritos();
 // RESPUESTA: Ordenar por fecha, buscar, exportar, compartir, etc.
 
 // ===============================
+// Ejemplo adicional: Sistema de Notas/Recordatorios
+// ===============================
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Vamos a crear un sistema completo de notas que persista en localStorage.
+// Este es un ejemplo muy práctico que pueden usar en sus proyectos."
+
+// Función constructora para notas
+function Nota(titulo, contenido, categoria = "general") {
+  this.id = Date.now(); // ID único basado en timestamp
+  this.titulo = titulo;
+  this.contenido = contenido;
+  this.categoria = categoria;
+  this.fechaCreacion = new Date().toISOString();
+  this.fechaModificacion = this.fechaCreacion;
+  this.completada = false;
+}
+
+// Método para marcar como completada
+Nota.prototype.marcarCompletada = function() {
+  this.completada = true;
+  this.fechaModificacion = new Date().toISOString();
+};
+
+// Método para actualizar el contenido
+Nota.prototype.actualizar = function(nuevoTitulo, nuevoContenido) {
+  this.titulo = nuevoTitulo || this.titulo;
+  this.contenido = nuevoContenido || this.contenido;
+  this.fechaModificacion = new Date().toISOString();
+};
+
+// Sistema de gestión de notas
+const GestorNotas = {
+  // Obtener todas las notas
+  obtenerNotas: function() {
+    const notas = localStorage.getItem("notas");
+    return notas ? JSON.parse(notas) : [];
+  },
+  
+  // Agregar una nueva nota
+  agregarNota: function(titulo, contenido, categoria) {
+    const nuevaNota = new Nota(titulo, contenido, categoria);
+    const notas = this.obtenerNotas();
+    notas.push(nuevaNota);
+    localStorage.setItem("notas", JSON.stringify(notas));
+    console.log(`Nota "${titulo}" creada con ID: ${nuevaNota.id}`);
+    return nuevaNota;
+  },
+  
+  // Buscar nota por ID
+  buscarNotaPorId: function(id) {
+    const notas = this.obtenerNotas();
+    return notas.find(nota => nota.id === id);
+  },
+  
+  // Eliminar una nota
+  eliminarNota: function(id) {
+    let notas = this.obtenerNotas();
+    const cantidadAntes = notas.length;
+    notas = notas.filter(nota => nota.id !== id);
+    
+    if (notas.length < cantidadAntes) {
+      localStorage.setItem("notas", JSON.stringify(notas));
+      console.log(`Nota con ID ${id} eliminada`);
+      return true;
+    }
+    return false;
+  },
+  
+  // Marcar nota como completada
+  completarNota: function(id) {
+    const notas = this.obtenerNotas();
+    const nota = notas.find(n => n.id === id);
+    
+    if (nota) {
+      nota.marcarCompletada();
+      localStorage.setItem("notas", JSON.stringify(notas));
+      console.log(`Nota "${nota.titulo}" marcada como completada`);
+      return true;
+    }
+    return false;
+  },
+  
+  // Obtener notas por categoría
+  obtenerPorCategoria: function(categoria) {
+    const notas = this.obtenerNotas();
+    return notas.filter(nota => nota.categoria === categoria);
+  },
+  
+  // Obtener solo notas pendientes
+  obtenerPendientes: function() {
+    const notas = this.obtenerNotas();
+    return notas.filter(nota => !nota.completada);
+  },
+  
+  // Mostrar resumen de notas
+  mostrarResumen: function() {
+    const notas = this.obtenerNotas();
+    const completadas = notas.filter(n => n.completada).length;
+    const pendientes = notas.length - completadas;
+    
+    console.log("=== Resumen de Notas ===");
+    console.log(`Total: ${notas.length}`);
+    console.log(`Completadas: ${completadas}`);
+    console.log(`Pendientes: ${pendientes}`);
+    
+    // Agrupar por categoría
+    const porCategoria = {};
+    notas.forEach(nota => {
+      if (!porCategoria[nota.categoria]) {
+        porCategoria[nota.categoria] = 0;
+      }
+      porCategoria[nota.categoria]++;
+    });
+    
+    console.log("\nPor categoría:");
+    Object.keys(porCategoria).forEach(cat => {
+      console.log(`  ${cat}: ${porCategoria[cat]}`);
+    });
+  },
+  
+  // Mostrar todas las notas
+  listarNotas: function() {
+    const notas = this.obtenerNotas();
+    
+    if (notas.length === 0) {
+      console.log("No hay notas guardadas");
+      return;
+    }
+    
+    console.log("=== Lista de Notas ===");
+    notas.forEach((nota, index) => {
+      const estado = nota.completada ? "✓ Completada" : "○ Pendiente";
+      console.log(`${index + 1}. [${nota.categoria}] ${nota.titulo} - ${estado}`);
+      console.log(`   ${nota.contenido.substring(0, 50)}...`);
+    });
+  }
+};
+
+// Ejemplo de uso del sistema de notas
+GestorNotas.agregarNota("Comprar leche", "Recordar comprar leche en el supermercado", "compras");
+GestorNotas.agregarNota("Estudiar JavaScript", "Repasar funciones constructoras", "estudio");
+GestorNotas.agregarNota("Reunión con cliente", "Lunes a las 10:00 AM", "trabajo");
+GestorNotas.mostrarResumen();
+GestorNotas.listarNotas();
+
+// Completar una nota
+const primeraNota = GestorNotas.obtenerNotas()[0];
+if (primeraNota) {
+  GestorNotas.completarNota(primeraNota.id);
+}
+
+console.log("\nNotas pendientes:");
+console.log(GestorNotas.obtenerPendientes());
+
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Cómo podríamos mejorar este sistema de notas?"
+// RESPUESTA: Agregar búsqueda, ordenar por fecha, etiquetas, prioridad, etc.
+
+// ===============================
+// Ejemplo adicional: Sistema de Historial de Búsquedas
+// ===============================
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Muchas aplicaciones guardan el historial de búsquedas. Vamos a crear
+// un sistema que guarde y limite las búsquedas recientes."
+
+// Función constructora para búsquedas
+function Busqueda(termino, categoria = null) {
+  this.termino = termino;
+  this.categoria = categoria;
+  this.fecha = new Date().toISOString();
+  this.vecesBuscado = 1;
+}
+
+// Sistema de historial de búsquedas
+const HistorialBusquedas = {
+  // Obtener historial completo
+  obtenerHistorial: function() {
+    const historial = localStorage.getItem("historialBusquedas");
+    return historial ? JSON.parse(historial) : [];
+  },
+  
+  // Agregar una búsqueda
+  agregarBusqueda: function(termino, categoria) {
+    let historial = this.obtenerHistorial();
+    
+    // Buscar si ya existe una búsqueda similar
+    const busquedaExistente = historial.find(b => 
+      b.termino.toLowerCase() === termino.toLowerCase()
+    );
+    
+    if (busquedaExistente) {
+      // Incrementar contador
+      busquedaExistente.vecesBuscado++;
+      busquedaExistente.fecha = new Date().toISOString();
+    } else {
+      // Crear nueva búsqueda
+      const nuevaBusqueda = new Busqueda(termino, categoria);
+      historial.push(nuevaBusqueda);
+    }
+    
+    // Limitar a las últimas 20 búsquedas
+    if (historial.length > 20) {
+      historial = historial.slice(-20);
+    }
+    
+    // Ordenar por fecha (más recientes primero)
+    historial.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    
+    localStorage.setItem("historialBusquedas", JSON.stringify(historial));
+    console.log(`Búsqueda "${termino}" agregada al historial`);
+  },
+  
+  // Obtener búsquedas más frecuentes
+  obtenerMasFrecuentes: function(limite = 5) {
+    const historial = this.obtenerHistorial();
+    return historial
+      .sort((a, b) => b.vecesBuscado - a.vecesBuscado)
+      .slice(0, limite);
+  },
+  
+  // Obtener búsquedas recientes
+  obtenerRecientes: function(limite = 5) {
+    const historial = this.obtenerHistorial();
+    return historial.slice(0, limite);
+  },
+  
+  // Limpiar historial
+  limpiarHistorial: function() {
+    localStorage.removeItem("historialBusquedas");
+    console.log("Historial de búsquedas limpiado");
+  },
+  
+  // Mostrar historial
+  mostrarHistorial: function() {
+    const historial = this.obtenerHistorial();
+    
+    if (historial.length === 0) {
+      console.log("No hay búsquedas en el historial");
+      return;
+    }
+    
+    console.log(`=== Historial de Búsquedas (${historial.length}) ===`);
+    historial.forEach((busqueda, index) => {
+      const fecha = new Date(busqueda.fecha).toLocaleString();
+      console.log(`${index + 1}. "${busqueda.termino}"`);
+      console.log(`   Buscado ${busqueda.vecesBuscado} vez/veces - ${fecha}`);
+      if (busqueda.categoria) {
+        console.log(`   Categoría: ${busqueda.categoria}`);
+      }
+    });
+  }
+};
+
+// Ejemplo de uso del historial
+HistorialBusquedas.agregarBusqueda("JavaScript", "programación");
+HistorialBusquedas.agregarBusqueda("localStorage", "programación");
+HistorialBusquedas.agregarBusqueda("JavaScript", "programación"); // Duplicado
+HistorialBusquedas.agregarBusqueda("React", "programación");
+HistorialBusquedas.mostrarHistorial();
+
+console.log("\nBúsquedas más frecuentes:");
+console.log(HistorialBusquedas.obtenerMasFrecuentes(3));
+
+console.log("\nBúsquedas recientes:");
+console.log(HistorialBusquedas.obtenerRecientes(3));
+
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Por qué limitamos el historial a 20 búsquedas?"
+// RESPUESTA: Para no ocupar demasiado espacio en localStorage
+
+// ===============================
+// Ejemplo adicional: Función constructora para Pedidos
+// ===============================
+
+// 📝 EXPLICACIÓN PARA LA CLASE:
+// "Vamos a crear una función constructora más compleja que combine
+// múltiples conceptos: objetos, arrays y métodos avanzados."
+
+// Función constructora para pedidos de un e-commerce
+function Pedido(cliente, direccion) {
+  this.id = "PED-" + Date.now();
+  this.cliente = cliente;
+  this.direccion = direccion;
+  this.productos = [];
+  this.fechaCreacion = new Date().toISOString();
+  this.estado = "pendiente"; // pendiente, procesando, enviado, entregado, cancelado
+}
+
+// Método para agregar producto al pedido
+Pedido.prototype.agregarProducto = function(producto, cantidad = 1) {
+  const item = {
+    producto: producto,
+    cantidad: cantidad,
+    subtotal: producto.precio * cantidad
+  };
+  this.productos.push(item);
+  console.log(`${cantidad}x ${producto.nombre} agregado al pedido ${this.id}`);
+};
+
+// Método para calcular el total
+Pedido.prototype.calcularTotal = function() {
+  return this.productos.reduce((total, item) => {
+    return total + item.subtotal;
+  }, 0);
+};
+
+// Método para calcular cantidad total de items
+Pedido.prototype.cantidadItems = function() {
+  return this.productos.reduce((total, item) => {
+    return total + item.cantidad;
+  }, 0);
+};
+
+// Método para actualizar estado
+Pedido.prototype.actualizarEstado = function(nuevoEstado) {
+  const estadosValidos = ["pendiente", "procesando", "enviado", "entregado", "cancelado"];
+  if (estadosValidos.includes(nuevoEstado)) {
+    this.estado = nuevoEstado;
+    console.log(`Pedido ${this.id} ahora está: ${nuevoEstado}`);
+  } else {
+    console.warn(`Estado "${nuevoEstado}" no válido`);
+  }
+};
+
+// Método para mostrar resumen del pedido
+Pedido.prototype.mostrarResumen = function() {
+  console.log(`\n=== Pedido ${this.id} ===");
+  console.log(`Cliente: ${this.cliente}`);
+  console.log(`Dirección: ${this.direccion}`);
+  console.log(`Estado: ${this.estado.toUpperCase()}`);
+  console.log(`Fecha: ${new Date(this.fechaCreacion).toLocaleString()}`);
+  console.log(`\nProductos (${this.cantidadItems()} items):`);
+  
+  this.productos.forEach((item, index) => {
+    console.log(`${index + 1}. ${item.cantidad}x ${item.producto.nombre}`);
+    console.log(`   $${item.producto.precio} c/u = $${item.subtotal}`);
+  });
+  
+  console.log(`\nTOTAL: $${this.calcularTotal()}`);
+};
+
+// Ejemplo de uso
+const pedido1 = new Pedido("María González", "Av. Corrientes 1234, CABA");
+pedido1.agregarProducto(new Producto("Camisa", 5000), 2);
+pedido1.agregarProducto(new Producto("Pantalón", 8000), 1);
+pedido1.mostrarResumen();
+
+pedido1.actualizarEstado("procesando");
+pedido1.actualizarEstado("enviado");
+
+// Sistema para guardar pedidos en localStorage
+const GestorPedidos = {
+  guardarPedido: function(pedido) {
+    const pedidos = this.obtenerPedidos();
+    pedidos.push(pedido);
+    localStorage.setItem("pedidos", JSON.stringify(pedidos));
+    console.log(`Pedido ${pedido.id} guardado`);
+  },
+  
+  obtenerPedidos: function() {
+    const pedidos = localStorage.getItem("pedidos");
+    return pedidos ? JSON.parse(pedidos) : [];
+  },
+  
+  obtenerPedidoPorId: function(id) {
+    const pedidos = this.obtenerPedidos();
+    return pedidos.find(p => p.id === id);
+  },
+  
+  obtenerPorEstado: function(estado) {
+    const pedidos = this.obtenerPedidos();
+    return pedidos.filter(p => p.estado === estado);
+  }
+};
+
+GestorPedidos.guardarPedido(pedido1);
+
+console.log("\nPedidos pendientes:");
+console.log(GestorPedidos.obtenerPorEstado("pendiente"));
+
+// 💬 PREGUNTA PARA LA CLASE:
+// "¿Qué otros métodos podríamos agregar a la función constructora Pedido?"
+// RESPUESTA: Aplicar descuento, calcular envío, generar factura, etc.
+
+// ===============================
 // Un poco más de teoría
 // ===============================
 
@@ -830,6 +1217,12 @@ function capturarConsoleLog() {
     } else if (mensaje.includes('Estadísticas') || mensaje.includes('Visita #') || mensaje.includes('Acción')) {
       seccionActual = 'json-output';
     } else if (mensaje.includes('Favoritos') || mensaje.includes('agregado a favoritos')) {
+      seccionActual = 'productos-output';
+    } else if (mensaje.includes('Nota') && mensaje.includes('creada') || mensaje.includes('Resumen de Notas')) {
+      seccionActual = 'json-output';
+    } else if (mensaje.includes('Búsqueda') && mensaje.includes('agregada') || mensaje.includes('Historial de Búsquedas')) {
+      seccionActual = 'localstorage-output';
+    } else if (mensaje.includes('Pedido') || mensaje.includes('PED-')) {
       seccionActual = 'productos-output';
     }
     
@@ -1303,6 +1696,322 @@ function ejecutarCodigoCompleto() {
 
   SistemaFavoritos.eliminarFavorito(2);
   SistemaFavoritos.mostrarFavoritos();
+
+  // ✅ Ejemplo adicional: Sistema de Notas
+  function Nota(titulo, contenido, categoria = "general") {
+    this.id = Date.now();
+    this.titulo = titulo;
+    this.contenido = contenido;
+    this.categoria = categoria;
+    this.fechaCreacion = new Date().toISOString();
+    this.fechaModificacion = this.fechaCreacion;
+    this.completada = false;
+  }
+
+  Nota.prototype.marcarCompletada = function() {
+    this.completada = true;
+    this.fechaModificacion = new Date().toISOString();
+  };
+
+  Nota.prototype.actualizar = function(nuevoTitulo, nuevoContenido) {
+    this.titulo = nuevoTitulo || this.titulo;
+    this.contenido = nuevoContenido || this.contenido;
+    this.fechaModificacion = new Date().toISOString();
+  };
+
+  const GestorNotas = {
+    obtenerNotas: function() {
+      const notas = localStorage.getItem("notas");
+      return notas ? JSON.parse(notas) : [];
+    },
+    
+    agregarNota: function(titulo, contenido, categoria) {
+      const nuevaNota = new Nota(titulo, contenido, categoria);
+      const notas = this.obtenerNotas();
+      notas.push(nuevaNota);
+      localStorage.setItem("notas", JSON.stringify(notas));
+      console.log(`Nota "${titulo}" creada con ID: ${nuevaNota.id}`);
+      return nuevaNota;
+    },
+    
+    buscarNotaPorId: function(id) {
+      const notas = this.obtenerNotas();
+      return notas.find(nota => nota.id === id);
+    },
+    
+    eliminarNota: function(id) {
+      let notas = this.obtenerNotas();
+      const cantidadAntes = notas.length;
+      notas = notas.filter(nota => nota.id !== id);
+      
+      if (notas.length < cantidadAntes) {
+        localStorage.setItem("notas", JSON.stringify(notas));
+        console.log(`Nota con ID ${id} eliminada`);
+        return true;
+      }
+      return false;
+    },
+    
+    completarNota: function(id) {
+      const notas = this.obtenerNotas();
+      const nota = notas.find(n => n.id === id);
+      
+      if (nota) {
+        nota.marcarCompletada();
+        localStorage.setItem("notas", JSON.stringify(notas));
+        console.log(`Nota "${nota.titulo}" marcada como completada`);
+        return true;
+      }
+      return false;
+    },
+    
+    obtenerPorCategoria: function(categoria) {
+      const notas = this.obtenerNotas();
+      return notas.filter(nota => nota.categoria === categoria);
+    },
+    
+    obtenerPendientes: function() {
+      const notas = this.obtenerNotas();
+      return notas.filter(nota => !nota.completada);
+    },
+    
+    mostrarResumen: function() {
+      const notas = this.obtenerNotas();
+      const completadas = notas.filter(n => n.completada).length;
+      const pendientes = notas.length - completadas;
+      
+      console.log("=== Resumen de Notas ===");
+      console.log(`Total: ${notas.length}`);
+      console.log(`Completadas: ${completadas}`);
+      console.log(`Pendientes: ${pendientes}`);
+      
+      const porCategoria = {};
+      notas.forEach(nota => {
+        if (!porCategoria[nota.categoria]) {
+          porCategoria[nota.categoria] = 0;
+        }
+        porCategoria[nota.categoria]++;
+      });
+      
+      console.log("\nPor categoría:");
+      Object.keys(porCategoria).forEach(cat => {
+        console.log(`  ${cat}: ${porCategoria[cat]}`);
+      });
+    },
+    
+    listarNotas: function() {
+      const notas = this.obtenerNotas();
+      
+      if (notas.length === 0) {
+        console.log("No hay notas guardadas");
+        return;
+      }
+      
+      console.log("=== Lista de Notas ===");
+      notas.forEach((nota, index) => {
+        const estado = nota.completada ? "✓ Completada" : "○ Pendiente";
+        console.log(`${index + 1}. [${nota.categoria}] ${nota.titulo} - ${estado}`);
+        console.log(`   ${nota.contenido.substring(0, 50)}...`);
+      });
+    }
+  };
+
+  GestorNotas.agregarNota("Comprar leche", "Recordar comprar leche en el supermercado", "compras");
+  GestorNotas.agregarNota("Estudiar JavaScript", "Repasar funciones constructoras", "estudio");
+  GestorNotas.agregarNota("Reunión con cliente", "Lunes a las 10:00 AM", "trabajo");
+  GestorNotas.mostrarResumen();
+  GestorNotas.listarNotas();
+
+  const primeraNota = GestorNotas.obtenerNotas()[0];
+  if (primeraNota) {
+    GestorNotas.completarNota(primeraNota.id);
+  }
+
+  console.log("\nNotas pendientes:");
+  console.log(GestorNotas.obtenerPendientes());
+
+  // ✅ Ejemplo adicional: Sistema de Historial de Búsquedas
+  function Busqueda(termino, categoria = null) {
+    this.termino = termino;
+    this.categoria = categoria;
+    this.fecha = new Date().toISOString();
+    this.vecesBuscado = 1;
+  }
+
+  const HistorialBusquedas = {
+    obtenerHistorial: function() {
+      const historial = localStorage.getItem("historialBusquedas");
+      return historial ? JSON.parse(historial) : [];
+    },
+    
+    agregarBusqueda: function(termino, categoria) {
+      let historial = this.obtenerHistorial();
+      
+      const busquedaExistente = historial.find(b => 
+        b.termino.toLowerCase() === termino.toLowerCase()
+      );
+      
+      if (busquedaExistente) {
+        busquedaExistente.vecesBuscado++;
+        busquedaExistente.fecha = new Date().toISOString();
+      } else {
+        const nuevaBusqueda = new Busqueda(termino, categoria);
+        historial.push(nuevaBusqueda);
+      }
+      
+      if (historial.length > 20) {
+        historial = historial.slice(-20);
+      }
+      
+      historial.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+      
+      localStorage.setItem("historialBusquedas", JSON.stringify(historial));
+      console.log(`Búsqueda "${termino}" agregada al historial`);
+    },
+    
+    obtenerMasFrecuentes: function(limite = 5) {
+      const historial = this.obtenerHistorial();
+      return historial
+        .sort((a, b) => b.vecesBuscado - a.vecesBuscado)
+        .slice(0, limite);
+    },
+    
+    obtenerRecientes: function(limite = 5) {
+      const historial = this.obtenerHistorial();
+      return historial.slice(0, limite);
+    },
+    
+    limpiarHistorial: function() {
+      localStorage.removeItem("historialBusquedas");
+      console.log("Historial de búsquedas limpiado");
+    },
+    
+    mostrarHistorial: function() {
+      const historial = this.obtenerHistorial();
+      
+      if (historial.length === 0) {
+        console.log("No hay búsquedas en el historial");
+        return;
+      }
+      
+      console.log(`=== Historial de Búsquedas (${historial.length}) ===`);
+      historial.forEach((busqueda, index) => {
+        const fecha = new Date(busqueda.fecha).toLocaleString();
+        console.log(`${index + 1}. "${busqueda.termino}"`);
+        console.log(`   Buscado ${busqueda.vecesBuscado} vez/veces - ${fecha}`);
+        if (busqueda.categoria) {
+          console.log(`   Categoría: ${busqueda.categoria}`);
+        }
+      });
+    }
+  };
+
+  HistorialBusquedas.agregarBusqueda("JavaScript", "programación");
+  HistorialBusquedas.agregarBusqueda("localStorage", "programación");
+  HistorialBusquedas.agregarBusqueda("JavaScript", "programación");
+  HistorialBusquedas.agregarBusqueda("React", "programación");
+  HistorialBusquedas.mostrarHistorial();
+
+  console.log("\nBúsquedas más frecuentes:");
+  console.log(HistorialBusquedas.obtenerMasFrecuentes(3));
+
+  console.log("\nBúsquedas recientes:");
+  console.log(HistorialBusquedas.obtenerRecientes(3));
+
+  // ✅ Ejemplo adicional: Sistema de Pedidos
+  function Pedido(cliente, direccion) {
+    this.id = "PED-" + Date.now();
+    this.cliente = cliente;
+    this.direccion = direccion;
+    this.productos = [];
+    this.fechaCreacion = new Date().toISOString();
+    this.estado = "pendiente";
+  }
+
+  Pedido.prototype.agregarProducto = function(producto, cantidad = 1) {
+    const item = {
+      producto: producto,
+      cantidad: cantidad,
+      subtotal: producto.precio * cantidad
+    };
+    this.productos.push(item);
+    console.log(`${cantidad}x ${producto.nombre} agregado al pedido ${this.id}`);
+  };
+
+  Pedido.prototype.calcularTotal = function() {
+    return this.productos.reduce((total, item) => {
+      return total + item.subtotal;
+    }, 0);
+  };
+
+  Pedido.prototype.cantidadItems = function() {
+    return this.productos.reduce((total, item) => {
+      return total + item.cantidad;
+    }, 0);
+  };
+
+  Pedido.prototype.actualizarEstado = function(nuevoEstado) {
+    const estadosValidos = ["pendiente", "procesando", "enviado", "entregado", "cancelado"];
+    if (estadosValidos.includes(nuevoEstado)) {
+      this.estado = nuevoEstado;
+      console.log(`Pedido ${this.id} ahora está: ${nuevoEstado}`);
+    } else {
+      console.warn(`Estado "${nuevoEstado}" no válido`);
+    }
+  };
+
+  Pedido.prototype.mostrarResumen = function() {
+    console.log(`\n=== Pedido ${this.id} ===");
+    console.log(`Cliente: ${this.cliente}`);
+    console.log(`Dirección: ${this.direccion}`);
+    console.log(`Estado: ${this.estado.toUpperCase()}`);
+    console.log(`Fecha: ${new Date(this.fechaCreacion).toLocaleString()}`);
+    console.log(`\nProductos (${this.cantidadItems()} items):`);
+    
+    this.productos.forEach((item, index) => {
+      console.log(`${index + 1}. ${item.cantidad}x ${item.producto.nombre}`);
+      console.log(`   $${item.producto.precio} c/u = $${item.subtotal}`);
+    });
+    
+    console.log(`\nTOTAL: $${this.calcularTotal()}`);
+  };
+
+  const pedido1 = new Pedido("María González", "Av. Corrientes 1234, CABA");
+  pedido1.agregarProducto(new Producto("Camisa", 5000), 2);
+  pedido1.agregarProducto(new Producto("Pantalón", 8000), 1);
+  pedido1.mostrarResumen();
+
+  pedido1.actualizarEstado("procesando");
+  pedido1.actualizarEstado("enviado");
+
+  const GestorPedidos = {
+    guardarPedido: function(pedido) {
+      const pedidos = this.obtenerPedidos();
+      pedidos.push(pedido);
+      localStorage.setItem("pedidos", JSON.stringify(pedidos));
+      console.log(`Pedido ${pedido.id} guardado`);
+    },
+    
+    obtenerPedidos: function() {
+      const pedidos = localStorage.getItem("pedidos");
+      return pedidos ? JSON.parse(pedidos) : [];
+    },
+    
+    obtenerPedidoPorId: function(id) {
+      const pedidos = this.obtenerPedidos();
+      return pedidos.find(p => p.id === id);
+    },
+    
+    obtenerPorEstado: function(estado) {
+      const pedidos = this.obtenerPedidos();
+      return pedidos.filter(p => p.estado === estado);
+    }
+  };
+
+  GestorPedidos.guardarPedido(pedido1);
+
+  console.log("\nPedidos pendientes:");
+  console.log(GestorPedidos.obtenerPorEstado("pendiente"));
 }
 
 // Función para inicializar la práctica interactiva
