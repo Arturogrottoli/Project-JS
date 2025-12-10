@@ -1047,19 +1047,19 @@ Pedido.prototype.actualizarEstado = function(nuevoEstado) {
 
 // Método para mostrar resumen del pedido
 Pedido.prototype.mostrarResumen = function() {
-  console.log(`\n=== Pedido ${this.id} ===");
-  console.log(`Cliente: ${this.cliente}`);
-  console.log(`Dirección: ${this.direccion}`);
-  console.log(`Estado: ${this.estado.toUpperCase()}`);
-  console.log(`Fecha: ${new Date(this.fechaCreacion).toLocaleString()}`);
-  console.log(`\nProductos (${this.cantidadItems()} items):`);
+  console.log("\n=== Pedido " + this.id + " ===");
+  console.log("Cliente: " + this.cliente);
+  console.log("Dirección: " + this.direccion);
+  console.log("Estado: " + this.estado.toUpperCase());
+  console.log("Fecha: " + new Date(this.fechaCreacion).toLocaleString());
+  console.log("\nProductos (" + this.cantidadItems() + " items):");
   
   this.productos.forEach((item, index) => {
-    console.log(`${index + 1}. ${item.cantidad}x ${item.producto.nombre}`);
-    console.log(`   $${item.producto.precio} c/u = $${item.subtotal}`);
+    console.log((index + 1) + ". " + item.cantidad + "x " + item.producto.nombre);
+    console.log("   $" + item.producto.precio + " c/u = $" + item.subtotal);
   });
   
-  console.log(`\nTOTAL: $${this.calcularTotal()}`);
+  console.log("\nTOTAL: $" + this.calcularTotal());
 };
 
 // Ejemplo de uso
@@ -1285,15 +1285,14 @@ function renderizarListaProductos() {
     const productItem = document.createElement('div');
     productItem.className = 'product-item';
     
-    productItem.innerHTML = `
-      <div class="product-info">
-        <div class="product-name">${producto.nombre}</div>
-        <div class="product-price">$${producto.precio}</div>
-      </div>
-      <button class="btn-delete" onclick="eliminarProductoInterfaz('${producto.nombre}')">
-        <i class="fas fa-trash"></i> Eliminar
-      </button>
-    `;
+    productItem.innerHTML = 
+      '<div class="product-info">' +
+        '<div class="product-name">' + producto.nombre + '</div>' +
+        '<div class="product-price">$' + producto.precio + '</div>' +
+      '</div>' +
+      '<button class="btn-delete" onclick="eliminarProductoInterfaz(\'' + producto.nombre + '\')">' +
+        '<i class="fas fa-trash"></i> Eliminar' +
+      '</button>';
     
     container.appendChild(productItem);
   });
@@ -1340,7 +1339,7 @@ function ejecutarCodigoCompleto() {
   }
 
   Usuario.prototype.saludar = function() {
-    return `Hola, soy ${this.nombre} y tengo ${this.edad} años.`;
+    return "Hola, soy " + this.nombre + " y tengo " + this.edad + " años.";
   };
 
   const usuario1 = new Usuario("Carlos", 30);
@@ -1366,8 +1365,8 @@ function ejecutarCodigoCompleto() {
   const prod1 = new Producto("Camisa", 1000);
 
   console.log("Ejercicio 5.1 - Producto:");
-  console.log(`Precio normal: $${prod1.precio}`);
-  console.log(`Precio con descuento: $${prod1.precioConDescuento()}`);
+  console.log("Precio normal: $" + prod1.precio);
+  console.log("Precio con descuento: $" + prod1.precioConDescuento());
 
   // ✅ 5.2-5.3 LocalStorage
   localStorage.setItem("nombreUsuario", "Carlos");
@@ -1961,19 +1960,19 @@ function ejecutarCodigoCompleto() {
   };
 
   Pedido.prototype.mostrarResumen = function() {
-    console.log(`\n=== Pedido ${this.id} ===");
-    console.log(`Cliente: ${this.cliente}`);
-    console.log(`Dirección: ${this.direccion}`);
-    console.log(`Estado: ${this.estado.toUpperCase()}`);
-    console.log(`Fecha: ${new Date(this.fechaCreacion).toLocaleString()}`);
-    console.log(`\nProductos (${this.cantidadItems()} items):`);
+    console.log("\n=== Pedido " + this.id + " ===");
+    console.log("Cliente: " + this.cliente);
+    console.log("Dirección: " + this.direccion);
+    console.log("Estado: " + this.estado.toUpperCase());
+    console.log("Fecha: " + new Date(this.fechaCreacion).toLocaleString());
+    console.log("\nProductos (" + this.cantidadItems() + " items):");
     
     this.productos.forEach((item, index) => {
-      console.log(`${index + 1}. ${item.cantidad}x ${item.producto.nombre}`);
-      console.log(`   $${item.producto.precio} c/u = $${item.subtotal}`);
+      console.log((index + 1) + ". " + item.cantidad + "x " + item.producto.nombre);
+      console.log("   $" + item.producto.precio + " c/u = $" + item.subtotal);
     });
     
-    console.log(`\nTOTAL: $${this.calcularTotal()}`);
+    console.log("\nTOTAL: $" + this.calcularTotal());
   };
 
   const pedido1 = new Pedido("María González", "Av. Corrientes 1234, CABA");
