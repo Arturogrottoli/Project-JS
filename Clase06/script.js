@@ -46,7 +46,7 @@
 // 6.1 Función de Orden Superior Personalizada
 // ===============================
 
-const numeros = [1, 2, 3, 4, 5];
+const numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 // Creamos una función que recibe un array y una función (callback)
 function porCadaUno(arr, fn) {
