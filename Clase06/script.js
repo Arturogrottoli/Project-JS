@@ -2,6 +2,7 @@
 // 6. FUNCIONES DE ORDEN SUPERIOR Y MÉTODOS DE ARRAYS
 // ================================================
 
+
 // ======================
 // 📚 GUÍA DIDÁCTICA PARA LA CLASE
 // ======================
@@ -46,17 +47,18 @@
 // 6.1 Función de Orden Superior Personalizada
 // ===============================
 
-const numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+// Descomentar para ejecutar:
+// const numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 // Creamos una función que recibe un array y una función (callback)
-function porCadaUno(arr, fn) {
-  for (const el of arr) {
-    fn(el);
-  }
-}
+// function porCadaUno(arr, fn) {
+//   for (const el of arr) {
+//     fn(el);
+//   }
+// }
 
 // Usamos la función con un callback que imprime cada número
-porCadaUno(numeros, (n) => console.log(n));
+// porCadaUno(numeros, (n) => console.log(n));
 
 // 📝 EXPLICACIÓN PARA LA CLASE:
 // "porCadaUno es como un forEach personalizado. Recibe una función y la aplica a cada elemento."
@@ -69,19 +71,20 @@ porCadaUno(numeros, (n) => console.log(n));
 // 6.2 Métodos de Búsqueda: find y some
 // ===============================
 
-const cursos = [
-  { nombre: "JavaScript", precio: 15000 },
-  { nombre: "ReactJS", precio: 22000 },
-  { nombre: "Angular", precio: 18000 }
-];
+// Descomentar para ejecutar:
+// const cursos = [
+//   { nombre: "JavaScript", precio: 15000 },
+//   { nombre: "ReactJS", precio: 22000 },
+//   { nombre: "Angular", precio: 18000 }
+// ];
 
 // find busca el primer elemento que cumpla la condición
-const resultado = cursos.find((el) => el.nombre === "ReactJS");
-console.log("Resultado de find:", resultado);
+// const resultado = cursos.find((el) => el.nombre === "ReactJS");
+// console.log("Resultado de find:", resultado);
 
 // some verifica si existe al menos uno que cumpla la condición
-const existe = cursos.some((el) => el.nombre === "VueJS");
-console.log("¿Existe VueJS?", existe);
+// const existe = cursos.some((el) => el.nombre === "VueJS");
+// console.log("¿Existe VueJS?", existe);
 
 // 📝 EXPLICACIÓN PARA LA CLASE:
 // "find devuelve el primer elemento que cumple la condición, some solo true/false si existe alguno."
@@ -94,13 +97,14 @@ console.log("¿Existe VueJS?", existe);
 // 6.3 Métodos de Transformación: map y filter
 // ===============================
 
-const lista = [1, 2, 3, 4, 5];
-const porDos = lista.map((n) => n * 2);
-console.log("Lista original:", lista);
-console.log("Lista por dos:", porDos);
+// Descomentar para ejecutar:
+// const lista = [1, 2, 3, 4, 5];
+// const porDos = lista.map((n) => n * 2);
+// console.log("Lista original:", lista);
+// console.log("Lista por dos:", porDos);
 
-const mayorQueDos = lista.filter((n) => n > 2);
-console.log("Mayores que 2:", mayorQueDos);
+// const mayorQueDos = lista.filter((n) => n > 2);
+// console.log("Mayores que 2:", mayorQueDos);
 
 // 📝 EXPLICACIÓN PARA LA CLASE:
 // "map transforma cada elemento y devuelve un nuevo array. filter filtra según la condición."
@@ -113,12 +117,13 @@ console.log("Mayores que 2:", mayorQueDos);
 // 6.4 Ejemplos Avanzados y Prácticos
 // ===============================
 
-const productos = [
-  { nombre: "Mouse", precio: 5000 },
-  { nombre: "Teclado", precio: 8000 },
-  { nombre: "Monitor", precio: 30000 },
-  { nombre: "Auriculares", precio: 10000 }
-];
+// Descomentar para ejecutar:
+// const productos = [
+//   { nombre: "Mouse", precio: 5000 },
+//   { nombre: "Teclado", precio: 8000 },
+//   { nombre: "Monitor", precio: 30000 },
+//   { nombre: "Auriculares", precio: 10000 }
+// ];
 
 // Buscar producto por nombre (usando prompt)
 // const nombreProducto = prompt("Buscar producto:");
@@ -135,11 +140,11 @@ const productos = [
 // console.log("Filtrados:", filtrados);
 
 // Agregar IVA con map
-const productosConIVA = productos.map(p => ({
-  nombre: p.nombre,
-  precio: (p.precio * 1.21).toFixed(2)
-}));
-console.log("Productos con IVA:", productosConIVA);
+// const productosConIVA = productos.map(p => ({
+//   nombre: p.nombre,
+//   precio: (p.precio * 1.21).toFixed(2)
+// }));
+// console.log("Productos con IVA:", productosConIVA);
 
 // ===============================
 // 6.5 Ejercicios Prácticos
@@ -153,12 +158,13 @@ console.log("Productos con IVA:", productosConIVA);
 // 2. Filtrar productos por palabra clave (filter)
 // 3. Crear un nuevo array con precios con IVA (map)
 
-const productosActividad = [
-  { nombre: "Mouse", precio: 5000 },
-  { nombre: "Teclado", precio: 8000 },
-  { nombre: "Monitor", precio: 30000 },
-  { nombre: "Auriculares", precio: 10000 }
-];
+// Descomentar para ejecutar:
+// const productosActividad = [
+//   { nombre: "Mouse", precio: 5000 },
+//   { nombre: "Teclado", precio: 8000 },
+//   { nombre: "Monitor", precio: 30000 },
+//   { nombre: "Auriculares", precio: 10000 }
+// ];
 
 // 1. Buscar producto por nombre exacto
 // const nombreBuscar = prompt("Ingresá el nombre del producto a buscar:");
@@ -175,11 +181,11 @@ const productosActividad = [
 // console.log("Productos filtrados:", filtradosActividad);
 
 // 3. Agregar IVA (21%) con map
-const productosConIVAActividad = productosActividad.map(p => ({
-  nombre: p.nombre,
-  precio: (p.precio * 1.21).toFixed(2)
-}));
-console.log("Productos con IVA:", productosConIVAActividad);
+// const productosConIVAActividad = productosActividad.map(p => ({
+//   nombre: p.nombre,
+//   precio: (p.precio * 1.21).toFixed(2)
+// }));
+// console.log("Productos con IVA:", productosConIVAActividad);
 
 // -----------------------------------------------
 // EXPLICACIÓN:
