@@ -111,3 +111,157 @@ setInterval(función, tiempoMs) → Ejecuta una función repetidamente a interva
 clearTimeout / clearInterval → Cancela un temporizador si ya no queremos que se ejecute.
 
 💡 Importante: Los temporizadores son asincrónicos, no bloquean el resto del código. Por eso se integran con el Event Loop: esperan su turno en la cola de tareas y se ejecutan cuando el Call Stack está vacío.
+
+8.4 Control de Errores en JavaScript
+Introducción al Control de Errores
+
+Cuando escribimos código, no siempre todo sale como esperamos.
+Puede fallar un cálculo, un dato puede no existir o una operación puede no ser válida.
+Si estos errores no se manejan correctamente, la aplicación puede romperse, dejar de responder o mostrar comportamientos inesperados.
+
+Para evitar esto, JavaScript nos permite detectar errores y reaccionar de forma controlada usando la estructura:
+
+try – catch – finally
+
+Esto es fundamental para escribir aplicaciones más seguras, estables y fáciles de mantener.
+
+¿Qué es try-catch-finally?
+
+El bloque try-catch-finally se utiliza para ejecutar código que puede fallar, capturar el error si ocurre y decidir qué hacer en ese caso.
+
+Está compuesto por tres partes:
+
+🔹 try
+
+El bloque try contiene el código que puede generar un error.
+JavaScript intenta ejecutar este código normalmente.
+
+Si no ocurre ningún error, el bloque catch se ignora.
+
+Si ocurre un error, la ejecución del try se detiene inmediatamente y se pasa al catch.
+
+🔹 catch
+
+El bloque catch se ejecuta solo si ocurre un error en el try.
+
+Aquí se maneja el error:
+
+Mostrar un mensaje al usuario
+
+Evitar que la aplicación se rompa
+
+Explicar qué salió mal
+
+El catch recibe un objeto error, que contiene información sobre el problema.
+
+🔹 finally
+
+El bloque finally es opcional, pero muy útil.
+
+Se ejecuta siempre, ocurra o no un error.
+Sirve para tareas que deben ejecutarse pase lo que pase, como:
+
+Ocultar un loader
+
+Limpiar mensajes
+
+Restablecer estados
+
+Ejemplo conceptual (idea, no código todavía)
+
+Imaginá esta situación:
+
+Intentamos hacer una operación
+Si algo sale mal, avisamos
+Al final, ordenamos todo igual
+
+Eso es exactamente lo que hace try-catch-finally.
+
+¿Por qué es importante usar control de errores?
+
+Porque permite:
+
+Evitar que la aplicación se rompa
+
+Mostrar mensajes claros en lugar de fallos silenciosos
+
+Controlar qué pasa cuando algo no sale bien
+
+Mantener una buena experiencia de usuario
+
+En aplicaciones reales, los errores existen, lo importante es cómo los manejamos.
+
+Lanzar errores manualmente (throw)
+
+Además de capturar errores, JavaScript permite crear nuestros propios errores usando throw.
+
+Esto se usa cuando detectamos una situación inválida, por ejemplo:
+
+Datos incorrectos
+
+Operaciones no permitidas
+
+Valores que no deberían existir
+
+Lanzar errores permite:
+
+Detener la ejecución en ese punto
+
+Forzar que el error sea manejado con catch
+
+Control de Errores y Asincronía
+
+Cuando trabajamos con:
+
+temporizadores
+
+promesas
+
+async / await
+
+fetch
+
+Los errores no siempre ocurren en el mismo momento en que escribimos el código.
+
+Por eso:
+
+En código asincrónico usamos try-catch junto con async/await
+
+O .catch() cuando usamos promesas
+
+Esto permite manejar errores sin bloquear la aplicación y sin romper el flujo.
+
+Buenas Prácticas de Manejo de Errores
+
+✔ Usar try-catch solo donde realmente puede fallar algo
+✔ Mostrar mensajes claros y entendibles
+✔ No ignorar errores silenciosamente
+✔ No abusar del try-catch para todo
+✔ Usar finally para limpieza y estados finales
+✔ Pensar el error como parte normal del flujo del programa
+
+Conclusión
+
+El control de errores no es solo un concepto teórico, es una herramienta clave en aplicaciones reales.
+
+Usar correctamente try-catch-finally permite:
+
+Anticiparse a problemas
+
+Mantener la aplicación funcionando
+
+Dar feedback claro al usuario
+
+Escribir código más profesional
+
+En los próximos ejemplos veremos cómo aplicar esto directamente en el DOM, con botones y mensajes visibles, para entender claramente qué pasa cuando ocurre un error y cómo manejarlo.
+
+Cuando quieras, seguimos punto por punto con ejemplos prácticos, arrancando por:
+👉 try-catch más simple posible con botón y error visible
+y después avanzamos a:
+
+throw
+
+finally
+
+errores en asincronía   

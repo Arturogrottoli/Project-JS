@@ -234,3 +234,298 @@ btnClearTimeout.addEventListener("click", () => {
   clearTimeout(timeoutMensaje);
   output.textContent += "❌ Cancelamos el mensaje antes de que aparezca\n";
 });
+
+
+/* =====================================================
+   MANEJO DE ERRORES: try + catch (PASO A PASO)
+   ===================================================== */
+
+// Función que puede FALLAR
+function dividir(a, b) {
+    // Paso 1: validamos una condición
+    if (b === 0) {
+      // Paso 2: lanzamos un error manualmente
+      // En este punto, la ejecución NORMAL se detiene
+      throw new Error("No se puede dividir por cero");
+    }
+  
+    // Paso 3: si NO hubo error, devolvemos el resultado
+    return a / b;
+  }
+  
+  // Botón para ejecutar el ejemplo
+  const btnTryCatch = document.getElementById("runTryCatch");
+  
+  btnTryCatch.addEventListener("click", () => {
+    output.textContent = "";
+    output.textContent += "=== TRY / CATCH PASO A PASO ===\n\n";
+  
+    // Paso 4: intentamos ejecutar código "peligroso"
+    try {
+      output.textContent += "➡ Entramos al bloque TRY\n";
+  
+      // Paso 5: llamamos a una función que puede fallar
+      const resultado = dividir(10, 1);
+  
+      // Paso 6: esta línea SOLO se ejecuta si NO hubo error
+      output.textContent += "Resultado: " + resultado + "\n";
+    } 
+    // Paso 7: si ocurre un error en el TRY, saltamos al CATCH
+    catch (error) {
+      output.textContent += "❌ Ocurrió un error\n";
+      output.textContent += "Mensaje del error: " + error.message + "\n";
+    } finally {
+        // Paso 8: este bloque SE EJECUTA SIEMPRE
+        output.textContent += "🧹 FINALLY: esto se ejecuta haya error o no\n";
+      }
+  
+    // Paso 8: el programa continúa normalmente
+    output.textContent += "\n➡ El programa sigue funcionando\n";
+  });
+  
+
+  /* =====================================================
+   FETCH BÁSICO (SIN MANEJO DE ERRORES)
+   ===================================================== */
+
+/*
+¿Qué es fetch?
+
+- fetch es una función nativa de JavaScript
+- Sirve para pedir datos a un servidor externo (API)
+- Devuelve una PROMESA
+- JavaScript NO se frena mientras espera la respuesta
+*/
+
+// URL de la API
+const url = "https://rickandmortyapi.com/api/character";
+
+// Contenedor donde vamos a mostrar los datos
+const container = document.getElementById("cards");
+
+/*
+1️⃣ Llamamos a fetch
+*/
+fetch(url)
+
+  /*
+  2️⃣ fetch devuelve una respuesta (response)
+  Todavía NO son los datos
+  */
+  .then((response) => {
+    // Convertimos la respuesta a JSON
+    return response.json();
+  })
+
+  /*
+  3️⃣ Acá ya tenemos los datos reales
+  */
+  .then((data) => {
+    // data.results es un array de personajes
+    data.results.forEach((personaje) => {
+      const card = document.createElement("div");
+
+      card.innerHTML = `
+      <img src="${personaje.image}" alt="${personaje.name}">
+      <h3>${personaje.name}</h3>
+      <p>${personaje.status} - ${personaje.species}</p>
+    `;
+    
+
+      container.appendChild(card);
+    });
+  });
+
+
+  /* =====================================================
+   FETCH + TRY / CATCH (SIN async/await)
+   API: PokeAPI
+   ===================================================== */
+
+/*
+📌 OBJETIVO DEL EJEMPLO
+
+- Consumir una API real (PokeAPI)
+- Traer datos automáticamente al cargar la página
+- Crear cards con nombre e imagen
+- Entender cómo se manejan errores con fetch
+- Ver por qué try/catch NO alcanza para asincronía
+*/
+
+/*
+📌 CONTENEDOR EN EL HTML
+
+Debe existir en el index.html algo como:
+<div id="poke-cards"></div>
+*/
+const pokeContainer = document.getElementById("poke-cards");
+
+/*
+📌 IMPORTANTE SOBRE try / catch Y fetch
+
+- try / catch SOLO captura errores SINCRÓNICOS
+- fetch es ASINCRÓNICO (devuelve una promesa)
+- Por eso:
+  - errores de red
+  - errores HTTP
+  NO entran en este catch
+- Esos errores se manejan con .catch() de la promesa
+*/
+
+try {
+  // Mostramos mensaje inicial
+  pokeContainer.innerHTML = "<p>🔄 Cargando Pokémon...</p>";
+
+  /*
+  📌 fetch
+  - Hace una petición HTTP
+  - No bloquea el programa
+  - Devuelve una PROMESA
+  */
+  fetch("https://pokeapi.co/api/v2/pokemon?limit=6")
+
+    /*
+    📌 Primer then
+    - response representa la respuesta del servidor
+    - Todavía NO son los datos reales
+    */
+    .then((response) => {
+
+      /*
+      📌 Validamos la respuesta HTTP
+      - response.ok === false → error 404, 500, etc
+      - Lanzamos un error manualmente
+      - Este error será capturado por el .catch() de abajo
+      */
+      if (!response.ok) {
+        throw new Error("Error al acceder a la API de Pokémon");
+      }
+
+      // Convertimos la respuesta a JSON
+      return response.json();
+    })
+
+    /*
+    📌 Segundo then
+    - data contiene los datos reales de la API
+    */
+    .then((data) => {
+      pokeContainer.innerHTML = ""; // limpiamos el mensaje de carga
+
+      /*
+      📌 data.results es un array de Pokémon
+      - Cada uno tiene nombre y una URL con más info
+      */
+      data.results.forEach((pokemon) => {
+
+        /*
+        📌 Segunda petición fetch
+        - Necesaria para obtener imagen y datos completos
+        */
+        fetch(pokemon.url)
+          .then((response) => response.json())
+          .then((pokeData) => {
+
+            /*
+            📌 Creamos una card para cada Pokémon
+            */
+            const card = document.createElement("div");
+            card.classList.add("card");
+
+            card.innerHTML = `
+              <h3>${pokeData.name.toUpperCase()}</h3>
+              <img src="${pokeData.sprites.front_default}" alt="${pokeData.name}">
+            `;
+
+            pokeContainer.appendChild(card);
+          });
+      });
+    })
+
+    /*
+    📌 .catch()
+    - ESTE es el verdadero manejo de errores ASINCRÓNICOS
+    - Errores de red
+    - Errores lanzados dentro de then()
+    */
+    .catch((error) => {
+      pokeContainer.innerHTML = "❌ Error en fetch: " + error.message;
+    });
+
+} catch (error) {
+  /*
+  📌 Este catch SOLO captura errores SINCRÓNICOS
+  - Errores de sintaxis
+  - Variables no definidas
+  - Errores fuera del fetch
+  */
+  pokeContainer.innerHTML = "❌ Error inesperado: " + error.message;
+}
+
+
+
+/* =====================================================
+   FETCH con ASYNC / AWAIT + TRY / CATCH + LOADER
+   ===================================================== */
+
+/*
+  1️⃣ async / await nos permite escribir código asincrónico
+     como si fuera sincrónico (más legible).
+
+  2️⃣ Usamos un loader para indicar que "algo está cargando".
+
+  3️⃣ Agregamos un retardo artificial (2 segundos)
+     para SIMULAR una espera de servidor real.
+*/
+
+const containerpoke = document.getElementById("pokemon-container");
+const loaderpoke = document.getElementById("pokemon-loader");
+
+
+/* Función helper para simular espera */
+function esperar(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function traerPokemons() {
+  try {
+    // Paso 1: mostramos el loader
+    loaderpoke.style.display = "block";
+
+    // Paso 2: simulamos demora de 2 segundos
+    await esperar(6000);
+
+    // Paso 3: hacemos el fetch
+    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=6");
+
+    // Paso 4: validamos la respuesta
+    if (!response.ok) {
+      throw new Error("Error al traer los pokemons");
+    }
+
+    // Paso 5: convertimos a JSON
+    const data = await response.json();
+
+    // Paso 6: recorremos los resultados
+    data.results.forEach(pokemon => {
+      const card = document.createElement("div");
+      card.classList.add("card");
+
+      card.innerHTML = `
+        <h3>${pokemon.name}</h3>
+      `;
+
+      containerpoke.appendChild(card);
+    });
+
+  } catch (error) {
+    console.error("Ocurrió un error:", error);
+    containerpoke.innerHTML = "<p>Error al cargar los datos</p>";
+  } finally {
+    // Paso 7: pase lo que pase, ocultamos el loader
+    loaderpoke.style.display = "none";
+  }
+}
+
+// Ejecutamos automáticamente
+traerPokemons();
