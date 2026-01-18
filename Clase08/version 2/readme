@@ -35,20 +35,79 @@ JavaScript es un lenguaje single-threaded, lo que significa que solo puede ejecu
 
 Call Stack
 
-El Call Stack es la estructura que controla la ejecución del código sincrónico. Cada vez que se llama a una función, esta se agrega a la pila. Cuando termina, se elimina y se continúa con la siguiente.
+
+El Call Stack es la estructura que controla la ejecución del código sincrónico en JavaScript.
+
+Cada vez que se llama a una función, se agrega a la pila (stack).
+
+Cuando la función termina, se elimina de la pila y se continúa con la siguiente función que estaba esperando.
 
 Si una función tarda en finalizar, el Call Stack queda bloqueado y el resto del código debe esperar.
 
+💡 Ejemplo de la vida real:
+Imaginá que estás haciendo tareas en tu escritorio y vas apilando hojas:
+
+Ponés la hoja A arriba → hacés la tarea de A → terminás → sacás A.
+
+Luego hacés la hoja B que estaba debajo.
+
+Finalmente hacés la hoja C.
+
+El Call Stack funciona igual: última que entra, primera que sale (LIFO: Last In, First Out).
+
+Por qué JavaScript usa el Call Stack
+
+JavaScript es un lenguaje single-threaded (un solo hilo).
+
+Solo puede ejecutar una cosa a la vez, entonces necesita controlar qué función se está ejecutando y cuáles esperan su turno.
+
+Gracias al Call Stack, JavaScript mantiene el orden de ejecución y sabe cuándo cada función terminó para pasar a la siguiente.
+
 👉 Este comportamiento se observa en el ejemplo sincrónico trabajado en Visual Studio Code.
 
-Event Loop
+Qué es el Event Loop?
 
-El Event Loop permite que JavaScript maneje tareas asincrónicas sin bloquear el hilo principal. Mientras el Call Stack ejecuta el código sincrónico, el Event Loop se encarga de verificar cuándo una tarea asincrónica puede ejecutarse.
+El Event Loop es el mecanismo que permite a JavaScript manejar operaciones asincrónicas (temporizadores, solicitudes HTTP, promesas) aunque JavaScript sea single-threaded.
 
-Cuando el Call Stack queda vacío, el Event Loop envía la siguiente tarea pendiente para su ejecución.
+Mientras que el Call Stack maneja las funciones sincrónicas, el Event Loop supervisa la cola de tareas (Callback Queue), donde se colocan las operaciones asincrónicas una vez que están listas.
+
+Cuando el Call Stack queda vacío, el Event Loop toma la primera tarea de la cola y la coloca en el Call Stack para su ejecución.
+
+Esto permite que la interfaz siga siendo receptiva y que operaciones largas no bloqueen el programa.
+
+Gracias al Event Loop, JavaScript puede manejar:
+
+Temporizadores: setTimeout, setInterval
+
+Promesas: Promise
+
+Operaciones de I/O
+
+sin bloquear el Call Stack, asegurando que el código sincrónico siga ejecutándose y la app se mantenga fluida.
+
+
+💡 Analogía rápida:
+
+Call Stack = tu escritorio, donde hacés las tareas una a la vez.
+
+Event Loop = un asistente que mira las tareas asincrónicas (temporizadores, promesas) y te las trae cuando tu escritorio está libre.
+
+
 
 👉 Este funcionamiento se puede ver en los ejemplos asincrónicos desarrollados en el archivo JavaScript del proyecto.
 
 Relación entre ambos
 
 El Call Stack ejecuta el código en orden y de forma bloqueante, mientras que el Event Loop permite que tareas lentas se ejecuten más tarde sin detener la aplicación. Gracias a esta combinación, JavaScript puede ser eficiente y mantener una experiencia de usuario fluida.
+
+---TEMPORIZADORES----
+
+Temporizadores en JavaScript permiten ejecutar funciones en el futuro o repetidamente:
+
+setTimeout(función, tiempoMs) → Ejecuta una función una sola vez después de un retraso.
+
+setInterval(función, tiempoMs) → Ejecuta una función repetidamente a intervalos regulares.
+
+clearTimeout / clearInterval → Cancela un temporizador si ya no queremos que se ejecute.
+
+💡 Importante: Los temporizadores son asincrónicos, no bloquean el resto del código. Por eso se integran con el Event Loop: esperan su turno en la cola de tareas y se ejecutan cuando el Call Stack está vacío.

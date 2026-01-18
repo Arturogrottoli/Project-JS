@@ -108,3 +108,129 @@ function hojaC() {
   output.textContent += "Hacemos la tarea de la hoja C\n";
   output.textContent += "✅ Tarea de C terminada → sacamos la hoja C del Call Stack\n\n";
 }
+
+//EVENT LOOP
+
+const btnEventLoop = document.getElementById("runEventLoop"); // Nuevo botón
+
+btnEventLoop.addEventListener("click", () => {
+  output.textContent = "";
+  output.textContent += "=== EVENT LOOP ANIMADO: DÍA OCUPADO ===\n\n";
+
+  // -----------------------------------------------------
+  // Funciones sincrónicas (Call Stack)
+  // -----------------------------------------------------
+  function trabajar(tarea) {
+    output.textContent += `💻 Trabajando en: ${tarea}\n`;
+  }
+
+  // -----------------------------------------------------
+  // Funciones asincrónicas (Callback Queue → Event Loop)
+  // -----------------------------------------------------
+  function recogerChicos(tiempo) {
+    setTimeout(() => {
+      output.textContent += "🚌 Chicos recogidos del colegio\n";
+    }, tiempo);
+  }
+
+  function comprarSupermercado(tiempo) {
+    setTimeout(() => {
+      output.textContent += "🛒 Compras hechas en el supermercado\n";
+    }, tiempo);
+  }
+
+  // -----------------------------------------------------
+  // Día animado paso a paso
+  // -----------------------------------------------------
+  // Tareas sincrónicas → Call Stack
+  trabajar("Escribir informe");
+  trabajar("Responder emails");
+
+  // Tareas asincrónicas → van a Callback Queue y esperan
+  recogerChicos(4000);          // 4s
+  comprarSupermercado(2000);    // 2s
+
+  // Más tareas sincrónicas
+  trabajar("Llamar al cliente");
+  trabajar("Revisar agenda");
+
+  output.textContent += "🏠 Fin de tareas inmediatas (Call Stack vacío)\n\n";
+
+  // -----------------------------------------------------
+  // Explicación para alumnos
+  // -----------------------------------------------------
+  output.textContent += "🔹 Comentarios:\n";
+  output.textContent += "- Las tareas sincrónicas se ejecutan primero (Call Stack)\n";
+  output.textContent += "- Las tareas asincrónicas esperan en la cola (Callback Queue)\n";
+  output.textContent += "- El Event Loop supervisa la cola y ejecuta las tareas cuando el Call Stack queda vacío\n";
+  output.textContent += "- Por eso 'supermercado' puede completarse antes que 'recoger chicos', aunque se llamaron en orden inverso\n";
+});
+
+
+
+//Setimeout, ejemplo con loader
+
+const btnTimeoutLoader = document.getElementById("runTimeoutLoader");
+const loader = document.getElementById("loader");
+
+btnTimeoutLoader.addEventListener("click", () => {
+  output.textContent = "";
+  loader.style.display = "block";
+
+  output.textContent += "Botón presionado → Iniciamos la espera de 3 segundos\n";
+
+  // Variables para animación de puntos
+  let puntos = 0;
+  const maxPuntos = 3;
+
+  /* 
+  // setInterval para animar el loader
+  const animacionLoader = setInterval(() => {
+    puntos = (puntos + 1) % (maxPuntos + 1); // 0,1,2,3,0,1...
+    loader.textContent = "⏳ Cargando" + ".".repeat(puntos);
+  }, 500); // cada 0.5s cambia el loader
+  */
+
+  // Tarea asincrónica con setTimeout
+  setTimeout(() => {
+    //clearInterval(animacionLoader); // se puede usar cuando activemos el loader animado
+    loader.style.display = "none"; // ocultamos el loader
+    output.textContent += "✅ Mensaje aparecido después de 3 segundos\n";
+  }, 3000);
+
+  output.textContent += "Mientras tanto, la página no se bloquea\n";
+});
+
+
+/* =====================================================
+   EJEMPLO SIMPLE: clearTimeout
+   =====================================================
+
+   Qué muestra este ejemplo:
+   - Programamos un mensaje para el futuro
+   - Podemos cancelarlo antes de que aparezca
+
+   Idea clave:
+   setTimeout → programa
+   clearTimeout → cancela
+*/
+
+const btnSetTimeout = document.getElementById("runSetTimeout");
+const btnClearTimeout = document.getElementById("runClearTimeout");
+
+// Guardamos el ID del timeout para poder cancelarlo
+let timeoutMensaje;
+
+btnSetTimeout.addEventListener("click", () => {
+  output.textContent = "";
+  output.textContent += "⏳ Programamos un mensaje para dentro de 5 segundos...\n";
+
+  timeoutMensaje = setTimeout(() => {
+    output.textContent += "✅ Este mensaje apareció después de 5 segundos\n";
+  }, 5000);
+});
+
+btnClearTimeout.addEventListener("click", () => {
+  clearTimeout(timeoutMensaje);
+  output.textContent += "❌ Cancelamos el mensaje antes de que aparezca\n";
+});
