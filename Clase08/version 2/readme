@@ -1,0 +1,54 @@
+8.1 Fundamentos de Asincronismo
+Introducción al asincronismo
+
+El asincronismo permite que JavaScript ejecute tareas en segundo plano sin detener el flujo principal del programa. Esto es clave cuando trabajamos con operaciones lentas o dependientes de recursos externos. Para entenderlo, primero vamos a comparar la ejecución sincrónica con la asincrónica.
+
+Ejecución sincrónica
+
+En la ejecución sincrónica, el código se ejecuta línea por línea, esperando que cada operación termine antes de continuar. Si una función tarda mucho tiempo en completarse, el programa queda bloqueado hasta que finaliza. Este comportamiento puede provocar aplicaciones lentas o interfaces que no responden.
+
+(Aquí se muestra el ejemplo de código sincrónico.)
+
+Ejecución asincrónica
+
+La ejecución asincrónica permite que el programa continúe ejecutándose mientras una tarea se procesa en segundo plano. JavaScript delega estas tareas y se encarga de ejecutar su resultado cuando está disponible, sin bloquear el resto del código.
+
+(Aquí se muestra el ejemplo con setTimeout.)
+
+Event Loop
+
+El Event Loop es el mecanismo que permite a JavaScript manejar el asincronismo. Se encarga de ejecutar las tareas pendientes cuando el stack de ejecución queda libre. Por eso, el código asincrónico no siempre se ejecuta en el orden en que está escrito.
+
+Relevancia en aplicaciones modernas
+
+El asincronismo es fundamental para cargar datos, interactuar con APIs y mantener interfaces fluidas. JavaScript ofrece herramientas como callbacks, promesas y async/await para trabajar con este modelo de forma clara y eficiente, las cuales veremos a lo largo de la clase.
+
+Transición al siguiente tema
+
+Con estos conceptos claros, a continuación vamos a trabajar con ejemplos prácticos de asincronismo usando peticiones fetch, analizando cómo manejar tanto los resultados como los errores que pueden surgir.
+
+
+8.2 Profundizando en el Asincronismo
+Call Stack y Event Loop en JavaScript
+
+JavaScript es un lenguaje single-threaded, lo que significa que solo puede ejecutar una tarea a la vez. Para poder manejar operaciones lentas sin bloquear la aplicación, utiliza dos conceptos clave: el Call Stack y el Event Loop. Entender estos mecanismos permite comprender cómo JavaScript maneja el asincronismo.
+
+Call Stack
+
+El Call Stack es la estructura que controla la ejecución del código sincrónico. Cada vez que se llama a una función, esta se agrega a la pila. Cuando termina, se elimina y se continúa con la siguiente.
+
+Si una función tarda en finalizar, el Call Stack queda bloqueado y el resto del código debe esperar.
+
+👉 Este comportamiento se observa en el ejemplo sincrónico trabajado en Visual Studio Code.
+
+Event Loop
+
+El Event Loop permite que JavaScript maneje tareas asincrónicas sin bloquear el hilo principal. Mientras el Call Stack ejecuta el código sincrónico, el Event Loop se encarga de verificar cuándo una tarea asincrónica puede ejecutarse.
+
+Cuando el Call Stack queda vacío, el Event Loop envía la siguiente tarea pendiente para su ejecución.
+
+👉 Este funcionamiento se puede ver en los ejemplos asincrónicos desarrollados en el archivo JavaScript del proyecto.
+
+Relación entre ambos
+
+El Call Stack ejecuta el código en orden y de forma bloqueante, mientras que el Event Loop permite que tareas lentas se ejecuten más tarde sin detener la aplicación. Gracias a esta combinación, JavaScript puede ser eficiente y mantener una experiencia de usuario fluida.
