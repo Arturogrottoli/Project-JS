@@ -2,14 +2,16 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>MiniFlix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MiniFlix – Proyecto Final</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.16.1/sweetalert2.min.css">
 </head>
 <body>
 
   <header>
     <h1>🎬 MiniFlix</h1>
-    <p>Catálogo de películas y series</p>
+    <p>Catálogo de películas y series – Simulador de suscripción</p>
   </header>
 
   <section class="filters">
@@ -18,20 +20,39 @@
       <option value="Película">Películas</option>
       <option value="Serie">Series</option>
     </select>
-
     <select id="filterCategory">
       <option value="">Todas las categorías</option>
     </select>
   </section>
 
-  <main id="catalog"></main>
+  <main id="catalog">
+    <p id="catalogLoading" class="state-msg">Cargando catálogo…</p>
+  </main>
 
-  <aside>
+  <aside class="sidebar">
     <h2>⭐ Mi lista</h2>
     <div id="myListCards"></div>
-
+    <button type="button" id="btnConfirmar" class="btn-confirmar" disabled>Confirmar mi suscripción</button>
   </aside>
 
+  <section class="form-section">
+    <h2>📋 Datos de suscripción</h2>
+    <form id="formSuscripcion">
+      <label for="nombre">Nombre</label>
+      <input type="text" id="nombre" name="nombre" required>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+      <label for="plan">Plan</label>
+      <select id="plan" name="plan">
+        <option value="basico">Básico</option>
+        <option value="estandar">Estándar</option>
+        <option value="premium">Premium</option>
+      </select>
+      <button type="submit">Enviar datos</button>
+    </form>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.16.1/sweetalert2.all.min.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
