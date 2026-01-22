@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>MiniFlix</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header>
+    <h1>🎬 MiniFlix</h1>
+    <p>Catálogo de películas y series</p>
+  </header>
+
+  <section class="filters">
+    <select id="filterType">
+      <option value="">Todos</option>
+      <option value="Película">Películas</option>
+      <option value="Serie">Series</option>
+    </select>
+
+    <select id="filterCategory">
+      <option value="">Todas las categorías</option>
+    </select>
+  </section>
+
+  <main id="catalog"></main>
+
+  <aside>
+    <h2>⭐ Mi lista</h2>
+    <div id="myListCards"></div>
+
+  </aside>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
