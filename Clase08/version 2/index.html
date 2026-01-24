@@ -2,49 +2,138 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Sincronía vs Asincronía</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clase 8 – Asincronismo, Call Stack, Temporizadores y Control de Errores</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>Sincronía y Asincronía en JavaScript</h1>
-  <p>
-    Estos ejemplos muestran la diferencia entre ejecución sincrónica
-    y asincrónica usando JavaScript.
-  </p>
+  <header>
+    <h1>Clase 8 – Asincronismo en JavaScript</h1>
+    <p>Teoría y ejemplos: sincronía, asincronía, Call Stack, Event Loop, temporizadores y manejo de errores.</p>
+  </header>
 
-  <button id="runSync">Ejecutar Sincrónico</button>
-  <button id="runAsyncBasic">Ejecutar Asincrónico Básico</button>
-  <button id="runAsyncPizza">Ejecutar Asincrónico (Pizza)</button>
-  <button id="runCallStack">Ejecutar Call Stack (Hojas)</button>
-  <button id="runEventLoop">Ejecutar Event Loop (Día ocupado)</button>
-  <button id="runTimeoutLoader">Ejemplo setTimeout con Loader</button>
-  <div id="loader" style="display:none;">⏳ Cargando...</div>
-  <button id="runSetTimeout">Programar mensaje</button>
-<button id="runClearTimeout">Cancelar mensaje</button>
-<button id="runTryCatch">Ejecutar Try / Catch</button>
+  <!-- ========== 1. INTRODUCCIÓN AL ASINCRONISMO ========== -->
+  <section class="tema">
+    <h2>1. Introducción al Asincronismo</h2>
+    <div class="teoria">
+      <p>En JavaScript, el asincronismo permite manejar múltiples tareas sin bloquear la ejecución. Es fundamental en aplicaciones que interactúan con APIs, datos remotos o mejoran la experiencia del usuario. Primero hay que distinguir entre <strong>ejecución sincrónica</strong> y <strong>asincrónica</strong>.</p>
+      <h3>Ejecución Sincrónica</h3>
+      <p>El código se ejecuta de forma secuencial: cada línea termina antes de que siga la siguiente. Si una operación tarda mucho (por ejemplo, una petición a un servidor), el resto debe esperar y la app puede verse lenta o no responder.</p>
+      <h3>Ejecución Asincrónica</h3>
+      <p>El código puede seguir ejecutándose sin esperar a que termine una operación. Útil para peticiones de red, lecturas de archivos o temporizadores. JavaScript, al ser <em>single-threaded</em>, usa el <strong>Event Loop</strong> para gestionar tareas no bloqueantes en segundo plano.</p>
+      <p>El asincronismo se trabaja con <strong>callbacks</strong>, <strong>promesas</strong> y <strong>async/await</strong>.</p>
+    </div>
+    <div class="ejemplos">
+      <h4>Ejemplo 1 – Sincrónico</h4>
+      <p class="ej-desc">Operación lenta bloquea hasta terminar; luego se ejecuta "Fin".</p>
+      <button type="button" id="runSync">Ejecutar Ejemplo 1 (Sincrónico)</button>
+      <h4>Ejemplo 2 – Asincrónico</h4>
+      <p class="ej-desc">Se programa un mensaje con <code>setTimeout</code>; "Fin" se muestra antes.</p>
+      <button type="button" id="runAsyncBasic">Ejecutar Ejemplo 2 (Asincrónico)</button>
+    </div>
+    <pre id="output-intro" class="output"></pre>
+  </section>
 
-  
+  <!-- ========== 2. CALL STACK Y EVENT LOOP ========== -->
+  <section class="tema">
+    <h2>2. Call Stack y Event Loop</h2>
+    <div class="teoria">
+      <p>JavaScript es <em>single-threaded</em>: una sola tarea a la vez en el hilo principal. Para gestionar varias tareas se usan el <strong>Call Stack</strong> y el <strong>Event Loop</strong>.</p>
+      <h3>Call Stack (pila de llamadas)</h3>
+      <p>Estructura donde se apilan las funciones en ejecución. Al llamar una función, se apila; al terminar, se desapila y se vuelve a la anterior.</p>
+      <h3>Event Loop</h3>
+      <p>Supervisa la <strong>Callback Queue</strong>. Cuando el Call Stack está vacío, toma la siguiente tarea de la cola y la ejecuta. Así se manejan temporizadores, promesas y I/O sin bloquear el hilo.</p>
+    </div>
+    <div class="ejemplos">
+      <h4>Ejemplo 1 – Call Stack</h4>
+      <p class="ej-desc">Simulación de apilar/desapilar funciones (first → second → first).</p>
+      <button type="button" id="runCallStack">Ejecutar Ejemplo 1 (Call Stack)</button>
+      <h4>Ejemplo 2 – Event Loop</h4>
+      <p class="ej-desc">Tareas sincrónicas primero; luego las asincrónicas (setTimeout) cuando el stack está vacío.</p>
+      <button type="button" id="runEventLoop">Ejecutar Ejemplo 2 (Event Loop)</button>
+    </div>
+    <pre id="output-callstack" class="output"></pre>
+  </section>
 
-  <!--
-    <pre> se usa para mostrar texto respetando exactamente:
-    - saltos de línea
-    - espacios
-    - tabulaciones
-    Tal como se escribe desde JavaScript.
-  -->
-  <pre id="output"></pre>
+  <!-- ========== 3. ASYNC / AWAIT ========== -->
+  <section class="tema">
+    <h2>3. Async / Await</h2>
+    <div class="teoria">
+      <p><code>async/await</code> permite escribir código asincrónico con un estilo secuencial y más legible. Una función <code>async</code> devuelve una promesa; <code>await</code> pausa la ejecución hasta que la promesa se resuelva. Se suele combinar con <code>try/catch</code> para manejar errores.</p>
+    </div>
+    <div class="ejemplos">
+      <h4>Ejemplo 1 – Fetch con async/await (Pokémon)</h4>
+      <p class="ej-desc">Carga de datos desde API usando <code>async/await</code>, loader y <code>try/catch/finally</code>.</p>
+      <button type="button" id="runFetchPokemon">Cargar Pokémon (Ejemplo 1)</button>
+      <div id="pokemon-loader" class="loader" style="display:none;">⏳ Cargando Pokémon…</div>
+      <div id="pokemon-container" class="cards-grid"></div>
+      <h4>Ejemplo 2 – Simulación con retardo</h4>
+      <p class="ej-desc">Función <code>async</code> con <code>await</code> para simular una espera antes de mostrar mensaje.</p>
+      <button type="button" id="runAsyncAwait">Ejecutar Ejemplo 2 (Async/Await)</button>
+      <pre id="output-asyncawait" class="output"></pre>
+    </div>
+  </section>
 
-  <div id="cards" class="card"></div>
+  <!-- ========== 4. TEMPORIZADORES ========== -->
+  <section class="tema">
+    <h2>4. Temporizadores: setTimeout y setInterval</h2>
+    <div class="teoria">
+      <p>Los temporizadores permiten ejecutar código en el futuro: <strong>setTimeout</strong> una sola vez tras un retraso; <strong>setInterval</strong> de forma periódica. Se pueden cancelar con <strong>clearTimeout</strong> y <strong>clearInterval</strong>.</p>
+      <p><strong>setTimeout(función, ms)</strong> — ejecución diferida. <strong>setInterval(función, ms)</strong> — ejecución periódica.</p>
+    </div>
+    <div class="ejemplos">
+      <h4>Ejemplo 1 – setTimeout</h4>
+      <p class="ej-desc">Mensaje tras 2 segundos; el resto del código sigue sin esperar.</p>
+      <button type="button" id="runSetTimeout">Ejecutar Ejemplo 1 (setTimeout)</button>
+      <h4>Ejemplo 2 – setInterval</h4>
+      <p class="ej-desc">Contador que se actualiza cada segundo. Usa "Detener intervalo" para cancelar.</p>
+      <button type="button" id="runSetInterval">Iniciar Ejemplo 2 (setInterval)</button>
+      <button type="button" id="runClearInterval">Detener intervalo</button>
+      <pre id="output-timers" class="output"></pre>
+    </div>
+  </section>
 
-  <h2>Pokémon</h2>
-<div id="poke-cards" class="card"></div>
+  <!-- ========== 5. CANCELACIÓN DE TEMPORIZADORES ========== -->
+  <section class="tema">
+    <h2>5. Cancelación: clearTimeout y clearInterval</h2>
+    <div class="teoria">
+      <p>Si ya no se necesita ejecutar la tarea programada, se cancela con <strong>clearTimeout(id)</strong> o <strong>clearInterval(id)</strong>, usando el valor devuelto por <code>setTimeout</code> / <code>setInterval</code>.</p>
+    </div>
+    <div class="ejemplos">
+      <h4>Ejemplo 1 – clearTimeout</h4>
+      <p class="ej-desc">Se programa un mensaje; si se cancela antes, no se muestra.</p>
+      <button type="button" id="runSetTimeoutCancel">Programar mensaje (5 s)</button>
+      <button type="button" id="runClearTimeout">Cancelar mensaje</button>
+      <h4>Ejemplo 2 – clearInterval</h4>
+      <p class="ej-desc">Mismo contador del tema anterior: "Detener intervalo" usa <code>clearInterval</code>.</p>
+      <p class="ej-desc"><em>(Usa los botones de la sección "Temporizadores" arriba.)</em></p>
+      <pre id="output-clear" class="output"></pre>
+    </div>
+  </section>
 
-<h2>Pokemon con async/await</h2>
-<div id="pokemon-loader" style="display:none;">
-    ⏳ Cargando Pokémon...
-  </div>
-<div id="pokemon-container" class="card"></div>
+  <!-- ========== 6. CONTROL DE ERRORES ========== -->
+  <section class="tema">
+    <h2>6. Control de errores: try / catch / finally</h2>
+    <div class="teoria">
+      <p>El bloque <strong>try-catch-finally</strong> permite capturar y manejar excepciones:</p>
+      <ul>
+        <li><strong>try</strong>: código que puede lanzar un error.</li>
+        <li><strong>catch (error)</strong>: se ejecuta si hay excepción; puedes mostrar mensajes, registrar o recuperar.</li>
+        <li><strong>finally</strong>: opcional; se ejecuta siempre, haya error o no (limpieza, cerrar recursos).</li>
+      </ul>
+      <p>Usa <code>throw new Error("mensaje")</code> para lanzar errores. En código asincrónico combina <code>try/catch</code> con <code>async/await</code> o <code>.catch()</code> en promesas.</p>
+    </div>
+    <div class="ejemplos">
+      <h4>Ejemplo 1 – try / catch / finally (dividir)</h4>
+      <p class="ej-desc">Función <code>dividir(a, b)</code> que lanza error si <code>b === 0</code>. <code>finally</code> siempre se ejecuta.</p>
+      <button type="button" id="runTryCatch">Ejecutar Ejemplo 1 (dividir por cero)</button>
+      <h4>Ejemplo 2 – try / catch con validación</h4>
+      <p class="ej-desc">Validación manual y <code>throw</code>; catch muestra el mensaje de error.</p>
+      <button type="button" id="runTryCatch2">Ejecutar Ejemplo 2 (validación)</button>
+      <pre id="output-errors" class="output"></pre>
+    </div>
+  </section>
 
   <script src="app.js"></script>
 </body>

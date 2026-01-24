@@ -1,96 +1,251 @@
+/* MiniFlix – Proyecto Final. Clase 10. */
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background: #0f0f0f;
-    color: #fff;
-    margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f0f0f;
+  color: #fff;
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 0;
+}
+
+header {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 20px;
+}
+
+.filters {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 25px;
+  padding: 0 20px;
+}
+
+.filters select {
+  background: #1f1f1f;
+  color: #fff;
+  border: 1px solid #333;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.filters select:focus {
+  outline: none;
+  border-color: #e50914;
+}
+
+#catalog {
+  grid-column: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+  padding: 20px;
+  align-content: start;
+}
+
+.hidden {
+  display: none;
+}
+
+.state-msg {
+  grid-column: 1 / -1;
+  padding: 20px;
+  color: #999;
+  text-align: center;
+}
+
+#myListCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  padding: 12px;
+}
+
+.sidebar {
+  grid-column: 2;
+  border-left: 1px solid #333;
+  padding: 16px;
+  align-self: start;
+}
+
+.sidebar h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+}
+
+.btn-confirmar {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: #e50914;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-confirmar:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btn-confirmar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.card {
+  background: #1c1c1c;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+.card img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 10px;
+}
+
+.card h3 {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.card p {
+  font-size: 12px;
+  color: #bbb;
+}
+
+.card button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 6px;
+  background: #e50914;
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.card button.remove {
+  background: #444;
+}
+
+.card button.remove:hover {
+  background: #555;
+}
+
+.form-section {
+  grid-column: 1 / -1;
+  border-top: 1px solid #333;
+  padding: 24px 20px;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.form-section h2 {
+  margin: 0 0 16px;
+  font-size: 1.1rem;
+}
+
+.form-section form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.form-section label {
+  display: block;
+  font-size: 0.85rem;
+  color: #bbb;
+  margin-bottom: 4px;
+}
+
+.form-section input,
+.form-section select {
+  background: #1f1f1f;
+  color: #fff;
+  border: 1px solid #333;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.form-section input:focus,
+.form-section select:focus {
+  outline: none;
+  border-color: #e50914;
+}
+
+.form-section .field {
+  flex: 1 1 140px;
+  min-width: 0;
+}
+
+.form-section button[type="submit"] {
+  padding: 8px 20px;
+  background: #e50914;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.form-section button[type="submit"]:hover {
+  opacity: 0.9;
+}
+
+/* SweetAlert resumen dentro del modal */
+.swal-resumen {
+  max-height: 200px;
+  overflow-y: auto;
+  text-align: left;
+  padding: 8px 0;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 900px) {
+  body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto 1fr auto;
   }
-  
-  header {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .filters {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 25px;
-  }
-  
-  .filters select {
-    background: #1f1f1f;
-    color: #fff;
-    border: 1px solid #333;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-  .filters select:focus {
-    outline: none;
-    border-color: #e50914;
-  }
-  
-  #catalog,
-  #myListCards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 15px;
-    padding: 20px;
-  }
-  
-  .card {
-    background: #1c1c1c;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.2s;
-  }
-  
-  .card:hover {
-    transform: scale(1.03);
-  }
-  
-  .card img {
-    width: 100%;
-    height: 260px;
-    object-fit: cover;
-  }
-  
-  .card-content {
-    padding: 10px;
-  }
-  
-  .card h3 {
-    font-size: 14px;
-    margin: 5px 0;
-  }
-  
-  .card p {
-    font-size: 12px;
-    color: #bbb;
-  }
-  
-  .card button {
-    width: 100%;
-    margin-top: 8px;
-    padding: 6px;
-    background: #e50914;
-    border: none;
-    color: #fff;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .card button.remove {
-    background: #444;
-  }
-  
-  aside {
+
+  .sidebar {
+    grid-column: 1;
+    border-left: none;
     border-top: 1px solid #333;
-    margin-top: 20px;
   }
-  
-  aside h2 {
-    padding-left: 20px;
+
+  #catalog {
+    grid-column: 1;
   }
-  
+
+  .form-section {
+    grid-column: 1;
+  }
+}

@@ -38,16 +38,22 @@
   <section class="form-section">
     <h2>📋 Datos de suscripción</h2>
     <form id="formSuscripcion">
-      <label for="nombre">Nombre</label>
-      <input type="text" id="nombre" name="nombre" required>
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required>
-      <label for="plan">Plan</label>
-      <select id="plan" name="plan">
-        <option value="basico">Básico</option>
-        <option value="estandar">Estándar</option>
-        <option value="premium">Premium</option>
-      </select>
+      <div class="field">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" required>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="field">
+        <label for="plan">Plan</label>
+        <select id="plan" name="plan">
+          <option value="basico">Básico</option>
+          <option value="estandar">Estándar</option>
+          <option value="premium">Premium</option>
+        </select>
+      </div>
       <button type="submit">Enviar datos</button>
     </form>
   </section>
