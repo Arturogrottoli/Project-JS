@@ -1,0 +1,159 @@
+/* Clase 09 – Estilos generales y repaso Fetch + API */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #f5f5f5;
+  color: #222;
+  line-height: 1.5;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 32px 0;
+}
+
+/* ---- Repaso Clase 8 ---- */
+.repaso-clase8 {
+  background: #fff;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.repaso-clase8 h1 {
+  margin: 0 0 12px;
+  font-size: 1.5rem;
+  color: #2e7d32;
+}
+
+.repaso-clase8 .intro {
+  margin: 0 0 20px;
+  color: #444;
+}
+
+.repaso-clase8 .intro a {
+  color: #1b5e20;
+  text-decoration: underline;
+}
+
+.repaso-clase8 .intro a:hover {
+  text-decoration: none;
+}
+
+.repaso-clase8 button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.repaso-clase8 button:hover {
+  background: #1b5e20;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: #e8f5e9;
+  color: #1b5e20;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+
+.loader::before {
+  content: "";
+  width: 24px;
+  height: 24px;
+  border: 3px solid #a5d6a7;
+  border-top-color: #2e7d32;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loader-text {
+  font-weight: 500;
+}
+
+.error-msg {
+  padding: 12px 16px;
+  background: #ffebee;
+  color: #c62828;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.pokemon-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.pokemon-card {
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pokemon-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.pokemon-card img {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 10px;
+}
+
+.pokemon-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  text-transform: capitalize;
+  color: #1b5e20;
+}
+
+/* ---- Clase 09 ---- */
+.clase09 h2 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.clase09 p {
+  margin: 0;
+  color: #555;
+}
+
+.clase09 code {
+  background: #eee;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
