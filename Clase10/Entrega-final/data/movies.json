@@ -124,7 +124,7 @@
       "id": 12,
       "nombre": "Rick and Morty",
       "contenido": "Serie",
-      "categoria": "Animacion",
+      "categoria": "animacion",
       "director": "Dan Harmon",
       "anio": 2013,
       "disponibilidad": true,
