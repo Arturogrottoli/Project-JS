@@ -469,3 +469,60 @@ async function compararPromesas() {
 // 2. Muestre alertas bonitas
 // 3. Maneje errores graciosamente
 // 4. Tenga una interfaz de usuario interactiva
+
+// ============================================================================
+// 9.7 canvas-confetti – otra librería útil
+// ============================================================================
+
+// TEORÍA: ¿Qué es canvas-confetti?
+// Es una librería muy liviana que dibuja animaciones de confetti en el navegador.
+// Se instala con npm o se carga directo desde CDN (sin configurar nada más).
+// Es un buen ejemplo de librería de una sola responsabilidad: hace una cosa y la hace bien.
+
+// Instalación con npm:
+//   npm install canvas-confetti
+import confetti from "canvas-confetti";
+
+// Instalación por CDN (sin npm, directo en el HTML):
+// <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+// EJEMPLO BÁSICO: confetti con opciones por defecto
+confetti();
+
+// EJEMPLO CON OPCIONES:
+// particleCount : cantidad de partículas (default 50)
+// spread        : ángulo de apertura en grados (default 45)
+// origin        : punto de origen, {x, y} de 0 a 1 (esquina superior izq = {x:0, y:0})
+confetti({
+  particleCount: 150,
+  spread: 90,
+  origin: { y: 0.6 }
+});
+
+// EJERCICIO 14: Mostrar confetti al terminar una acción async
+async function cargarYCelebrar() {
+  try {
+    const res = await axios.get("https://jsonplaceholder.typicode.com/posts/1");
+    console.log("Dato cargado:", res.data.title);
+
+    // Cuando la promesa se resuelve, festejamos
+    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+
+    Swal.fire({
+      title: "¡Carga exitosa!",
+      text: res.data.title,
+      icon: "success"
+    });
+  } catch (err) {
+    Swal.fire({ title: "Error", text: err.message, icon: "error" });
+  }
+}
+
+// EJERCICIO 15: Confetti personalizado con colores y forma
+confetti({
+  particleCount: 80,
+  spread: 60,
+  colors: ["#ff0000", "#00ff00", "#0000ff"],  // rojo, verde, azul
+  shapes: ["circle", "square"],
+  origin: { x: 0.5, y: 0.5 }  // desde el centro exacto de la pantalla
+});
