@@ -139,6 +139,86 @@ hr {
   color: #1b5e20;
 }
 
+/* ---- Sección genérica de ejemplo ---- */
+.seccion-ejemplo {
+  background: #fff;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.seccion-ejemplo h1 {
+  margin: 0 0 12px;
+  font-size: 1.5rem;
+  color: #2e7d32;
+}
+
+.seccion-ejemplo .intro {
+  margin: 0 0 20px;
+  color: #444;
+}
+
+.seccion-ejemplo button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.seccion-ejemplo button:hover {
+  background: #1b5e20;
+}
+
+/* ---- Rick & Morty ---- */
+.rick-seccion h1 {
+  color: #1565c0;
+}
+
+.rick-seccion button {
+  background: #1565c0;
+}
+
+.rick-seccion button:hover {
+  background: #0d47a1;
+}
+
+.rick-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #e3f2fd;
+  border: 1px solid #90caf9;
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 16px;
+  max-width: 420px;
+}
+
+.rick-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #1565c0;
+  flex-shrink: 0;
+}
+
+.rick-card h3 {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+  color: #0d47a1;
+}
+
+.rick-card p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
 /* ---- Clase 09 ---- */
 .clase09 h2 {
   margin: 0 0 8px;

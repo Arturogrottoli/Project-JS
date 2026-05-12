@@ -1,22 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clase 09</title>
+    <title>Clase 09 – Fetch y Promesas</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <h1>Clase 09</h1>
+  <!-- ==========================================================
+       EJEMPLO 1 – PokeAPI
+       Fetch con cadena de promesas: .then() / .catch() / .finally()
+       ========================================================== -->
+  <section class="seccion-ejemplo">
+    <h1>Ejemplo 1 – PokeAPI</h1>
+    <p class="intro">
+      Traemos <strong>10 Pokémon al azar</strong> usando
+      <code>fetch</code> + <code>.then()</code> / <code>.catch()</code> / <code>.finally()</code>
+      — el estilo clásico de cadena de promesas.
+    </p>
+    <button id="btnPokemon">Cargar 10 Pokémon al azar</button>
+    <div id="loader-pokemon" class="loader" style="display:none;">
+      <span class="loader-text">Cargando Pokémon...</span>
+    </div>
+    <p id="error-pokemon" class="error-msg" style="display:none;"></p>
+    <div id="cards-pokemon" class="pokemon-cards"></div>
+  </section>
 
-<button id="btnCargarPokemon">Cargar Pokémon</button>
+  <hr>
 
-<div id="loader" style="display:none;">Cargando...</div>
-<p id="pokemon-error" style="display:none;"></p>
+  <!-- ==========================================================
+       EJEMPLO 2 – Rick and Morty API
+       Fetch con async / await + try / catch / finally
+       ========================================================== -->
+  <section class="seccion-ejemplo rick-seccion">
+    <h1>Ejemplo 2 – Rick &amp; Morty API</h1>
+    <p class="intro">
+      Traemos un <strong>personaje al azar</strong> usando
+      <code>async</code> / <code>await</code> + <code>try</code> / <code>catch</code> / <code>finally</code>
+      — la misma lógica que el Ejemplo 1, escrita de forma más legible.
+    </p>
+    <button id="btnRick">Personaje al azar</button>
+    <div id="loader-rick" class="loader" style="display:none;">
+      <span class="loader-text">Buscando personaje...</span>
+    </div>
+    <p id="error-rick" class="error-msg" style="display:none;"></p>
+    <div id="card-rick"></div>
+  </section>
 
-<div id="pokemon-cards"></div>
-
-    <script src="repaso-fetch.js"></script>
-
+  <script src="repaso-fetch.js"></script>
 </body>
 </html>
