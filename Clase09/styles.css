@@ -63,6 +63,7 @@ hr {
   background: #1b5e20;
 }
 
+
 .loader {
   display: flex;
   align-items: center;
@@ -74,7 +75,6 @@ hr {
   margin-bottom: 16px;
 }
 
-
 .loader::before {
   content: "";
   width: 24px;
@@ -83,12 +83,11 @@ hr {
   border-top-color: #2e7d32;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 .loader-text {
@@ -116,6 +115,7 @@ hr {
   border-radius: 10px;
   padding: 16px;
   text-align: center;
+  cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
@@ -217,6 +217,11 @@ hr {
   margin: 4px 0;
   font-size: 0.9rem;
   color: #333;
+}
+
+.rick-info {
+  display: flex;
+  flex-direction: column;
 }
 
 /* ---- Clase 09 ---- */
