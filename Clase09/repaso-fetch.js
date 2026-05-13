@@ -157,6 +157,7 @@
   // ==========================================================================
 
   var btnRick    = document.getElementById("btnRick");
+  var inputRick  = document.getElementById("inputRick");
   var loaderRick = document.getElementById("loader-rick");
   var errorRick  = document.getElementById("error-rick");
   var cardRick   = document.getElementById("card-rick");
@@ -190,7 +191,11 @@
 
       await esperar(800);
 
-      var id       = aleatorio(1, 826);
+      var id = parseInt(inputRick.value);
+      if (!id || id < 1 || id > 826) {
+        throw new Error("Ingresá un ID entre 1 y 826.");
+      }
+
       var response = await fetch("https://rickandmortyapi.com/api/character/" + id);
 
       if (!response.ok) {
