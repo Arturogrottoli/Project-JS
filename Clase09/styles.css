@@ -64,35 +64,6 @@ hr {
 }
 
 
-.loader {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 20px;
-  background: #e8f5e9;
-  color: #1b5e20;
-  border-radius: 8px;
-  margin-bottom: 16px;
-}
-
-.loader::before {
-  content: "";
-  width: 24px;
-  height: 24px;
-  border: 3px solid #a5d6a7;
-  border-top-color: #2e7d32;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  flex-shrink: 0;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.loader-text {
-  font-weight: 500;
-}
 
 .error-msg {
   padding: 12px 16px;
