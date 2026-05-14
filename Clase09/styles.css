@@ -20,50 +20,6 @@ hr {
   margin: 32px 0;
 }
 
-/* ---- Repaso Clase 8 ---- */
-.repaso-clase8 {
-  background: #fff;
-  border-radius: 10px;
-  padding: 24px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-}
-
-.repaso-clase8 h1 {
-  margin: 0 0 12px;
-  font-size: 1.5rem;
-  color: #2e7d32;
-}
-
-.repaso-clase8 .intro {
-  margin: 0 0 20px;
-  color: #444;
-}
-
-.repaso-clase8 .intro a {
-  color: #1b5e20;
-  text-decoration: underline;
-}
-
-.repaso-clase8 .intro a:hover {
-  text-decoration: none;
-}
-
-.repaso-clase8 button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  background: #2e7d32;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 16px;
-}
-
-.repaso-clase8 button:hover {
-  background: #1b5e20;
-}
-
-
 
 .error-msg {
   padding: 12px 16px;
@@ -195,21 +151,3 @@ hr {
   flex-direction: column;
 }
 
-/* ---- Clase 09 ---- */
-.clase09 h2 {
-  margin: 0 0 8px;
-  font-size: 1.25rem;
-  color: #333;
-}
-
-.clase09 p {
-  margin: 0;
-  color: #555;
-}
-
-.clase09 code {
-  background: #eee;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.9em;
-}
