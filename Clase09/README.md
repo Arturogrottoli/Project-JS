@@ -1,7 +1,7 @@
 # Clase 09 – Guía de armado en vivo
 
-Seguí este documento de arriba hacia abajo.  
-Cada paso muestra **exactamente qué escribir**, qué explicar, y qué probar antes de seguir.
+Seguí este documento de arriba hacia abajo.
+Cada paso muestra exactamente qué escribir, qué explicar, y qué probar antes de seguir.
 
 ---
 
@@ -21,25 +21,20 @@ El archivo `repaso-fetch.js` arranca vacío. Todo lo que sigue va ahí.
 
 ## Paso 1 – La base del archivo
 
-Lo primero es envolver todo en una **IIFE** (función que se llama a sí misma) y activar el modo estricto.
+Lo primero es envolver todo en una **IIFE** (función que se llama a sí misma).
 
 ```js
 (function () {
-  "use strict";
 
   // Todo el código de la clase va acá adentro
 
 })();
 ```
 
-> **¿Por qué la IIFE?**  
-> Porque todas las variables que declaramos adentro (botones, funciones, etc.) quedan
-> aisladas y no "ensucian" el objeto global `window`. Es una buena práctica cuando
-> no se usan módulos ES.
-
-> **¿Qué hace `"use strict"`?**  
-> Activa el modo estricto de JavaScript: no deja usar variables sin declararlas
-> y ayuda a detectar errores comunes antes de que causen problemas.
+**¿Por qué la IIFE?**
+Porque todas las variables que declaramos adentro (botones, funciones, etc.) quedan
+aisladas y no "ensucian" el objeto global `window`. Es una buena práctica cuando
+no se usan módulos ES.
 
 ---
 
@@ -53,8 +48,8 @@ Las vamos a usar en los dos ejemplos.
 // La usamos para que el loading sea visible aunque la red sea rápida.
 //
 // new Promise(function(resolve, reject) { ... })
-//   - resolve → llama cuando la operación salió bien
-//   - reject  → llama cuando la operación falló
+//   - resolve llama cuando la operación salió bien
+//   - reject  llama cuando la operación falló
 // Acá solo usamos resolve porque setTimeout no puede fallar.
 function esperar(ms) {
   return new Promise(function (resolve) {
@@ -69,9 +64,9 @@ function aleatorio(min, max) {
 }
 ```
 
-> **Probalo en consola:**  
-> `esperar(1000).then(function() { console.log("pasó 1 segundo") })`  
-> `aleatorio(1, 10)` → número al azar entre 1 y 10.
+**Probalo en consola:**
+- `esperar(1000).then(function() { console.log("pasó 1 segundo") })`
+- `aleatorio(1, 10)` devuelve un número al azar entre 1 y 10.
 
 ---
 
@@ -93,12 +88,12 @@ var cardsPokemon  = document.getElementById("cards-pokemon");
 
 ### 3.2 – La función principal con cadena de promesas
 
-> **Antes de escribirla, explicar:**  
-> `fetch(url)` hace un pedido HTTP y devuelve una **Promesa**.
-> `.then(fn)` se ejecuta cuando la promesa se cumple.
-> Si dentro de un `.then` devolvemos otra promesa, la cadena la espera antes de seguir.
-> `.catch(fn)` atrapa cualquier error de **toda** la cadena.
-> `.finally(fn)` se ejecuta **siempre**, haya error o no. Perfecto para ocultar loaders.
+**Antes de escribirla, explicar:**
+- `fetch(url)` hace un pedido HTTP y devuelve una **Promesa**.
+- `.then(fn)` se ejecuta cuando la promesa se cumple.
+- Si dentro de un `.then` devolvemos otra promesa, la cadena la espera antes de seguir.
+- `.catch(fn)` atrapa cualquier error de **toda** la cadena.
+- `.finally(fn)` se ejecuta **siempre**, haya error o no. Perfecto para ocultar loaders.
 
 ```js
 function cargarPokemon() {
@@ -154,6 +149,9 @@ function cargarPokemon() {
         var imgSrc = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + id + ".png";
         crearCardPokemon(poke.name, imgSrc);
       }
+
+      // Confetti cuando cargan todas las cards (Paso 7)
+      confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
     })
 
     // .catch() atrapa cualquier error que haya ocurrido en toda la cadena.
@@ -174,14 +172,24 @@ function cargarPokemon() {
 
 ```js
 function crearCardPokemon(nombre, imgSrc) {
-  // createElement crea el nodo en memoria. Todavía no aparece en la página.
   var card       = document.createElement("div");
   card.className = "pokemon-card";
   card.innerHTML =
     '<img src="' + imgSrc + '" alt="' + nombre + '">' +
     "<h3>" + nombre + "</h3>";
 
-  // appendChild lo agrega al DOM. Recién acá aparece en la pantalla.
+  // SweetAlert al hacer clic (Paso 6)
+  card.addEventListener("click", function () {
+    Swal.fire({
+      title: "¡Es " + nombre + "!",
+      imageUrl: imgSrc,
+      imageWidth: 180,
+      imageAlt: nombre,
+      confirmButtonText: "¡Atrapar! 🎯",
+      confirmButtonColor: "#2e7d32"
+    });
+  });
+
   cardsPokemon.appendChild(card);
 }
 ```
@@ -194,11 +202,9 @@ if (btnPokemon) {
 }
 ```
 
-> **Probar ahora:** abrí el archivo en el navegador, hacé clic en el botón.
-> Deberían aparecer 10 cards de Pokémon distintas cada vez.
+**Probar ahora:** abrí en el navegador, hacé clic. Deberían aparecer 10 cards distintas cada vez.
 
-> **Para mostrar el error:** cambiar la URL a algo inválido y ver el mensaje de error.
-> Volver a la URL correcta después.
+**Para mostrar el error:** cambiar la URL a algo inválido, ver el mensaje, volver a la URL correcta.
 
 ---
 
@@ -221,15 +227,14 @@ var cardRick   = document.getElementById("card-rick");
 
 ### 4.2 – La función principal con async/await
 
-> **Antes de escribirla, comparar con el Ejemplo 1:**  
-> La LÓGICA es exactamente la misma: esperar → fetch → chequear → leer JSON → mostrar.  
-> La diferencia es cómo se escribe. `async/await` parece código que corre línea por línea,
-> como si fuera sincrónico. Es más fácil de leer y de seguir.  
->
-> `async` antes de `function` habilita el uso de `await` adentro.  
-> `await` pausa esta función hasta que la promesa se resuelva,
-> **sin bloquear el navegador** (el resto de la página sigue viva).  
-> En vez de `.catch()` y `.finally()`, usamos `try / catch / finally`.
+**Antes de escribirla, comparar con el Ejemplo 1:**
+La LÓGICA es exactamente la misma: esperar → fetch → chequear → leer JSON → mostrar.
+La diferencia es cómo se escribe. `async/await` parece código que corre línea por línea,
+más fácil de leer y de seguir.
+
+- `async` antes de `function` habilita el uso de `await` adentro.
+- `await` pausa esta función hasta que la promesa se resuelva, **sin bloquear el navegador**.
+- En vez de `.catch()` y `.finally()`, usamos `try / catch / finally`.
 
 ```js
 async function cargarPersonaje() {
@@ -264,6 +269,15 @@ async function cargarPersonaje() {
 
     crearCardPersonaje(personaje);
 
+    // Toastify cuando carga bien (Paso 5)
+    Toastify({
+      text: "✅ ¡" + personaje.name + " cargado con éxito!",
+      duration: 3000,
+      gravity: "bottom",
+      position: "right",
+      style: { background: "#1565c0", borderRadius: "8px" }
+    }).showToast();
+
   }
   // ---- CATCH: cualquier error del try cae acá ----
   catch (err) {
@@ -281,7 +295,6 @@ async function cargarPersonaje() {
 
 ```js
 function crearCardPersonaje(p) {
-  // Íconos según el estado del personaje en la serie.
   var estadoIcono = { Alive: "🟢", Dead: "🔴", unknown: "⚪" };
 
   var card       = document.createElement("div");
@@ -307,25 +320,31 @@ if (btnRick) {
 }
 ```
 
-> **Probar ahora con estos IDs:**
-> - `1` → Rick Sanchez
-> - `2` → Morty Smith
-> - `3` → Summer Smith
-> - `826` → último personaje de la API
-> - `0` o texto vacío → ver el mensaje de validación
-> - `999` → ver el error de la API (404)
+**Probar con estos IDs:**
+
+| ID | Personaje |
+|---|---|
+| 1 | Rick Sanchez |
+| 2 | Morty Smith |
+| 3 | Summer Smith |
+| 4 | Beth Smith |
+| 5 | Jerry Smith |
+| 361 | Evil Morty |
+| 826 | Último personaje |
+
+Probar también con `0`, vacío, o `999` para ver los mensajes de error.
 
 ---
 
 ## Paso 5 – Librería 1: Toastify
 
-> **Qué es:** una notificación pequeña que aparece en una esquina y desaparece sola.
-> No bloquea al usuario. Ideal para confirmar acciones como "guardado", "enviado", etc.
->
-> **Diferencia con `alert()`:** `alert()` congela todo hasta que el usuario hace clic.
-> Toastify muestra el mensaje y el usuario puede seguir usando la página.
+**Qué es:** una notificación pequeña que aparece en una esquina y desaparece sola.
+No bloquea al usuario. Ideal para confirmar acciones como "guardado", "enviado", etc.
 
-### Probar el uso básico (escribirlo en consola o en una función de prueba)
+**Diferencia con `alert()`:** `alert()` congela todo hasta que el usuario hace clic.
+Toastify muestra el mensaje y el usuario puede seguir usando la página.
+
+### Probar el uso básico primero (escribirlo en consola)
 
 ```js
 Toastify({
@@ -333,46 +352,24 @@ Toastify({
   duration: 3000,       // cuántos ms dura (3000 = 3 segundos)
   gravity: "top",       // "top" o "bottom"
   position: "right",    // "left", "center" o "right"
-  style: {
-    background: "#2e7d32",
-    borderRadius: "8px"
-  }
+  style: { background: "#2e7d32", borderRadius: "8px" }
 }).showToast();
 ```
 
-### Integrarlo: mostrar un toast cuando el personaje carga bien
-
-Buscar el `crearCardPersonaje(personaje);` dentro del `try` de `cargarPersonaje`
-y agregar estas líneas **debajo**:
-
-```js
-    crearCardPersonaje(personaje);
-
-    // Toastify aparece después de que la card se creó exitosamente.
-    Toastify({
-      text: "✅ ¡" + personaje.name + " cargado con éxito!",
-      duration: 3000,
-      gravity: "bottom",
-      position: "right",
-      style: { background: "#1565c0", borderRadius: "8px" }
-    }).showToast();
-```
-
-> **Probar:** buscar un personaje, ver que aparece el toast azul abajo a la derecha.
+El Toastify en Rick & Morty ya está incluido en el código del Paso 4 (dentro del `try`, después de `crearCardPersonaje`). Señalarlo y explicarlo.
 
 ---
 
 ## Paso 6 – Librería 2: SweetAlert2
 
-> **Qué es:** reemplaza el `alert()`, `confirm()` y `prompt()` nativos con popups
-> bonitos y configurables. A diferencia de Toastify, **sí bloquea** la página
-> hasta que el usuario interactúa (es un modal).
->
-> **Cuándo usar Toastify y cuándo SweetAlert:**
-> - Toastify → confirmaciones silenciosas que no necesitan respuesta del usuario.
-> - SweetAlert → cuando necesitás que el usuario tome una decisión o vea algo importante.
+**Qué es:** reemplaza `alert()`, `confirm()` y `prompt()` con popups bonitos y configurables.
+A diferencia de Toastify, **sí bloquea** la página hasta que el usuario interactúa.
 
-### Probar el uso básico
+**Cuándo usar cada uno:**
+- Toastify → confirmaciones silenciosas que no necesitan respuesta del usuario.
+- SweetAlert → cuando el usuario tiene que tomar una decisión o ver algo importante.
+
+### Probar el uso básico primero (escribirlo en consola)
 
 ```js
 Swal.fire({
@@ -399,45 +396,17 @@ Swal.fire({
 });
 ```
 
-### Integrarlo: abrir un modal al hacer clic en una card de Pokémon
-
-Dentro de `crearCardPokemon`, agregar el listener **antes** del `appendChild`:
-
-```js
-function crearCardPokemon(nombre, imgSrc) {
-  var card       = document.createElement("div");
-  card.className = "pokemon-card";
-  card.innerHTML =
-    '<img src="' + imgSrc + '" alt="' + nombre + '">' +
-    "<h3>" + nombre + "</h3>";
-
-  // Al hacer clic en la card, SweetAlert abre un modal con imagen grande.
-  card.addEventListener("click", function () {
-    Swal.fire({
-      title: "¡Es " + nombre + "!",
-      imageUrl: imgSrc,
-      imageWidth: 180,
-      imageAlt: nombre,
-      confirmButtonText: "¡Atrapar! 🎯",
-      confirmButtonColor: "#2e7d32"
-    });
-  });
-
-  cardsPokemon.appendChild(card);
-}
-```
-
-> **Probar:** cargar Pokémon, hacer clic en cualquier card, ver el modal con la imagen.
+El SweetAlert al hacer clic en las cards de Pokémon ya está incluido en el código del Paso 3 (dentro de `crearCardPokemon`). Señalarlo y explicarlo.
 
 ---
 
 ## Paso 7 – Librería 3: canvas-confetti
 
-> **Qué es:** dibuja una animación de confetti en el navegador.
-> Es un buen ejemplo de librería de **una sola responsabilidad**: hace una cosa y la hace muy bien.
-> La API tiene literalmente una función: `confetti()`.
+**Qué es:** dibuja animación de confetti en el navegador.
+Ejemplo de librería de **una sola responsabilidad**: hace una cosa y la hace bien.
+La API tiene una sola función: `confetti()`.
 
-### Probar el uso básico
+### Probar el uso básico (escribirlo en consola)
 
 ```js
 confetti();  // disparo con opciones por defecto
@@ -449,48 +418,18 @@ confetti();  // disparo con opciones por defecto
 confetti({
   particleCount: 150,   // cantidad de partículas
   spread: 90,           // ángulo de apertura en grados
-  origin: { y: 0.6 }   // punto de origen: 0 = arriba, 1 = abajo de la pantalla
+  origin: { y: 0.6 }   // 0 = arriba, 1 = abajo de la pantalla
 });
 ```
 
-### Integrarlo: confetti cuando los 10 Pokémon terminan de cargar
-
-Buscar el `for` que crea las cards dentro del último `.then` de `cargarPokemon`
-y agregar **una línea** después del bucle:
-
-```js
-      for (var i = 0; i < elegidos.length; i++) {
-        // ... código existente ...
-        crearCardPokemon(poke.name, imgSrc);
-      }
-
-      // Una sola línea para la animación de confetti.
-      confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
-```
-
-> **Probar:** cargar Pokémon, ver el confetti cuando aparecen las cards.
+El confetti ya está incluido en el código del Paso 3 (al final del último `.then` de `cargarPokemon`). Señalarlo y explicarlo.
 
 ---
 
-## Resumen final
+## Resumen de librerías
 
-| Librería | Para qué sirve | Cómo se usa |
+| Librería | Para qué sirve | Cómo se activa |
 |---|---|---|
 | **Toastify** | Notificación que desaparece sola, no bloquea | `Toastify({...}).showToast()` |
 | **SweetAlert2** | Modal con botones, bloquea hasta que el usuario actúa | `Swal.fire({...})` |
-| **canvas-confetti** | Animación de confetti, una sola función | `confetti({...})` |
-
----
-
-## IDs útiles para probar Rick & Morty
-
-| ID | Personaje |
-|---|---|
-| 1 | Rick Sanchez |
-| 2 | Morty Smith |
-| 3 | Summer Smith |
-| 4 | Beth Smith |
-| 5 | Jerry Smith |
-| 6 | Abadango Cluster Princess |
-| 361 | Evil Morty |
-| 826 | Último personaje |
+| **canvas-confetti** | Animación de confetti | `confetti({...})` |
