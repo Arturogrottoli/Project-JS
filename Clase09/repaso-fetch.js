@@ -13,79 +13,91 @@
 // Estilo: fetch + .then() / .catch() / .finally()
 // =============================================================================
 
-var btnPokemon    = document.getElementById("btnPokemon");
-var loaderPokemon = document.getElementById("loader-pokemon");
-var errorPokemon  = document.getElementById("error-pokemon");
-var cardsPokemon  = document.getElementById("cards-pokemon");
+var btnPokemon  = document.getElementById("btnPokemon");   // el botón que dispara el fetch
+var errorPokemon = document.getElementById("error-pokemon"); // el párrafo donde mostramos errores
+var cardsPokemon = document.getElementById("cards-pokemon"); // el contenedor donde van las cards
 
 /**
  * cargarPokemon usa el estilo CLÁSICO de promesas encadenadas con .then().
  *
- * ¿Cómo funciona una cadena .then()?
- *   fetch(url)   → devuelve una Promesa con la respuesta HTTP
- *   .then(fn)    → cuando la promesa se cumple, llama a fn con el resultado.
- *                  Si fn devuelve otra Promesa, la cadena la espera.
- *   .catch(fn)   → si cualquier .then() lanza un error, cae acá.
- *   .finally(fn) → se ejecuta SIEMPRE al final, haya error o no.
+ * Una Promesa puede estar en 3 estados:
+ *   PENDING   → todavía esperando (la petición está en vuelo)
+ *   FULFILLED → se resolvió bien  → entra al .then()
+ *   REJECTED  → algo falló        → entra al .catch()
+ *
+ * La cadena funciona así:
+ *   fetch(url)   → devuelve una Promesa
+ *   .then(fn)    → cuando se resuelve, llama a fn con el resultado
+ *                  si fn devuelve otra Promesa, la cadena la espera antes de seguir
+ *   .catch(fn)   → si CUALQUIER paso lanza un error, cae acá
+ *   .finally(fn) → se ejecuta SIEMPRE al final, haya error o no
  */
 function cargarPokemon() {
 
-  loaderPokemon.style.display = "block";
-  errorPokemon.style.display  = "none";
-  errorPokemon.textContent    = "";
-  cardsPokemon.innerHTML      = "";
+  errorPokemon.style.display = "none";
+  errorPokemon.textContent   = "";
+  cardsPokemon.innerHTML     = "";
 
-  // fetch(url) devuelve una Promesa. Arrancamos la cadena directamente.
-  fetch("https://pokeapi.co/api/v2/pokemon?limit=1025")
+  // Le pedimos a la API 10 Pokémon desde un punto al azar.
+  // ?limit=10  → cuántos traer
+  // ?offset=X  → desde qué posición empezar (la PokeAPI tiene 1025 en total)
+  // Así cada clic trae un grupo distinto sin necesidad de lógica extra.
+  var offset = Math.floor(Math.random() * 1000);
 
-    // Paso 1: recibimos `response`. Todavía NO tenemos el JSON, solo los headers.
-    // fetch() NO lanza error automáticamente ante 404 o 500, por eso chequeamos nosotros.
-    // Un throw acá hace que el código salte directo al .catch().
+  // ----- fetch devuelve una Promesa -----
+  // El navegador hace el pedido HTTP en segundo plano.
+  // Cuando el servidor responde, la Promesa pasa a FULFILLED
+  // y el código sigue en el primer .then().
+  fetch("https://pokeapi.co/api/v2/pokemon?limit=10&offset=" + offset)
+
+    // ----- .then() Nro 1: recibimos la respuesta HTTP -----
+    // `response` tiene los headers y el código de estado (200, 404, 500, etc.).
+    // El cuerpo con los datos todavía NO está disponible acá.
     .then(function (response) {
+
+      // fetch() NO lanza error automáticamente si el servidor devuelve 404 o 500.
+      // Solo falla si no hay conexión de red. Por eso chequeamos response.ok nosotros.
+      // response.ok es true cuando el código HTTP está entre 200 y 299.
       if (!response.ok) {
         throw new Error("La PokeAPI respondió con error. Código: " + response.status);
       }
-      // response.json() lee el body completo. También devuelve una Promesa.
+
+      // response.json() lee el body completo y lo convierte a objeto JS.
+      // También es asíncrono, también devuelve una Promesa.
+      // Al hacer return acá, la cadena espera esa Promesa antes de seguir.
       return response.json();
     })
 
-    // Paso 2: ya tenemos `data` como objeto JavaScript listo para usar.
-    // Respuesta de la API: { count: 1025, results: [ { name, url }, ... ] }
+    // ----- .then() Nro 2: ya tenemos los datos como objeto JavaScript -----
+    // La API devuelve: { count: 1025, results: [ { name, url }, ... ] }
+    // `data.results` es el array con los 10 Pokémon que pedimos.
     .then(function (data) {
-      var todos    = data.results;
-      var elegidos = [];
-      var usados   = {};
 
-      // Elegimos 10 índices al azar sin repetir.
-      // Math.floor(Math.random() * todos.length) da un índice válido del array.
-      while (elegidos.length < 10) {
-        var idx = Math.floor(Math.random() * todos.length);
-        if (!usados[idx]) {
-          usados[idx] = true;
-          elegidos.push(todos[idx]);
-        }
-      }
+      // Recorremos el array y creamos una card por cada Pokémon.
+      data.results.forEach(function (poke) {
 
-      for (var i = 0; i < elegidos.length; i++) {
-        var poke   = elegidos[i];
-        // La URL de cada Pokémon termina en su id: ".../pokemon/25/"
+        // Cada poke tiene: { name: "bulbasaur", url: ".../pokemon/1/" }
+        // Sacamos el número del id de la URL con una regex.
         var id     = poke.url.replace(/.*\/(\d+)\/?$/, "$1");
         var imgSrc = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + id + ".png";
+
         crearCardPokemon(poke.name, imgSrc);
-      }
+      });
 
       confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
     })
 
-    // .catch() atrapa cualquier error que haya ocurrido en toda la cadena.
+    // ----- .catch(): atrapa cualquier error de toda la cadena -----
+    // Si el throw del paso 1 se ejecuta, o si hay error de red, cae acá.
     .catch(function (err) {
       errorPokemon.textContent   = "Error: " + (err.message || "Error desconocido");
       errorPokemon.style.display = "block";
     })
 
-    // .finally() se ejecuta siempre, con o sin error.
+    // ----- .finally(): se ejecuta siempre, con o sin error -----
+    // Ideal para tareas de limpieza: ocultar loaders, cerrar conexiones, etc.
     .finally(function () {
-      loaderPokemon.style.display = "none";
+      console.log("Fetch terminado (con o sin error)");
     });
 }
 
