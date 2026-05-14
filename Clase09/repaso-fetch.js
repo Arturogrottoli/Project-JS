@@ -4,18 +4,19 @@
  * EJEMPLO 1 – PokeAPI      → cadena de promesas: .then() / .catch() / .finally()
  * EJEMPLO 2 – Rick & Morty → async / await + try / catch / finally
  *
- * Librerías: Toastify · SweetAlert2 · canvas-confetti
+ * Librerías: SweetAlert2 · Toastify
  */
 
 
 // =============================================================================
-// EJEMPLO 1 – PokeAPI: 10 Pokémon al azar
+// EJEMPLO 1 – PokeAPI: 10 Pokémon
 // Estilo: fetch + .then() / .catch() / .finally()
 // =============================================================================
 
-var btnPokemon  = document.getElementById("btnPokemon");   // el botón que dispara el fetch
-var errorPokemon = document.getElementById("error-pokemon"); // el párrafo donde mostramos errores
-var cardsPokemon = document.getElementById("cards-pokemon"); // el contenedor donde van las cards
+let btnPokemon     = document.getElementById("btnPokemon");    // el botón que dispara el fetch
+let cargandoPokemon = document.getElementById("cargando-pokemon"); // texto "Cargando..." mientras espera
+let errorPokemon   = document.getElementById("error-pokemon"); // el párrafo donde mostramos errores
+let cardsPokemon   = document.getElementById("cards-pokemon"); // el contenedor donde van las cards
 
 /**
  * cargarPokemon usa el estilo CLÁSICO de promesas encadenadas con .then().
@@ -34,84 +35,88 @@ var cardsPokemon = document.getElementById("cards-pokemon"); // el contenedor do
  */
 function cargarPokemon() {
 
-  errorPokemon.style.display = "none";
-  errorPokemon.textContent   = "";
-  cardsPokemon.innerHTML     = "";
+  // Limpiamos la pantalla antes de arrancar:
+  // - Ocultamos el mensaje de error del fetch anterior (si hubo alguno).
+  // - Borramos las cards viejas para que no se acumulen con las nuevas.
+  cargandoPokemon.style.display = "block";
+  errorPokemon.style.display    = "none";
+  errorPokemon.textContent      = "";
+  cardsPokemon.innerHTML        = "";
 
-  // Le pedimos a la API 10 Pokémon desde un punto al azar.
-  // ?limit=10  → cuántos traer
-  // ?offset=X  → desde qué posición empezar (la PokeAPI tiene 1025 en total)
-  // Así cada clic trae un grupo distinto sin necesidad de lógica extra.
-  var offset = Math.floor(Math.random() * 1000);
+  // Generamos 10 IDs únicos al azar entre 1 y 1025 (total de Pokémon en la API).
+  // Usamos un array y vamos agregando de a uno hasta tener 10 sin repetidos.
+  let ids = [];
+  while (ids.length < 10) {
+    let id = Math.floor(Math.random() * 1025) + 1;
+    if (!ids.includes(id)) {
+      ids.push(id);
+    }
+  }
 
-  // ----- fetch devuelve una Promesa -----
-  // El navegador hace el pedido HTTP en segundo plano.
-  // Cuando el servidor responde, la Promesa pasa a FULFILLED
-  // y el código sigue en el primer .then().
-  fetch("https://pokeapi.co/api/v2/pokemon?limit=10&offset=" + offset)
+  // Para cada id creamos una Promesa que fetchea ese Pokémon individual.
+  // .map() recorre el array de ids y devuelve un nuevo array, pero en vez de
+  // números devuelve Promesas — una por cada fetch.
+  let promesas = ids.map(function (id) {
+    return fetch("https://pokeapi.co/api/v2/pokemon/" + id)
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("La PokeAPI respondió con error. Código: " + response.status);
+        }
+        // response.json() lee el body → devuelve una Promesa con el objeto del Pokémon.
+        return response.json();
+      });
+  });
 
-    // ----- .then() Nro 1: recibimos la respuesta HTTP -----
-    // `response` tiene los headers y el código de estado (200, 404, 500, etc.).
-    // El cuerpo con los datos todavía NO está disponible acá.
-    .then(function (response) {
+  // Promise.all(array) recibe un array de Promesas y devuelve una sola Promesa nueva.
+  // Esa Promesa se resuelve cuando TODAS las del array terminaron.
+  // Si alguna falla, Promise.all falla inmediatamente → cae al .catch().
+  Promise.all(promesas)
 
-      // fetch() NO lanza error automáticamente si el servidor devuelve 404 o 500.
-      // Solo falla si no hay conexión de red. Por eso chequeamos response.ok nosotros.
-      // response.ok es true cuando el código HTTP está entre 200 y 299.
-      if (!response.ok) {
-        throw new Error("La PokeAPI respondió con error. Código: " + response.status);
-      }
-
-      // response.json() lee el body completo y lo convierte a objeto JS.
-      // También es asíncrono, también devuelve una Promesa.
-      // Al hacer return acá, la cadena espera esa Promesa antes de seguir.
-      return response.json();
-    })
-
-    // ----- .then() Nro 2: ya tenemos los datos como objeto JavaScript -----
-    // La API devuelve: { count: 1025, results: [ { name, url }, ... ] }
-    // `data.results` es el array con los 10 Pokémon que pedimos.
-    .then(function (data) {
-
-      // Recorremos el array y creamos una card por cada Pokémon.
-      data.results.forEach(function (poke) {
-
-        // Cada poke tiene: { name: "bulbasaur", url: ".../pokemon/1/" }
-        // Sacamos el número del id de la URL con una regex.
-        var id     = poke.url.replace(/.*\/(\d+)\/?$/, "$1");
-        var imgSrc = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + id + ".png";
-
+    // Cuando los 10 fetches terminaron, `pokemones` es un array con los 10 objetos.
+    .then(function (pokemones) {
+      pokemones.forEach(function (poke) {
+        // El endpoint individual devuelve el objeto completo con el campo `id` incluido.
+        // No necesitamos parsear ninguna URL: lo usamos directo.
+        let imgSrc = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke.id + ".png";
         crearCardPokemon(poke.name, imgSrc);
       });
-
-      confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
+      console.log("10 Pokémon cargados con éxito");
     })
 
-    // ----- .catch(): atrapa cualquier error de toda la cadena -----
-    // Si el throw del paso 1 se ejecuta, o si hay error de red, cae acá.
+    // ----- .catch(): atrapa cualquier error de cualquier fetch -----
     .catch(function (err) {
       errorPokemon.textContent   = "Error: " + (err.message || "Error desconocido");
       errorPokemon.style.display = "block";
     })
 
     // ----- .finally(): se ejecuta siempre, con o sin error -----
-    // Ideal para tareas de limpieza: ocultar loaders, cerrar conexiones, etc.
     .finally(function () {
-      console.log("Fetch terminado (con o sin error)");
+      cargandoPokemon.style.display = "none";
     });
 }
 
-/**
- * Crea una card de Pokémon.
- * Al hacer clic abre un modal con SweetAlert2.
- */
+// -----------------------------------------------------------------------------
+// SWEETALERT2
+// -----------------------------------------------------------------------------
+// SweetAlert2 reemplaza el alert() nativo con un popup bonito y configurable.
+// Se abre con Swal.fire(opciones) y bloquea la página hasta que el usuario
+// hace clic (a diferencia de Toastify que desaparece solo).
+//
+// Opciones más usadas:
+//   title             → título del modal
+//   imageUrl          → imagen que se muestra en el cuerpo
+//   imageWidth        → ancho de esa imagen en px
+//   confirmButtonText → texto del botón principal
+//   confirmButtonColor → color del botón
+// -----------------------------------------------------------------------------
 function crearCardPokemon(nombre, imgSrc) {
-  var card       = document.createElement("div");
+  let card       = document.createElement("div");
   card.className = "pokemon-card";
   card.innerHTML =
     '<img src="' + imgSrc + '" alt="' + nombre + '">' +
     "<h3>" + nombre + "</h3>";
 
+  // Al hacer clic en la card, SweetAlert abre un modal con la imagen grande.
   card.addEventListener("click", function () {
     Swal.fire({
       title: "¡Es " + nombre + "!",
@@ -134,55 +139,91 @@ btnPokemon.addEventListener("click", cargarPokemon);
 // Estilo: async / await + try / catch / finally
 // =============================================================================
 
-var btnRick    = document.getElementById("btnRick");
-var inputRick  = document.getElementById("inputRick");
-var loaderRick = document.getElementById("loader-rick");
-var errorRick  = document.getElementById("error-rick");
-var cardRick   = document.getElementById("card-rick");
+let btnRick   = document.getElementById("btnRick");    // botón buscar
+let inputRick = document.getElementById("inputRick");  // input donde el usuario escribe el ID
+let errorRick = document.getElementById("error-rick"); // párrafo donde mostramos errores
+let cardRick  = document.getElementById("card-rick");  // contenedor donde va la card
 
-/**
- * cargarPersonaje usa el estilo MODERNO con async/await.
- *
- * ¿Qué cambia respecto al Ejemplo 1?
- *   - La LÓGICA es idéntica: fetch → chequear → .json() → mostrar.
- *   - La ESCRITURA parece código sincrónico, línea a línea, más fácil de leer.
- *   - En vez de .then() anidados, escribimos await en cada línea.
- *   - En vez de .catch()/.finally(), usamos try / catch / finally.
- *
- * `async` antes de function habilita el uso de await adentro.
- * `await` pausa esta función hasta que la promesa se resuelva,
- * sin bloquear el navegador.
- */
+// -----------------------------------------------------------------------------
+// async / await
+// -----------------------------------------------------------------------------
+// Poner `async` antes de function hace dos cosas:
+//   1. Habilita el uso de `await` adentro de esa función.
+//   2. La función siempre devuelve una Promesa (aunque no lo escribamos).
+//
+// `await` pausa la ejecución de esta función en esa línea y espera
+// a que la Promesa se resuelva. Mientras espera, el navegador sigue
+// funcionando normalmente (el usuario puede seguir usando la página).
+// Cuando la Promesa se resuelve, el código continúa en la línea siguiente.
+//
+// Es exactamente lo mismo que el .then() del Ejemplo 1,
+// pero escrito de forma que parece código normal, línea por línea.
+// -----------------------------------------------------------------------------
+
 async function cargarPersonaje() {
 
-  // ---- TRY: todo el flujo feliz va acá ----
+  // ---------------------------------------------------------------------------
+  // TRY
+  // ---------------------------------------------------------------------------
+  // Acá escribimos todo el código que queremos ejecutar.
+  // Si en CUALQUIER línea del try ocurre un error (de red, de validación,
+  // de la API, etc.), JavaScript para en esa línea y salta directo al CATCH.
+  // ---------------------------------------------------------------------------
   try {
 
-    loaderRick.style.display = "block";
-    errorRick.style.display  = "none";
-    errorRick.textContent    = "";
-    cardRick.innerHTML       = "";
+    // Limpiamos errores y la card anterior antes de arrancar.
+    errorRick.style.display = "none";
+    errorRick.textContent   = "";
+    cardRick.innerHTML      = "";
 
-    // Validamos el input antes de hacer el fetch.
-    var id = parseInt(inputRick.value);
+    // parseInt() convierte el texto del input a número entero.
+    //   parseInt("3")   → 3
+    //   parseInt("")    → NaN  (el input estaba vacío)
+    //   parseInt("abc") → NaN  (no era un número)
+    //
+    // Después validamos que el número sea usable:
+    //   !id        → atrapa NaN y el 0 (NaN es "falsy", 0 también)
+    //   id < 1     → números negativos
+    //   id > 826   → fuera del total de personajes de la API
+    //
+    // Si cualquiera de esas condiciones es true, lanzamos un error con throw.
+    // throw hace que el código pare en esa línea y salte directo al catch.
+    let id = parseInt(inputRick.value);
     if (!id || id < 1 || id > 826) {
       throw new Error("Ingresá un ID válido entre 1 y 826.");
     }
 
-    var response = await fetch("https://rickandmortyapi.com/api/character/" + id);
+    // await fetch(...) hace el pedido HTTP y pausa acá hasta tener la respuesta.
+    // `response` llega con los headers y el código de estado, pero sin los datos todavía.
+    let response = await fetch("https://rickandmortyapi.com/api/character/" + id);
 
+    // Igual que en el Ejemplo 1: si el servidor devolvió 404 o 500,
+    // response.ok es false y lanzamos el error nosotros → salta al catch.
     if (!response.ok) {
       throw new Error("Personaje no encontrado. Código: " + response.status);
     }
 
+    // await response.json() lee el body y lo convierte a objeto JS.
     // La API devuelve: { id, name, status, species, image, origin: {name}, location: {name} }
-    var personaje = await response.json();
+    let personaje = await response.json();
 
+    // Si llegamos hasta acá, todo salió bien. Creamos la card.
     crearCardPersonaje(personaje);
 
-    // TOASTIFY: notificación no bloqueante cuando la carga termina bien.
-    // A diferencia de SweetAlert (modal que espera interacción),
-    // Toastify muestra un mensaje breve que desaparece solo.
+    // ---------------------------------------------------------------------------
+    // TOASTIFY
+    // ---------------------------------------------------------------------------
+    // Toastify muestra una notificación pequeña que desaparece sola.
+    // No bloquea al usuario (a diferencia de SweetAlert que abre un modal).
+    // Úsalo para confirmar acciones que salieron bien: "guardado", "enviado", etc.
+    //
+    // Opciones más usadas:
+    //   text     → el mensaje que aparece
+    //   duration → cuántos milisegundos dura (3000 = 3 segundos)
+    //   gravity  → "top" o "bottom" (dónde aparece verticalmente)
+    //   position → "left", "center" o "right" (dónde aparece horizontalmente)
+    //   style    → objeto CSS para personalizar colores y forma
+    // ---------------------------------------------------------------------------
     Toastify({
       text: "✅ ¡" + personaje.name + " cargado con éxito!",
       duration: 3000,
@@ -192,27 +233,41 @@ async function cargarPersonaje() {
     }).showToast();
 
   }
-  // ---- CATCH: cualquier error del try cae acá ----
+
+  // ---------------------------------------------------------------------------
+  // CATCH
+  // ---------------------------------------------------------------------------
+  // Si cualquier línea del try lanzó un error (con throw o por fallo de red),
+  // el código cae acá. `err` es el objeto de error con err.message adentro.
+  // Es equivalente al .catch() de la cadena de promesas del Ejemplo 1.
+  // ---------------------------------------------------------------------------
   catch (err) {
-    errorRick.textContent   = "Error: " + (err.message || "Error desconocido");
+    errorRick.textContent   = "Error: " + err.message;
     errorRick.style.display = "block";
   }
-  // ---- FINALLY: se ejecuta siempre, con o sin error ----
+
+  // ---------------------------------------------------------------------------
+  // FINALLY
+  // ---------------------------------------------------------------------------
+  // Se ejecuta siempre, llegue por el camino feliz (try) o por el error (catch).
+  // Es equivalente al .finally() del Ejemplo 1.
+  // Acá podríamos ocultar un loader, cerrar una conexión, etc.
+  // ---------------------------------------------------------------------------
   finally {
-    loaderRick.style.display = "none";
+    console.log("Fetch terminado (con o sin error)");
   }
 }
 
+// Armamos la card con los datos que devolvió la API.
+// `p` es el objeto personaje: { name, status, species, image, origin, location }
 function crearCardPersonaje(p) {
-  var estadoIcono = { Alive: "🟢", Dead: "🔴", unknown: "⚪" };
-
-  var card       = document.createElement("div");
+  let card       = document.createElement("div");
   card.className = "rick-card";
   card.innerHTML =
     '<img src="' + p.image + '" alt="' + p.name + '">' +
     "<div class='rick-info'>" +
     "<h3>" + p.name + "</h3>" +
-    "<p>" + (estadoIcono[p.status] || "⚪") + " " + p.status + " · " + p.species + "</p>" +
+    "<p>" + p.status + " · " + p.species + "</p>" +
     "<p><strong>Origen:</strong> " + p.origin.name + "</p>" +
     "<p><strong>Última ubicación:</strong> " + p.location.name + "</p>" +
     "</div>";

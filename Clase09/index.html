@@ -26,6 +26,7 @@
       Hacé clic en una card para ver SweetAlert en acción.
     </p>
     <button id="btnPokemon">Cargar 10 Pokémon al azar</button>
+    <p id="cargando-pokemon" style="display:none;">Cargando...</p>
 <p id="error-pokemon" class="error-msg" style="display:none;"></p>
     <div id="cards-pokemon" class="pokemon-cards"></div>
   </section>
@@ -46,15 +47,14 @@
     </p>
     <input id="inputRick" type="number" placeholder="ID del personaje (1 – 826)" min="1" max="826">
     <button id="btnRick">Buscar personaje</button>
-    <p id="loader-rick" style="display:none;">Cargando...</p>
-    <p id="error-rick" class="error-msg" style="display:none;"></p>
+<p id="error-rick" class="error-msg" style="display:none;"></p>
     <div id="card-rick"></div>
   </section>
 
   <!-- Toastify JS -->
-  //<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   <!-- SweetAlert2 JS -->
-  //<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script src="repaso-fetch.js"></script>
 </body>

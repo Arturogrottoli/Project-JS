@@ -7,178 +7,332 @@ Cada paso muestra exactamente qué escribir, qué explicar, y qué probar antes 
 
 ## Antes de empezar
 
-Tener los dos archivos listos. El HTML ya tiene los CDN de las librerías cargados,
-así que no hace falta instalar nada. Solo escribimos JavaScript.
+El archivo `index.html` ya está listo con:
+- Sección de Pokémon: botón `#btnPokemon`, párrafo `#cargando-pokemon`, error `#error-pokemon`, cards `#cards-pokemon`.
+- Sección de Rick & Morty: input `#inputRick`, botón `#btnRick`, error `#error-rick`, card `#card-rick`.
+- Los CDN de **Toastify** y **SweetAlert2** ya incluidos al final del body.
 
-El archivo `index.html` tiene:
-- Un botón `#btnPokemon` y un contenedor `#cards-pokemon` para las cards de Pokémon.
-- Un `<input>` `#inputRick`, un botón `#btnRick` y un contenedor `#card-rick` para Rick & Morty.
-- Los CDN de **Toastify**, **SweetAlert2** y **canvas-confetti** ya incluidos.
-
-El archivo `repaso-fetch.js` arranca vacío. Todo lo que sigue va ahí.
+El `repaso-fetch.js` arranca vacío. Todo lo que sigue va ahí.
 
 ---
 
-## Paso 1 – La base del archivo
+## Paso 1 – Ejemplo 1: PokeAPI (solo fetch, sin librerías)
 
-Lo primero es envolver todo en una **IIFE** (función que se llama a sí misma).
+### 1.1 – Variables que referencian el HTML
+
+`document.getElementById("id")` busca en el HTML el elemento con ese id y lo guarda en una variable.
+Si el elemento no existe, devuelve `null`.
 
 ```js
-(function () {
-
-  // Todo el código de la clase va acá adentro
-
-})();
+let btnPokemon      = document.getElementById("btnPokemon");      // el botón que dispara el fetch
+let cargandoPokemon = document.getElementById("cargando-pokemon"); // el "Cargando..." que mostramos mientras espera
+let errorPokemon    = document.getElementById("error-pokemon");    // el párrafo donde mostramos errores
+let cardsPokemon    = document.getElementById("cards-pokemon");    // el contenedor donde van las cards
 ```
-
-**¿Por qué la IIFE?**
-Porque todas las variables que declaramos adentro (botones, funciones, etc.) quedan
-aisladas y no "ensucian" el objeto global `window`. Es una buena práctica cuando
-no se usan módulos ES.
 
 ---
 
-## Paso 2 – Dos funciones de utilidad
+### 1.2 – Qué es una Promesa y cómo funciona la cadena
 
-Antes de tocar las APIs, escribimos estas dos funciones adentro de la IIFE.
-Las vamos a usar en los dos ejemplos.
+Antes de escribir el código, explicar:
 
-```js
-// Devuelve una Promesa que se resuelve después de `ms` milisegundos.
-// La usamos para que el loading sea visible aunque la red sea rápida.
-//
-// new Promise(function(resolve, reject) { ... })
-//   - resolve llama cuando la operación salió bien
-//   - reject  llama cuando la operación falló
-// Acá solo usamos resolve porque setTimeout no puede fallar.
-function esperar(ms) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, ms);
-  });
-}
+Una Promesa es un objeto que representa algo que todavía no terminó.
+Puede estar en 3 estados:
+- `PENDING` → todavía esperando (el pedido HTTP está en vuelo)
+- `FULFILLED` → se resolvió bien → el código entra al `.then()`
+- `REJECTED` → algo falló → el código entra al `.catch()`
 
-// Devuelve un número entero al azar entre min y max (ambos inclusive).
-// Math.random() da un decimal entre 0 y <1. Lo escalamos al rango deseado.
-function aleatorio(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-```
+La cadena de promesas:
+- `fetch(url)` → hace el pedido HTTP y devuelve una Promesa
+- `.then(fn)` → cuando la Promesa se cumple, llama a `fn` con el resultado. Si `fn` devuelve otra Promesa, la cadena espera antes de seguir
+- `.catch(fn)` → si CUALQUIER paso anterior lanzó un error, cae acá
+- `.finally(fn)` → se ejecuta SIEMPRE al final, haya error o no. Ideal para ocultar loaders
 
-**Probalo en consola:**
-- `esperar(1000).then(function() { console.log("pasó 1 segundo") })`
-- `aleatorio(1, 10)` devuelve un número al azar entre 1 y 10.
+**¿Cómo pedimos 10 Pokémon al azar?**
+Hacemos 10 fetches individuales, uno por cada ID random.
+Para no esperar que terminen uno por uno, usamos `Promise.all`:
+- `Promise.all([p1, p2, ... p10])` → recibe un array de Promesas y devuelve una Promesa nueva que se resuelve cuando **todas** terminaron
+- Si cualquiera falla, `Promise.all` falla inmediatamente
+- El `.then()` recibe un array con los 10 resultados en orden
 
 ---
 
-## Paso 3 – Ejemplo 1: 10 Pokémon al azar
-
-### 3.1 – Referencias al DOM
-
-```js
-// =====================================================================
-// EJEMPLO 1 – PokeAPI: 10 Pokémon al azar
-// Estilo: fetch + .then() / .catch() / .finally()
-// =====================================================================
-
-var btnPokemon    = document.getElementById("btnPokemon");
-var loaderPokemon = document.getElementById("loader-pokemon");
-var errorPokemon  = document.getElementById("error-pokemon");
-var cardsPokemon  = document.getElementById("cards-pokemon");
-```
-
-### 3.2 – La función principal con cadena de promesas
-
-**Antes de escribirla, explicar:**
-- `fetch(url)` hace un pedido HTTP y devuelve una **Promesa**.
-- `.then(fn)` se ejecuta cuando la promesa se cumple.
-- Si dentro de un `.then` devolvemos otra promesa, la cadena la espera antes de seguir.
-- `.catch(fn)` atrapa cualquier error de **toda** la cadena.
-- `.finally(fn)` se ejecuta **siempre**, haya error o no. Perfecto para ocultar loaders.
+### 1.3 – La función principal
 
 ```js
 function cargarPokemon() {
 
-  // Preparamos la pantalla: mostramos el loader, limpiamos errores y cards viejas.
-  loaderPokemon.style.display = "flex";
-  errorPokemon.style.display  = "none";
-  errorPokemon.textContent    = "";
-  cardsPokemon.innerHTML      = "";
+  // Mostramos "Cargando..." y limpiamos la pantalla antes de arrancar.
+  cargandoPokemon.style.display = "block";
+  errorPokemon.style.display    = "none";
+  errorPokemon.textContent      = "";
+  cardsPokemon.innerHTML        = "";
 
-  esperar(800)
+  // Generamos 10 IDs únicos al azar entre 1 y 1025 (total de Pokémon).
+  // El while sigue generando hasta tener 10 sin repetidos.
+  // Así cada Pokémon de la grilla es verdaderamente distinto.
+  let ids = [];
+  while (ids.length < 10) {
+    let id = Math.floor(Math.random() * 1025) + 1;
+    if (!ids.includes(id)) {
+      ids.push(id);
+    }
+  }
 
-    // Paso 1: cuando termina la espera, disparamos el fetch.
-    // Devolvemos la promesa de fetch para que la cadena la espere.
-    .then(function () {
-      // La PokeAPI nos da todos los Pokémon con ?limit=1025
-      // Respuesta: { count: 1025, results: [ { name, url }, ... ] }
-      return fetch("https://pokeapi.co/api/v2/pokemon?limit=1025");
-    })
-
-    // Paso 2: recibimos `response`. Todavía NO tenemos el JSON, solo los headers.
-    .then(function (response) {
-      // fetch() NO lanza error automáticamente ante 404 o 500.
-      // Por eso chequeamos response.ok nosotros y lanzamos el error a mano.
-      // Un throw acá hace que el código salte directo al .catch()
-      if (!response.ok) {
-        throw new Error("Error al conectar con la PokeAPI. Código: " + response.status);
-      }
-      // response.json() lee el body completo. También devuelve una Promesa.
-      return response.json();
-    })
-
-    // Paso 3: ya tenemos `data` como objeto JavaScript listo para usar.
-    .then(function (data) {
-      var todos = data.results; // array con los 1025 Pokémon
-
-      // Elegimos 10 índices al azar sin repetir usando un objeto como "set".
-      var elegidos = [];
-      var usados   = {};
-      while (elegidos.length < 10) {
-        var idx = aleatorio(0, todos.length - 1);
-        if (!usados[idx]) {
-          usados[idx] = true;
-          elegidos.push(todos[idx]);
+  // .map() recorre el array de ids y devuelve un nuevo array.
+  // En vez de números, cada elemento es una Promesa (un fetch individual).
+  let promesas = ids.map(function (id) {
+    return fetch("https://pokeapi.co/api/v2/pokemon/" + id)
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("La PokeAPI respondió con error. Código: " + response.status);
         }
-      }
+        return response.json();
+      });
+  });
 
-      // Cada Pokémon tiene: { name: "bulbasaur", url: ".../pokemon/1/" }
-      // Sacamos el id de la URL con una regex y construimos la URL de la imagen.
-      for (var i = 0; i < elegidos.length; i++) {
-        var poke   = elegidos[i];
-        var id     = poke.url.replace(/.*\/(\d+)\/?$/, "$1");
-        var imgSrc = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + id + ".png";
+  // Promise.all(array) recibe un array de Promesas y devuelve una Promesa nueva.
+  // Esa Promesa se resuelve cuando TODAS las del array terminaron.
+  // Si cualquiera falla, Promise.all falla inmediatamente → cae al .catch().
+  Promise.all(promesas)
+
+    // Cuando los 10 fetches terminaron, `pokemones` es un array con los 10 objetos.
+    .then(function (pokemones) {
+      pokemones.forEach(function (poke) {
+        // El endpoint individual incluye el campo `id` directamente en el objeto.
+        // No hace falta parsear ninguna URL.
+        let imgSrc = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + poke.id + ".png";
         crearCardPokemon(poke.name, imgSrc);
-      }
-
-      // Confetti cuando cargan todas las cards (Paso 7)
-      confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
+      });
+      console.log("10 Pokémon cargados con éxito");
     })
 
-    // .catch() atrapa cualquier error que haya ocurrido en toda la cadena.
+    // ----- .catch(): atrapa cualquier error de cualquier fetch -----
     .catch(function (err) {
-      errorPokemon.textContent   = "Error: " + (err.message || "Error desconocido");
+      errorPokemon.textContent   = "Error: " + err.message;
       errorPokemon.style.display = "block";
     })
 
-    // .finally() se ejecuta siempre. Ocultamos el loader sin repetir esa línea
-    // dentro del .then() y del .catch().
+    // ----- .finally(): se ejecuta siempre, con o sin error -----
     .finally(function () {
-      loaderPokemon.style.display = "none";
+      cargandoPokemon.style.display = "none";
     });
 }
 ```
 
-### 3.3 – Función para crear una card
+---
+
+### 1.4 – Función para crear la card
 
 ```js
 function crearCardPokemon(nombre, imgSrc) {
-  var card       = document.createElement("div");
+  let card       = document.createElement("div");
+  card.className = "pokemon-card";
+  card.innerHTML =
+    '<img src="' + imgSrc + '" alt="' + nombre + '">' +
+    "<h3>" + nombre + "</h3>";
+  cardsPokemon.appendChild(card);
+}
+```
+
+---
+
+### 1.5 – Listener del botón
+
+```js
+btnPokemon.addEventListener("click", cargarPokemon);
+```
+
+**Probar:** hacer clic, ver el "Cargando..." aparecer y desaparecer, ver 10 cards distintas cada vez.
+
+> Para mostrar el `.catch()` en acción: cambiar la URL por algo inválido, hacer clic, ver el error. Corregirla después.
+
+---
+
+## Paso 2 – Ejemplo 2: Rick & Morty (solo fetch, sin librerías)
+
+### 2.1 – Variables
+
+```js
+let btnRick   = document.getElementById("btnRick");    // botón buscar
+let inputRick = document.getElementById("inputRick");  // donde el usuario escribe el ID
+let errorRick = document.getElementById("error-rick"); // párrafo de errores
+let cardRick  = document.getElementById("card-rick");  // contenedor de la card
+```
+
+---
+
+### 2.2 – async/await y try/catch/finally
+
+Antes de escribir el código, comparar con el Ejemplo 1:
+
+`async/await` hace exactamente lo mismo que la cadena `.then()`, escrito de otra forma.
+El código parece sincrónico (línea por línea) pero en realidad espera las Promesas.
+
+- `async` antes de `function` → habilita `await` adentro
+- `await` → pausa esa línea hasta que la Promesa se resuelve, sin bloquear el navegador
+- `try` → el código que queremos ejecutar. Si cualquier línea lanza un error, salta al `catch`
+- `catch` → equivale al `.catch()`. Recibe el objeto error con `err.message`
+- `finally` → equivale al `.finally()`. Se ejecuta siempre
+
+---
+
+### 2.3 – La función principal
+
+```js
+async function cargarPersonaje() {
+
+  try {
+
+    errorRick.style.display = "none";
+    errorRick.textContent   = "";
+    cardRick.innerHTML      = "";
+
+    // parseInt() convierte el texto del input a número entero.
+    //   parseInt("3")   → 3
+    //   parseInt("")    → NaN  (input vacío)
+    //   parseInt("abc") → NaN  (no era un número)
+    //
+    // Luego validamos:
+    //   !id      → atrapa NaN y el 0
+    //   id < 1   → números negativos
+    //   id > 826 → fuera del rango de la API (826 personajes en total)
+    //
+    // Si alguna condición es true, throw lanza un error → salta al catch.
+    let id = parseInt(inputRick.value);
+    if (!id || id < 1 || id > 826) {
+      throw new Error("Ingresá un ID válido entre 1 y 826.");
+    }
+
+    // await pausa acá hasta tener la respuesta del servidor.
+    let response = await fetch("https://rickandmortyapi.com/api/character/" + id);
+
+    if (!response.ok) {
+      throw new Error("Personaje no encontrado. Código: " + response.status);
+    }
+
+    // La API devuelve: { id, name, status, species, image, origin: {name}, location: {name} }
+    let personaje = await response.json();
+
+    crearCardPersonaje(personaje);
+
+  }
+  catch (err) {
+    errorRick.textContent   = "Error: " + err.message;
+    errorRick.style.display = "block";
+  }
+  finally {
+    console.log("Fetch terminado");
+  }
+}
+```
+
+---
+
+### 2.4 – Función para crear la card
+
+```js
+function crearCardPersonaje(p) {
+  let card       = document.createElement("div");
+  card.className = "rick-card";
+  card.innerHTML =
+    '<img src="' + p.image + '" alt="' + p.name + '">' +
+    "<div class='rick-info'>" +
+    "<h3>" + p.name + "</h3>" +
+    "<p>" + p.status + " · " + p.species + "</p>" +
+    "<p><strong>Origen:</strong> " + p.origin.name + "</p>" +
+    "<p><strong>Última ubicación:</strong> " + p.location.name + "</p>" +
+    "</div>";
+  cardRick.appendChild(card);
+}
+```
+
+---
+
+### 2.5 – Listener del botón
+
+```js
+btnRick.addEventListener("click", cargarPersonaje);
+```
+
+**Probar con estos IDs:**
+
+| ID | Personaje |
+|---|---|
+| 1 | Rick Sanchez |
+| 2 | Morty Smith |
+| 3 | Summer Smith |
+| 361 | Evil Morty |
+
+Probar también con campo vacío, `0` o `999` para ver los tres tipos de error.
+
+---
+
+## Paso 3 – ¿Qué son las librerías?
+
+Las librerías son código que alguien más ya escribió y podemos usar en nuestros proyectos.
+En vez de escribir funcionalidad desde cero, traemos una herramienta que ya funciona y está probada.
+
+Hay dos formas de usar una librería:
+- **CDN** → agregar un `<script>` en el HTML. Sin instalar nada. Ideal para empezar.
+- **npm** → `npm install nombre-libreria`. Para proyectos más grandes con bundler.
+
+Los CDN de esta clase ya están en el HTML:
+```html
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+```
+
+Una vez que el `<script>` está cargado, la librería expone una variable global
+(`Toastify`, `Swal`) que podemos usar en nuestro JS directamente.
+
+---
+
+## Paso 4 – SweetAlert2 en el Ejemplo 1
+
+**Qué es:** reemplaza el `alert()` nativo con un popup bonito y configurable.
+Bloquea la página hasta que el usuario hace clic (es un modal).
+
+### Probar en consola primero
+
+```js
+Swal.fire({
+  title: "¡Hola!",
+  text: "Esto reemplaza al alert() nativo.",
+  icon: "success"
+});
+```
+
+Valores posibles para `icon`: `"success"`, `"error"`, `"warning"`, `"info"`, `"question"`.
+
+### Probar con confirmación (para mostrar que espera al usuario)
+
+```js
+Swal.fire({
+  title: "¿Estás seguro?",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonText: "Sí",
+  cancelButtonText: "Cancelar"
+}).then(function (resultado) {
+  if (resultado.isConfirmed) {
+    Swal.fire("¡Hecho!", "", "success");
+  }
+});
+```
+
+### Integrar: click en una card de Pokémon abre el modal
+
+Modificar `crearCardPokemon` para agregar el `addEventListener` antes del `appendChild`:
+
+```js
+function crearCardPokemon(nombre, imgSrc) {
+  let card       = document.createElement("div");
   card.className = "pokemon-card";
   card.innerHTML =
     '<img src="' + imgSrc + '" alt="' + nombre + '">' +
     "<h3>" + nombre + "</h3>";
 
-  // SweetAlert al hacer clic (Paso 6)
   card.addEventListener("click", function () {
     Swal.fire({
       title: "¡Es " + nombre + "!",
@@ -194,82 +348,44 @@ function crearCardPokemon(nombre, imgSrc) {
 }
 ```
 
-### 3.4 – Listener del botón
-
-```js
-if (btnPokemon) {
-  btnPokemon.addEventListener("click", cargarPokemon);
-}
-```
-
-**Probar ahora:** abrí en el navegador, hacé clic. Deberían aparecer 10 cards distintas cada vez.
-
-**Para mostrar el error:** cambiar la URL a algo inválido, ver el mensaje, volver a la URL correcta.
+**Probar:** cargar Pokémon, hacer clic en cualquier card.
 
 ---
 
-## Paso 4 – Ejemplo 2: Rick & Morty con input
+## Paso 5 – Toastify en el Ejemplo 2
 
-### 4.1 – Referencias al DOM
+**Qué es:** notificación pequeña que aparece en una esquina y desaparece sola.
+No bloquea al usuario.
+
+**Diferencia clave con SweetAlert:**
+- SweetAlert abre un modal → la página espera → el usuario tiene que hacer clic.
+- Toastify muestra el mensaje → la página sigue funcionando → desaparece solo después de X ms.
+
+### Probar en consola primero
 
 ```js
-// =====================================================================
-// EJEMPLO 2 – Rick & Morty: buscar personaje por ID
-// Estilo: async / await + try / catch / finally
-// =====================================================================
-
-var btnRick    = document.getElementById("btnRick");
-var inputRick  = document.getElementById("inputRick");
-var loaderRick = document.getElementById("loader-rick");
-var errorRick  = document.getElementById("error-rick");
-var cardRick   = document.getElementById("card-rick");
+Toastify({
+  text: "¡Hola desde Toastify!",
+  duration: 3000,
+  gravity: "top",
+  position: "right",
+  style: { background: "#2e7d32" }
+}).showToast();
 ```
 
-### 4.2 – La función principal con async/await
+Opciones:
+- `duration` → cuántos ms dura hasta desaparecer (`-1` = permanente)
+- `gravity` → `"top"` o `"bottom"`
+- `position` → `"left"`, `"center"` o `"right"`
+- `style` → objeto CSS para personalizar el color, borde, etc.
 
-**Antes de escribirla, comparar con el Ejemplo 1:**
-La LÓGICA es exactamente la misma: esperar → fetch → chequear → leer JSON → mostrar.
-La diferencia es cómo se escribe. `async/await` parece código que corre línea por línea,
-más fácil de leer y de seguir.
+### Integrar: mostrar toast cuando el personaje carga bien
 
-- `async` antes de `function` habilita el uso de `await` adentro.
-- `await` pausa esta función hasta que la promesa se resuelva, **sin bloquear el navegador**.
-- En vez de `.catch()` y `.finally()`, usamos `try / catch / finally`.
+Agregar dentro del `try` de `cargarPersonaje`, después de `crearCardPersonaje(personaje)`:
 
 ```js
-async function cargarPersonaje() {
-
-  // ---- TRY: todo el código que puede fallar va acá ----
-  try {
-
-    loaderRick.style.display = "flex";
-    errorRick.style.display  = "none";
-    errorRick.textContent    = "";
-    cardRick.innerHTML       = "";
-
-    await esperar(800);
-
-    // Leemos el input y validamos que sea un número dentro del rango.
-    // Si no es válido, lanzamos un error nosotros. Cae directo al catch.
-    var id = parseInt(inputRick.value);
-    if (!id || id < 1 || id > 826) {
-      throw new Error("Ingresá un ID válido entre 1 y 826.");
-    }
-
-    // await pausa acá hasta tener la respuesta del servidor.
-    var response = await fetch("https://rickandmortyapi.com/api/character/" + id);
-
-    // Mismo chequeo que en el Ejemplo 1.
-    if (!response.ok) {
-      throw new Error("Personaje no encontrado. Código: " + response.status);
-    }
-
-    // La API devuelve: { id, name, status, species, image, origin: {name}, location: {name} }
-    var personaje = await response.json();
-
     crearCardPersonaje(personaje);
 
-    // Toastify cuando carga bien (Paso 5)
     Toastify({
       text: "✅ ¡" + personaje.name + " cargado con éxito!",
       duration: 3000,
@@ -277,159 +393,15 @@ async function cargarPersonaje() {
       position: "right",
       style: { background: "#1565c0", borderRadius: "8px" }
     }).showToast();
-
-  }
-  // ---- CATCH: cualquier error del try cae acá ----
-  catch (err) {
-    errorRick.textContent   = "Error: " + (err.message || "Error desconocido");
-    errorRick.style.display = "block";
-  }
-  // ---- FINALLY: se ejecuta siempre, con o sin error ----
-  finally {
-    loaderRick.style.display = "none";
-  }
-}
 ```
 
-### 4.3 – Función para crear la card del personaje
-
-```js
-function crearCardPersonaje(p) {
-  var estadoIcono = { Alive: "🟢", Dead: "🔴", unknown: "⚪" };
-
-  var card       = document.createElement("div");
-  card.className = "rick-card";
-  card.innerHTML =
-    '<img src="' + p.image + '" alt="' + p.name + '">' +
-    "<div class='rick-info'>" +
-    "<h3>" + p.name + "</h3>" +
-    "<p>" + (estadoIcono[p.status] || "⚪") + " " + p.status + " · " + p.species + "</p>" +
-    "<p><strong>Origen:</strong> " + p.origin.name + "</p>" +
-    "<p><strong>Última ubicación:</strong> " + p.location.name + "</p>" +
-    "</div>";
-
-  cardRick.appendChild(card);
-}
-```
-
-### 4.4 – Listener del botón
-
-```js
-if (btnRick) {
-  btnRick.addEventListener("click", cargarPersonaje);
-}
-```
-
-**Probar con estos IDs:**
-
-| ID | Personaje |
-|---|---|
-| 1 | Rick Sanchez |
-| 2 | Morty Smith |
-| 3 | Summer Smith |
-| 4 | Beth Smith |
-| 5 | Jerry Smith |
-| 361 | Evil Morty |
-| 826 | Último personaje |
-
-Probar también con `0`, vacío, o `999` para ver los mensajes de error.
-
----
-
-## Paso 5 – Librería 1: Toastify
-
-**Qué es:** una notificación pequeña que aparece en una esquina y desaparece sola.
-No bloquea al usuario. Ideal para confirmar acciones como "guardado", "enviado", etc.
-
-**Diferencia con `alert()`:** `alert()` congela todo hasta que el usuario hace clic.
-Toastify muestra el mensaje y el usuario puede seguir usando la página.
-
-### Probar el uso básico primero (escribirlo en consola)
-
-```js
-Toastify({
-  text: "¡Hola desde Toastify!",
-  duration: 3000,       // cuántos ms dura (3000 = 3 segundos)
-  gravity: "top",       // "top" o "bottom"
-  position: "right",    // "left", "center" o "right"
-  style: { background: "#2e7d32", borderRadius: "8px" }
-}).showToast();
-```
-
-El Toastify en Rick & Morty ya está incluido en el código del Paso 4 (dentro del `try`, después de `crearCardPersonaje`). Señalarlo y explicarlo.
-
----
-
-## Paso 6 – Librería 2: SweetAlert2
-
-**Qué es:** reemplaza `alert()`, `confirm()` y `prompt()` con popups bonitos y configurables.
-A diferencia de Toastify, **sí bloquea** la página hasta que el usuario interactúa.
-
-**Cuándo usar cada uno:**
-- Toastify → confirmaciones silenciosas que no necesitan respuesta del usuario.
-- SweetAlert → cuando el usuario tiene que tomar una decisión o ver algo importante.
-
-### Probar el uso básico primero (escribirlo en consola)
-
-```js
-Swal.fire({
-  title: "¡Bienvenido!",
-  text: "Esto reemplaza al alert() nativo.",
-  icon: "success"   // "success", "error", "warning", "info", "question"
-});
-```
-
-### Mostrar una alerta con confirmación
-
-```js
-Swal.fire({
-  title: "¿Estás seguro?",
-  text: "Esta acción no se puede deshacer.",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonText: "Sí, continuar",
-  cancelButtonText: "Cancelar"
-}).then(function (resultado) {
-  if (resultado.isConfirmed) {
-    Swal.fire("¡Listo!", "La acción fue ejecutada.", "success");
-  }
-});
-```
-
-El SweetAlert al hacer clic en las cards de Pokémon ya está incluido en el código del Paso 3 (dentro de `crearCardPokemon`). Señalarlo y explicarlo.
-
----
-
-## Paso 7 – Librería 3: canvas-confetti
-
-**Qué es:** dibuja animación de confetti en el navegador.
-Ejemplo de librería de **una sola responsabilidad**: hace una cosa y la hace bien.
-La API tiene una sola función: `confetti()`.
-
-### Probar el uso básico (escribirlo en consola)
-
-```js
-confetti();  // disparo con opciones por defecto
-```
-
-### Con opciones
-
-```js
-confetti({
-  particleCount: 150,   // cantidad de partículas
-  spread: 90,           // ángulo de apertura en grados
-  origin: { y: 0.6 }   // 0 = arriba, 1 = abajo de la pantalla
-});
-```
-
-El confetti ya está incluido en el código del Paso 3 (al final del último `.then` de `cargarPokemon`). Señalarlo y explicarlo.
+**Probar:** buscar un personaje, ver el toast azul abajo a la derecha aparecer y desaparecer solo.
 
 ---
 
 ## Resumen de librerías
 
-| Librería | Para qué sirve | Cómo se activa |
-|---|---|---|
-| **Toastify** | Notificación que desaparece sola, no bloquea | `Toastify({...}).showToast()` |
-| **SweetAlert2** | Modal con botones, bloquea hasta que el usuario actúa | `Swal.fire({...})` |
-| **canvas-confetti** | Animación de confetti | `confetti({...})` |
+| Librería | Para qué sirve | Bloquea la página | Cómo se usa |
+|---|---|---|---|
+| **SweetAlert2** | Modal con botones e imagen | Sí, espera clic | `Swal.fire({...})` |
+| **Toastify** | Notificación que desaparece sola | No | `Toastify({...}).showToast()` |
