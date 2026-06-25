@@ -52,9 +52,59 @@ JavaScript se ejecuta en el **motor de JavaScript** del navegador. Cada navegado
 | Firefox | SpiderMonkey (Mozilla) |
 | Safari | JavaScriptCore (Apple) |
 
+### Cómo lee el navegador una página web
+
+Antes de entender dónde poner el script, hay que entender cómo trabaja el navegador cuando abre una página.
+
+El navegador lee el archivo HTML **de arriba hacia abajo y de izquierda a derecha**, línea por línea, en orden. No salta, no lee todo junto, no se adelanta. Procesa cada línea en el orden en que aparece y va construyendo la página a medida que avanza.
+
+```
+Línea 1  →  <!DOCTYPE html>          ← lo lee primero
+Línea 2  →  <html lang="es">
+Línea 3  →  <head>
+Línea 4  →    <title>Mi página</title>
+Línea 5  →  </head>
+Línea 6  →  <body>
+Línea 7  →    <h1>Hola Mundo</h1>   ← crea el título en la página
+Línea 8  →    <p>Un párrafo</p>     ← crea el párrafo
+Línea 9  →    <script src="...">    ← recién acá ejecuta el JS
+Línea 10 →  </body>
+Línea 11 →  </html>                 ← lo lee último
+```
+
+Esto tiene una consecuencia muy importante para JavaScript.
+
+### Por qué el script va al final del `<body>`
+
+Imaginate que JavaScript intenta buscar el título `<h1>` de la página para cambiarle el texto. Si el script está en el `<head>`, cuando el JS empieza a correr, el navegador todavía no llegó a leer el `<h1>` — ese elemento todavía no existe en la página. JavaScript busca algo que aún no fue creado y falla.
+
+```html
+<!-- MAL: el script está en el head -->
+<head>
+  <script src="script.js"></script>  <!-- JS corre aquí -->
+</head>
+<body>
+  <h1>Hola Mundo</h1>  <!-- pero esto todavía no existe cuando JS corrió -->
+</body>
+```
+
+En cambio, si el script va al final del `<body>`, para cuando el navegador llega al `<script>`, ya leyó y creó todos los elementos HTML de la página. JavaScript puede encontrarlos sin problema.
+
+```html
+<!-- BIEN: el script está al final del body -->
+<body>
+  <h1>Hola Mundo</h1>   <!-- esto ya existe -->
+  <p>Un párrafo</p>      <!-- esto ya existe -->
+
+  <script src="script.js"></script>  <!-- JS corre acá, todo lo de arriba ya existe -->
+</body>
+```
+
+Pensalo así: primero construís la casa (HTML), después le ponés la electricidad (JavaScript). No tiene sentido cablear una casa que todavía no tiene paredes.
+
 ### Cómo vincular JavaScript a una página HTML
 
-Se agrega al final del `<body>`, antes de cerrarlo:
+Con eso en mente, la estructura correcta de un archivo HTML es:
 
 ```html
 <!DOCTYPE html>
@@ -62,18 +112,30 @@ Se agrega al final del `<body>`, antes de cerrarlo:
 <head>
   <meta charset="UTF-8">
   <title>Mi página</title>
+  <!-- Acá va el CSS, no el JS -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
   <h1>Hola Mundo</h1>
+  <p>Contenido de la página...</p>
 
-  <!-- Script al final, para que el HTML cargue primero -->
+  <!-- El JS siempre al final, justo antes de cerrar el body -->
   <script src="script.js"></script>
 </body>
 </html>
 ```
 
-> El script va al final porque el navegador lee el HTML de arriba hacia abajo. Si JavaScript corre antes de que el HTML exista, no puede encontrar los elementos de la página.
+### También importa el orden entre múltiples scripts
+
+Si tenés más de un archivo JavaScript, el orden en que los escribís importa. Se ejecutan de arriba hacia abajo, igual que todo lo demás:
+
+```html
+<script src="utilidades.js"></script>  <!-- se ejecuta primero -->
+<script src="app.js"></script>         <!-- se ejecuta segundo, puede usar lo de utilidades.js -->
+```
+
+Si invertís ese orden y `app.js` intenta usar algo definido en `utilidades.js`, va a fallar porque `utilidades.js` todavía no corrió.
 
 ### La consola del navegador
 
