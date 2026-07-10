@@ -5,6 +5,11 @@
 /*
 Antes de arrancar con funciones, repasamos rápido dos temas de la clase anterior
 con ejemplos cotidianos y sencillos.
+
+if / else if / else:
+Permiten ejecutar distintos bloques de código según se cumpla una condición.
+JavaScript evalúa las condiciones de arriba hacia abajo y ejecuta el primer
+bloque cuya condición sea verdadera; si ninguna se cumple, ejecuta el "else".
 */
 
 // Repaso 1: if / else if / else
@@ -18,6 +23,17 @@ if (edad < 13) {
   console.log("Sos un adulto");
 }
 
+// Repaso 1b: if / else if / else - Nota de un examen (escala 0 a 10)
+const nota = 6;
+
+if (nota < 4) {
+  console.log("Desaprobado");
+} else if (nota < 7) {
+  console.log("Aprobado");
+} else {
+  console.log("Promocionado");
+}
+
 // Repaso 2: bucle for
 console.log("Lista de compras:");
 const listaDeCompras = ["pan", "leche", "huevos", "café"];
@@ -27,68 +43,208 @@ for (let i = 0; i < listaDeCompras.length; i++) {
 }
 
 // ==========================================
-// 3.2 CREACIÓN Y USO DE FUNCIONES
+// INTRODUCCIÓN A FUNCIONES
 // ==========================================
 
 /*
-TEORÍA:
-- Una función permite agrupar instrucciones que pueden ejecutarse cuando se las llama.
-- Son reutilizables, mejoran la organización del código y evitan repeticiones.
-- Las funciones pueden recibir datos (parámetros) y devolver resultados (return).
+¿Qué es una función?
+Una función es un bloque de código reutilizable que agrupa instrucciones para
+realizar una tarea específica. En vez de escribir la misma lógica muchas
+veces, la escribimos una sola vez dentro de una función y la "llamamos" cada
+vez que la necesitamos.
+
+¿Para qué se usan?
+- Reutilizar código: escribimos la lógica una vez y la usamos muchas veces.
+- Modularizar: dividimos un problema grande en piezas chicas y manejables.
+- Abstraer: usamos una función (ej: enviarEmail()) sin necesidad de recordar
+  cada línea de código interna cada vez que la llamamos.
 */
 
-// Función para mostrar resultados en la página
-function mostrarResultado(mensaje, tipo = 'info') {
-  const resultadosDiv = document.getElementById('resultados');
-  const resultadoItem = document.createElement('div');
-  resultadoItem.className = `resultado-item ${tipo}`;
-  resultadoItem.textContent = mensaje;
-  resultadosDiv.appendChild(resultadoItem);
+// Ejemplo básico: cómo se define y cómo se llama una función
+function saludarBasico() {
+  console.log("Hola, esto es una función básica");
 }
 
-// Función para limpiar resultados
-function limpiarResultados() {
-  document.getElementById('resultados').innerHTML = '<p class="placeholder">Los resultados de los ejercicios aparecerán aquí...</p>';
+// Para que el código de la función se ejecute, hay que "llamarla"
+saludarBasico();
+
+// Ejemplo básico matemático: la misma idea, con una cuenta simple
+function sumarBasico() {
+  console.log(2 + 3);
+}
+sumarBasico();
+
+// ==========================================
+// DECLARACIÓN Y EXPRESIÓN DE FUNCIONES
+// ==========================================
+
+/*
+Imagina que estás construyendo una aplicación de cocina. Tenés un libro de
+recetas físico guardado en el estante y, además, tenés notas adhesivas
+pegadas en la heladera con instrucciones rápidas. En JavaScript las
+funciones funcionan de forma parecida: son bloques de código reutilizables,
+pero la forma en que las "guardamos" o "anunciamos" determina cómo y cuándo
+podemos usarlas.
+
+1) ¿Por qué necesitamos funciones?
+En el módulo anterior usamos ciclos for y condicionales if. Si quisiéramos
+repetir esa lógica en distintas partes del código, tendríamos que copiar y
+pegar. Las funciones evitan eso porque permiten:
+- Reutilizar código: escribimos la lógica una vez y la usamos mil veces.
+- Modularizar: dividir un problema grande en piezas pequeñas y manejables.
+- Abstraer: usar una función como enviarEmail() sin necesidad de recordar
+  cada línea de código interna cada vez que la llamamos.
+*/
+
+// 2) Declaración de función (la forma clásica)
+// Se usa la palabra reservada "function", un nombre, paréntesis para los
+// parámetros y llaves para el cuerpo del código.
+function saludar(nombre) {
+  console.log("Hola, " + nombre + "!");
+}
+saludar("Ana");
+
+/*
+Características principales de la declaración de función:
+- Nombre obligatorio: al ser una declaración independiente, necesita un
+  nombre para poder ser referenciada.
+- Hoisting (elevación): JavaScript "mueve" virtualmente estas declaraciones
+  al principio del código antes de ejecutarlo, por eso se pueden llamar
+  antes de la línea donde están escritas.
+- Claridad: son fáciles de identificar como "herramientas" disponibles en
+  todo el archivo.
+*/
+
+// 3) Expresión de función (funciones como valores)
+// En JavaScript las funciones son "ciudadanos de primera clase": se pueden
+// asignar a una variable como cualquier otro valor.
+const despedirse = function (nombre) {
+  console.log("Adiós, " + nombre);
+};
+despedirse("Ana");
+
+/*
+Características principales de la expresión de función:
+- Pueden ser anónimas: la función después del "=" no tiene nombre propio,
+  se la conoce por el nombre de la variable (despedirse).
+- No tienen hoisting de la misma manera: no se puede llamar a esta función
+  antes de la línea donde fue definida.
+*/
+
+// 4) El concepto de Hoisting: el "truco de magia" de JavaScript
+
+// Función declarada: se puede llamar ANTES de que aparezca escrita en el archivo
+presentarse();
+function presentarse() {
+  console.log("Hola, soy una función declarada.");
+}
+// Esto funciona por el hoisting, pero no es recomendado: llamar a una
+// función antes de declararla arruina el orden de lectura del código.
+
+// Función expresada: NO se puede llamar antes de ser definida
+// cocinar(); // ❌ Error: "Cannot access 'cocinar' before initialization"
+const cocinar = function () {
+  console.log("Cocinando...");
+};
+cocinar();
+
+// ==========================================
+// PARÁMETROS, ARGUMENTOS Y RETORNO DE VALORES
+// ==========================================
+
+/*
+Para que las funciones sean realmente poderosas, necesitan poder comunicarse
+con el resto del programa. Ahora vamos a aprender a enviarles datos y a
+recibir respuestas de ellas.
+
+1) Parámetros y argumentos: el "input"
+Imaginá una cafetera. La cafetera tiene una ranura (parámetro) donde esperás
+granos de café. El café real que depositás hoy (argumento) es lo que
+determina el sabor.
+- Parámetros: son las variables que definimos en la declaración de la
+  función. Son como "huecos" o etiquetas.
+- Argumentos: son los valores reales que le pasamos a la función cuando la
+  llamamos.
+*/
+
+function saludarConNombre(nombre) { // 'nombre' es el parámetro
+  console.log("Hola, " + nombre);
+}
+saludarConNombre("Julieta"); // "Julieta" es el argumento
+
+/*
+2) El retorno de valores: el "output"
+Hasta ahora, algunas de nuestras funciones hacían cosas (como imprimir en
+consola), pero el programa no "recuperaba" nada de ellas. Para que una
+función nos devuelva un resultado que podamos guardar en una variable,
+usamos la palabra clave return.
+
+Regla de oro: cuando el motor de JavaScript encuentra un return, la función
+se detiene inmediatamente. Nada de lo que escribas debajo de un return se
+ejecutará.
+*/
+
+function duplicar(numero) {
+  return numero * 2; // Envía el resultado hacia afuera
 }
 
-// Ejemplo 1: función simple
-function saludar() {
-  console.log("Hola, bienvenidos a la clase.");
-  mostrarResultado("Hola, bienvenidos a la clase.", 'info');
-}
-saludar();
+let miResultado = duplicar(5); // miResultado ahora vale 10
+console.log(miResultado);
 
-// Ejemplo 2: función con parámetros y validación
+/*
+3) Funciones sin retorno explícito
+¿Qué pasa si una función no tiene return? JavaScript, por defecto, hace que
+esa función devuelva undefined. Estas funciones se usan generalmente para
+causar un "efecto secundario" (side effect), como escribir en pantalla o
+modificar una base de datos, en lugar de calcular un valor.
+*/
+
+function mostrarMensaje(mensaje) {
+  console.log(mensaje);
+  // No hay return: esta función devuelve undefined
+}
+
+const resultadoSinReturn = mostrarMensaje("Este mensaje no devuelve nada");
+console.log(resultadoSinReturn); // undefined
+
+/*
+4) Función flecha: la evolución de la función expresada
+Introducidas en ES6, las funciones flecha ofrecen una sintaxis más concisa
+para escribir funciones anónimas. Tienen un return implícito (cuando el
+cuerpo es una sola expresión), lo que las hace ideales para callbacks y
+programación funcional.
+*/
+
+const suma = (a, b) => a + b;
+console.log(suma(5, 3)); // Salida: 8
+
+// ==========================================
+// 3.2 CREACIÓN Y USO DE FUNCIONES (EJEMPLOS)
+// ==========================================
+
+/*
+Ahora que vimos declaración vs expresión, parámetros/argumentos y return,
+vamos a aplicarlo en funciones un poco más completas. La idea de estos
+ejemplos es combinar:
+- Parámetros que reciben datos de entrada (a, b / peso, altura).
+- Validación de esos datos antes de operar con ellos.
+- return para devolver un resultado (en vez de solo hacer console.log),
+  de forma que quien llama a la función pueda decidir qué hacer con ese
+  valor (guardarlo, mostrarlo, seguir operando con él, etc).
+*/
+
+// Ejemplo 2: función con parámetros (a, b) y validación antes de retornar
 function dividir(a, b) {
   if (b === 0) {
-    console.log("No se puede dividir por cero");
     return "No se puede dividir por cero";
-  } else {
-    const resultado = a / b;
-    console.log(`El resultado de dividir ${a} entre ${b} es:`, resultado);
-    return resultado;
   }
+  return a / b;
 }
 
-// Función para el botón de división
-function ejecutarDivision() {
-  const dividendo = parseFloat(document.getElementById('dividendo').value);
-  const divisor = parseFloat(document.getElementById('divisor').value);
-  
-  if (isNaN(dividendo) || isNaN(divisor)) {
-    mostrarResultado("Por favor, ingresa números válidos.", 'error');
-    return;
-  }
-  
-  const resultado = dividir(dividendo, divisor);
-  if (typeof resultado === 'number') {
-    mostrarResultado(`✅ División: ${dividendo} ÷ ${divisor} = ${resultado}`, 'success');
-  } else {
-    mostrarResultado(`❌ ${resultado}`, 'error');
-  }
-}
+console.log(dividir(10, 2)); // 5
+console.log(dividir(8, 0));  // "No se puede dividir por cero"
 
-// Ejemplo 3: función con lógica más compleja
+// Ejemplo 3: función con varios parámetros y varios return (uno por caso)
 function calcularIMC(peso, altura) {
   const imc = peso / (altura * altura);
   if (imc < 18.5) return "Bajo peso";
@@ -97,112 +253,180 @@ function calcularIMC(peso, altura) {
   return "Obesidad";
 }
 
-// Función para el botón de IMC
-function calcularIMC() {
-  const peso = parseFloat(document.getElementById('peso').value);
-  const altura = parseFloat(document.getElementById('altura').value);
-  
-  if (isNaN(peso) || isNaN(altura) || peso <= 0 || altura <= 0) {
-    mostrarResultado("Por favor, ingresa valores válidos para peso y altura.", 'error');
-    return;
-  }
-  
-  const categoria = calcularIMC(peso, altura);
-  const imc = (peso / (altura * altura)).toFixed(1);
-  mostrarResultado(`📊 IMC: ${imc} - Categoría: ${categoria}`, 'success');
+console.log(calcularIMC(68, 1.7)); // Normal
+
+// No todo el input/output tiene que ser por consola: prompt() le pide datos
+// a la persona usuaria y alert() le muestra un resultado en una ventana.
+function pedirIMC() {
+  const pesoIngresado = parseFloat(prompt("Ingresá tu peso en kg:"));
+  const alturaIngresada = parseFloat(prompt("Ingresá tu altura en metros:"));
+  const categoria = calcularIMC(pesoIngresado, alturaIngresada);
+  alert(`Tu categoría de IMC es: ${categoria}`);
 }
+// Para probarla, llamá pedirIMC() desde la consola del navegador.
 
 // ==========================================
-// 3.3 SCOPE (ÁMBITO DE LAS VARIABLES)
+// 3.3 SCOPE: ÁMBITO GLOBAL Y LOCAL
 // ==========================================
 
 /*
-TEORÍA:
-- El scope define el "alcance" o lugar donde una variable es accesible.
-- let y const → tienen **scope de bloque** (entre llaves `{}`).
-- var → tiene **scope de función**, lo que puede generar errores inesperados.
-- Es mejor usar `let` o `const` para evitar problemas de sobrescritura o acceso indebido.
+Imaginá que estás escribiendo un diario personal. Tenés una libreta física
+donde anotás tus pensamientos: esas notas son locales a tu libreta, solo vos
+podés verlas. Pero hay cosas que son globales, como el clima: si está
+lloviendo, está lloviendo para vos, para tu vecino y para cualquier persona
+en la ciudad. Todos pueden "leer" ese dato.
+
+En JavaScript el scope (o alcance) funciona así: determina la visibilidad y
+accesibilidad de tus variables. Entender el scope es la diferencia entre un
+código predecible y uno lleno de errores raros donde las variables parecen
+cambiar de valor "por arte de magia" o "no existen" cuando intentás usarlas.
+
+1) ¿Qué es el scope?
+Es el conjunto de reglas que define dónde puede ser alcanzada una variable
+dentro del código: en qué partes del programa es "visible" y se puede usar.
 */
 
-// Variable global
-let lenguaje = "JavaScript";
+// 2) Scope global: el "clima" de tu código
+// Una variable declarada fuera de cualquier función pertenece al scope
+// global. Está disponible para todo el script: cualquier función puede
+// leerla.
+const nombreAplicacion = "Mi Super App";
 
-// Función para probar scope global
-function probarScopeGlobal() {
-  const valorGlobal = document.getElementById('variableGlobal').value;
-  mostrarResultado(`🌍 Variable global: "${valorGlobal}" - Accesible desde cualquier función`, 'info');
+function mostrarBienvenida() {
+  // Podemos acceder a la variable global desde acá adentro
+  console.log("Bienvenido a " + nombreAplicacion);
 }
+mostrarBienvenida(); // Bienvenido a Mi Super App
 
-// Función para probar scope de bloque
-function probarScopeBloque() {
-  mostrarResultado("🔍 Probando scope de bloque...", 'info');
-  
-  if (true) {
-    var conVar = "Var dentro del if";
-    let conLet = "Let dentro del if";
-    mostrarResultado(`✅ var: "${conVar}" - let: "${conLet}" (dentro del bloque)`, 'success');
+/*
+El peligro de los globales: tener demasiadas variables globales es una mala
+práctica ("contaminación del scope global") porque:
+- Conflictos de nombres: en un programa grande podés declarar dos cosas con
+  el mismo nombre sin darte cuenta.
+- Dificultad de mantenimiento: si una variable global cambia, es difícil
+  rastrear qué parte del código la modificó.
+*/
+
+// 3) Scope local: tu "habitación privada"
+// Se crea cada vez que definís una función o un bloque {}. Las variables
+// declaradas ahí solo existen "dentro" de ese espacio.
+function calcularImpuesto(monto) {
+  let tasa = 0.21; // Variable LOCAL a la función
+  return monto * tasa;
+}
+console.log(calcularImpuesto(100)); // 21
+// console.log(tasa); // ❌ ERROR: Uncaught ReferenceError: tasa is not defined
+
+// 4) Scope de bloque: el poder de let y const
+// Un bloque es cualquier cosa rodeada por llaves {}, como un if, un for o
+// un while. Las variables let/const declaradas ahí solo son visibles
+// dentro de esas llaves.
+if (true) {
+  const saludoBloque = "Hola, estoy atrapado en el bloque";
+  console.log(saludoBloque); // Funciona
+}
+// console.log(saludoBloque); // ❌ ERROR: saludoBloque no está definido
+
+/*
+5) Acceso y aislamiento de datos
+Regla de oro: el código puede mirar "hacia afuera" (scopes superiores), pero
+no puede mirar "hacia adentro" (scopes inferiores).
+*/
+
+// Lexical scope: las funciones anidadas acceden a las variables de su
+// scope exterior.
+const usuarioActual = "Juan"; // Global
+function exterior() {
+  const mensaje = "Hola"; // Local de exterior
+
+  function interior() {
+    // interior tiene acceso a su propio scope, al de 'exterior' y al global
+    console.log(mensaje, usuarioActual);
   }
-  
-  // var es accesible fuera del bloque (peligroso)
-  mostrarResultado(`⚠️ var fuera del bloque: "${conVar}" (funciona pero es peligroso)`, 'error');
-  
-  // let no es accesible fuera del bloque (correcto)
-  mostrarResultado(`✅ let no es accesible fuera del bloque (comportamiento correcto)`, 'success');
+
+  interior();
 }
+exterior(); // Hola Juan
+
+// Shadowing: una variable local con el mismo nombre que una global la
+// "sombrea" dentro de su propio scope, sin modificar la global.
+const colorFavorito = "azul"; // Global
+
+function cambiarColor() {
+  const colorFavorito = "rojo"; // Local (shadowing)
+  console.log(colorFavorito); // Imprime "rojo"
+}
+cambiarColor();
+console.log(colorFavorito); // Imprime "azul" (la global no fue modificada)
+
+// Extra: var vs let dentro de un bloque
+// var tiene scope de función (o global), no de bloque: "se escapa" del if.
+// let sí respeta el scope de bloque.
+if (true) {
+  var conVar = "Var dentro del if";
+  let conLet = "Let dentro del if";
+  console.log(conVar, conLet); // Ambas funcionan acá adentro
+}
+console.log(conVar); // ⚠️ Funciona (peligroso): var se escapó del bloque
+// console.log(conLet); // ❌ ERROR: conLet no está definido acá afuera
+
+/*
+6) Síntesis
+- Scope global: variables fuera de cualquier función o bloque. Accesibles
+  desde cualquier parte.
+- Scope local / de función: variables dentro de una función. Solo existen
+  mientras la función se ejecuta.
+- Scope de bloque: variables let/const dentro de { }. Solo existen dentro
+  de esas llaves.
+- Transparencia: las funciones internas ven las variables de sus "padres",
+  pero los padres no ven las variables de sus "hijos".
+*/
 
 // ==========================================
-// 3.4 FUNCIONES ANÓNIMAS Y FLECHA
+// 3.4 FUNCIONES ANÓNIMAS Y FLECHA (REPASO OPCIONAL)
 // ==========================================
 
 /*
-TEORÍA:
+Las funciones flecha ya aparecieron en el punto 4 de "Parámetros, argumentos
+y retorno de valores" (el ejemplo de suma). Esta sección es refuerzo/repaso
+opcional del mismo concepto, no teoría nueva:
 - Las funciones anónimas no tienen nombre y se suelen guardar en variables o usar como argumentos.
 - Las funciones flecha (arrow) tienen una sintaxis más compacta y no tienen su propio "this".
 - Son útiles para callbacks o funciones simples.
 */
 
-// Función para calcular potencia con arrow function
-function calcularPotencia() {
-  const base = parseFloat(document.getElementById('base').value);
-  const exponente = parseFloat(document.getElementById('exponente').value);
-  
-  if (isNaN(base) || isNaN(exponente)) {
-    mostrarResultado("Por favor, ingresa números válidos.", 'error');
-    return;
-  }
-  
-  // Arrow function para calcular potencia
-  const potencia = (base, exponente) => Math.pow(base, exponente);
-  const resultado = potencia(base, exponente);
-  
-  mostrarResultado(`⚡ Potencia: ${base}^${exponente} = ${resultado}`, 'success');
+// Arrow function para calcular potencia
+const calcularPotencia = (base, exponente) => Math.pow(base, exponente);
+console.log(calcularPotencia(2, 3)); // 8
+
+// Arrow function con map, para generar saludos a partir de una lista
+const nombresInvitados = ["Ana", "Luis", "Pedro"];
+const saludosInvitados = nombresInvitados.map(nombre => `Hola ${nombre}`);
+console.log(saludosInvitados);
+
+// Comparación entre función tradicional, función anónima y arrow function
+function funcionTradicional() {
+  return "Función tradicional";
 }
 
-// Función para generar saludos con arrow function
-function generarSaludos() {
-  const nombresInput = document.getElementById('nombres').value;
-  
-  if (!nombresInput.trim()) {
-    mostrarResultado("Por favor, ingresa algunos nombres.", 'error');
-    return;
-  }
-  
-  const nombres = nombresInput.split(',').map(nombre => nombre.trim());
-  
-  // Arrow function con map
-  const saludos = nombres.map(nombre => `Hola ${nombre}`);
-  
-  mostrarResultado(`👋 Saludos generados: ${saludos.join(', ')}`, 'success');
-}
+const funcionAnonima = function () {
+  return "Función anónima";
+};
+
+const funcionFlecha = () => "Arrow function";
+
+console.log(funcionTradicional());
+console.log(funcionAnonima());
+console.log(funcionFlecha());
 
 // ✅ 3.5 Actividad práctica
 // Consigna: Crear un algoritmo utilizando funciones con entrada de datos, procesamiento y salida
 
 // 🟢 Parte 1 - Crear una función que solicite los datos de entrada
 function solicitarDatos() {
-    const nombre = prompt("¿Cuál es tu nombre?");
-    const edad = parseInt(prompt("¿Cuál es tu edad?"));
-    return { nombre, edad };
+  const nombre = prompt("¿Cuál es tu nombre?");
+  const edad = parseInt(prompt("¿Cuál es tu edad?"));
+  return { nombre, edad };
 }
 
 // 🟢 Parte 2 - Crear una función que procese la información obtenida
@@ -214,144 +438,64 @@ const procesarEdad = (edad) => {
 
 // 🟢 Parte 3 - Crear una función para mostrar el resultado final
 const mostrarResultadoFinal = function (usuario, categoria) {
-  console.log(`Hola ${usuario}, sos ${categoria}.`);
   return `Hola ${usuario}, sos ${categoria}.`;
 };
 
 // Función para iniciar la actividad completa
 function iniciarActividad() {
-  mostrarResultado("🚀 Iniciando actividad completa...", 'info');
-  
-  // Actualizar área de procesamiento
-  document.getElementById('procesamiento').innerHTML = '<p>Procesando datos...</p>';
-  
+  console.log("🚀 Iniciando actividad completa...");
+
   try {
     const datos = solicitarDatos();
-    
+
     if (!datos.nombre || isNaN(datos.edad)) {
-      mostrarResultado("❌ Datos inválidos ingresados", 'error');
-      document.getElementById('procesamiento').innerHTML = '<p>Error: Datos inválidos</p>';
-      document.getElementById('resultadoFinal').innerHTML = '<p>No se pudo procesar</p>';
+      console.log("❌ Datos inválidos ingresados");
       return;
     }
-    
-    // Mostrar paso 1
-    mostrarResultado(`📝 Paso 1 - Entrada: Nombre: "${datos.nombre}", Edad: ${datos.edad}`, 'info');
-    
-    // Procesar datos
+
+    console.log(`📝 Paso 1 - Entrada: Nombre: "${datos.nombre}", Edad: ${datos.edad}`);
+
     const categoria = procesarEdad(datos.edad);
-    document.getElementById('procesamiento').innerHTML = `<p>✅ Procesamiento: Edad ${datos.edad} → ${categoria}</p>`;
-    
-    // Mostrar resultado final
+    console.log(`✅ Paso 2 - Procesamiento: Edad ${datos.edad} → ${categoria}`);
+
     const resultado = mostrarResultadoFinal(datos.nombre, categoria);
-    document.getElementById('resultadoFinal').innerHTML = `<p>🎯 Resultado: ${resultado}</p>`;
-    
-    mostrarResultado(`✅ Actividad completada: ${resultado}`, 'success');
-    
+    console.log(`🎯 Paso 3 - Resultado: ${resultado}`);
   } catch (error) {
-    mostrarResultado("❌ Error en la actividad: " + error.message, 'error');
+    console.log("❌ Error en la actividad: " + error.message);
   }
 }
+// Para probarla, llamá iniciarActividad() desde la consola del navegador.
 
 // ==========================================
 // DEMOSTRACIONES AUTOMÁTICAS
 // ==========================================
 
-// Demostración de scope en bucles
-function demostrarScopeBucles() {
-  const demoDiv = document.getElementById('demoBucles');
-  demoDiv.innerHTML = '<p>🔄 Ejecutando demostración...</p>';
-  
+// Demostración de scope en bucles (var vs let dentro de un setTimeout)
+console.log("Scope en bucles:");
+
+// Problema con var: todas las callbacks comparten la misma variable
+for (var i = 0; i < 3; i++) {
   setTimeout(() => {
-    let resultado = "Scope en bucles:\n";
-    
-    // Problema con var
-    for (var i = 0; i < 3; i++) {
-      setTimeout(() => {
-        resultado += `var i: ${i}\n`;
-      }, 100);
-    }
-    
-    // Solución con let
-    for (let j = 0; j < 3; j++) {
-      setTimeout(() => {
-        resultado += `let j: ${j}\n`;
-      }, 100);
-    }
-    
-    demoDiv.innerHTML = `<p>✅ var imprime 3 veces "3" (problema)</p><p>✅ let imprime 0, 1, 2 (correcto)</p>`;
-    mostrarResultado("🔍 Demostración de scope en bucles completada", 'info');
-  }, 500);
+    console.log(`var i: ${i}`); // siempre imprime 3
+  }, 100);
 }
 
-// Demostración de funciones anónimas
-function demostrarFuncionesAnonimas() {
-  const demoDiv = document.getElementById('demoAnonimas');
-  demoDiv.innerHTML = '<p>🔄 Comparando funciones...</p>';
-  
-  // Función tradicional
-  function funcionTradicional() {
-    return "Función tradicional";
-  }
-  
-  // Función anónima
-  const funcionAnonima = function() {
-    return "Función anónima";
-  };
-  
-  // Arrow function
-  const arrowFunction = () => "Arrow function";
-  
-  demoDiv.innerHTML = `
-    <p>📝 Función tradicional: ${funcionTradicional()}</p>
-    <p>📝 Función anónima: ${funcionAnonima()}</p>
-    <p>🏹 Arrow function: ${arrowFunction()}</p>
-  `;
-  
-  mostrarResultado("⚙️ Demostración de funciones completada", 'info');
+// Solución con let: cada vuelta del ciclo tiene su propia variable
+for (let j = 0; j < 3; j++) {
+  setTimeout(() => {
+    console.log(`let j: ${j}`); // imprime 0, 1, 2
+  }, 100);
 }
 
 // Demostración de arrow functions con arrays
-function demostrarArrowFunctions() {
-  const demoDiv = document.getElementById('demoArrow');
-  demoDiv.innerHTML = '<p>🔄 Procesando array...</p>';
-  
-  const numeros = [1, 2, 3, 4, 5];
-  
-  // Arrow functions con métodos de array
-  const duplicados = numeros.map(num => num * 2);
-  const pares = numeros.filter(num => num % 2 === 0);
-  const suma = numeros.reduce((acc, num) => acc + num, 0);
-  
-  demoDiv.innerHTML = `
-    <p>📊 Array original: [${numeros.join(', ')}]</p>
-    <p>🔄 Duplicados: [${duplicados.join(', ')}]</p>
-    <p>🔢 Pares: [${pares.join(', ')}]</p>
-    <p>➕ Suma total: ${suma}</p>
-  `;
-  
-  mostrarResultado("🏹 Demostración de arrow functions completada", 'info');
-}
+const numerosDemo = [1, 2, 3, 4, 5];
 
-// ==========================================
-// INICIALIZACIÓN
-// ==========================================
+const duplicados = numerosDemo.map(num => num * 2);
+const pares = numerosDemo.filter(num => num % 2 === 0);
+const sumaTotal = numerosDemo.reduce((acc, num) => acc + num, 0);
 
-// Función que se ejecuta cuando se carga la página
-document.addEventListener('DOMContentLoaded', function() {
-  console.log("=== FUNCIONES Y SCOPE ===");
-  mostrarResultado("🚀 Página de Funciones y Scope cargada correctamente", 'success');
-  
-  // Ejecutar ejemplos automáticamente
-  setTimeout(() => {
-    console.log("\n=== SCOPE ===");
-    mostrarResultado("🔍 Ejemplos de scope cargados", 'info');
-  }, 1000);
-  
-  setTimeout(() => {
-    console.log("\n=== FUNCIONES ANÓNIMAS Y FLECHA ===");
-    mostrarResultado("🏹 Ejemplos de arrow functions cargados", 'info');
-  }, 2000);
-});
-  
+console.log(`Array original: [${numerosDemo.join(', ')}]`);
+console.log(`Duplicados: [${duplicados.join(', ')}]`);
+console.log(`Pares: [${pares.join(', ')}]`);
+console.log(`Suma total: ${sumaTotal}`);
 
