@@ -1,4 +1,32 @@
 // ==========================================
+// REPASO CLASE 2: if / else if / else y bucle for
+// ==========================================
+
+/*
+Antes de arrancar con funciones, repasamos rápido dos temas de la clase anterior
+con ejemplos cotidianos y sencillos.
+*/
+
+// Repaso 1: if / else if / else
+const edad = 20;
+
+if (edad < 13) {
+  console.log("Sos un niño");
+} else if (edad < 18) {
+  console.log("Sos un adolescente");
+} else {
+  console.log("Sos un adulto");
+}
+
+// Repaso 2: bucle for
+console.log("Lista de compras:");
+const listaDeCompras = ["pan", "leche", "huevos", "café"];
+
+for (let i = 0; i < listaDeCompras.length; i++) {
+  console.log(`${i + 1}. ${listaDeCompras[i]}`);
+}
+
+// ==========================================
 // 3.2 CREACIÓN Y USO DE FUNCIONES
 // ==========================================
 
