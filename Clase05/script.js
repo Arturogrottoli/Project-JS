@@ -35,27 +35,126 @@ for (const color of colores) {
 }
 
 // ==========================================
-// INTRODUCCIÓN A OBJETOS
+// 5.1 OBJETOS LITERALES: PROPIEDADES Y MÉTODOS
 // ==========================================
 
 /*
-¿Qué es un objeto?
-Un objeto agrupa datos relacionados en pares de "clave: valor". A diferencia
-del array (que ordena elementos por posición), el objeto describe las
-características de "una cosa" usando nombres.
+Hasta ahora trabajamos con variables para guardar datos sueltos (un nombre,
+una edad) y con arrays para guardar listas ordenadas de elementos. Pero,
+¿qué pasa cuando necesitamos representar algo más complejo, como un usuario,
+un producto o un personaje?
 
-¿Para qué se usan?
-- Representar entidades del mundo real: una persona, un producto, un auto.
-- Agrupar datos relacionados en un solo lugar, en vez de tener muchas
-  variables sueltas.
+Imaginemos que queremos representar un auto con variables sueltas:
+let marca = "Toyota";
+let modelo = "Corolla";
+let anio = 2022;
+
+El problema es que estas variables están "sueltas" en el código: nada le
+dice a JavaScript que esa marca y ese año pertenecen a la misma cosa. Ahí
+es donde entran los objetos literales.
 */
 
-// Ejemplo básico: cómo se define y cómo se accede a un objeto
+// 1) ¿Qué es un objeto literal?
+// Un objeto agrupa valores relacionados bajo un solo nombre. A diferencia
+// de los arrays (donde accedemos por posición: índice 0, 1, 2...), en los
+// objetos accedemos a los datos mediante nombres o claves.
+// Se crea con llaves {}.
+
+const usuario = {
+  nombre: "Ana",
+  edad: 25,
+  ciudad: "Madrid",
+};
+console.log(usuario);
+
+/*
+Anatomía del objeto:
+- 'usuario' es el nombre del objeto.
+- nombre, edad y ciudad son las claves (keys) o etiquetas.
+- "Ana", 25 y "Madrid" son los valores (values).
+- Cada combinación de clave y valor se llama "propiedad".
+*/
+
+// 2) Propiedades: los datos del objeto
+// Una propiedad puede guardar cualquier tipo de dato: strings, números,
+// booleanos, e incluso arrays u otros objetos.
+const producto = {
+  id: "A152",
+  nombre: "Auriculares Bluetooth",
+  precio: 59.90,
+  enStock: true,
+  coloresDisponibles: ["Negro", "Blanco", "Azul"],
+};
+console.log(producto);
+
+// 3) Métodos: el comportamiento del objeto
+// Cuando guardamos una función dentro de una propiedad, esa función pasa a
+// llamarse "método". Los métodos representan acciones que el objeto puede
+// realizar.
 const persona = {
-  nombre: "Lucía",
-  edad: 29,
+  nombre: "Carlos",
+  saludar: function () {
+    console.log("¡Hola! ¿Cómo estás?");
+  },
 };
 
-console.log(persona);
-console.log(persona.nombre);  // acceso con punto
-console.log(persona["edad"]); // acceso con corchetes
+persona.saludar(); // Para ejecutar un método, se usan paréntesis
+
+// La palabra clave "this": hace referencia al objeto mismo, para que un
+// método pueda usar los propios datos del objeto.
+const persona2 = {
+  nombre: "Carlos",
+  presentarse: function () {
+    console.log("Hola, mi nombre es " + this.nombre);
+  },
+};
+
+persona2.presentarse(); // Hola, mi nombre es Carlos
+
+// 4) Acceso a la información: punto vs corchetes
+
+// A. Notación de punto: la más común, cuando sabemos el nombre de la
+// propiedad de antemano.
+console.log(producto.nombre); // "Auriculares Bluetooth"
+producto.precio = 55.00; // modificamos el valor con punto
+
+// B. Notación de corchetes: obligatoria si el nombre de la propiedad tiene
+// espacios/caracteres especiales, o si el nombre está guardado en una
+// variable.
+const propiedadABuscar = "nombre";
+console.log(producto[propiedadABuscar]); // "Auriculares Bluetooth"
+// producto.propiedadABuscar daría undefined: buscaría literalmente una
+// propiedad llamada "propiedadABuscar", que no existe.
+
+// 5) Manipulación de objetos: agregar y eliminar propiedades
+// Los objetos son dinámicos: se puede cambiar su estructura después de
+// haberlos creado.
+
+// Agregar: asignamos un valor a una clave que todavía no existe.
+const auto = { marca: "Fiat" };
+auto.modelo = "Cronos";
+console.log(auto); // { marca: "Fiat", modelo: "Cronos" }
+
+// Eliminar: con el operador delete.
+const heroe = {
+  nombre: "Batman",
+  ciudad: "Gótica",
+  identidadSecreta: "Bruce Wayne",
+};
+delete heroe.identidadSecreta;
+console.log(heroe); // ya no tiene la propiedad identidadSecreta
+
+/*
+6) Errores comunes y buenas prácticas
+- No confundir objetos con arrays: los arrays usan [] y se basan en orden
+  (posición); los objetos usan {} y se basan en nombres (claves). Usá un
+  array para una lista de nombres; usá un objeto para los detalles de una
+  persona.
+- No olvidar las comas: entre cada propiedad de un objeto debe haber una
+  coma. Olvidarla es una de las causas más comunes de errores de sintaxis.
+- Acceder a propiedades inexistentes no tira un error fatal: JavaScript
+  devuelve undefined (ej: usuario.telefono si esa propiedad no existe).
+- Con const: se puede modificar el contenido interno del objeto (cambiar o
+  agregar propiedades). Lo que NO se puede hacer es reasignar la variable a
+  un objeto completamente nuevo.
+*/
