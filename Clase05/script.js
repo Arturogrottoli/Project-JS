@@ -158,3 +158,72 @@ console.log(heroe); // ya no tiene la propiedad identidadSecreta
   agregar propiedades). Lo que NO se puede hacer es reasignar la variable a
   un objeto completamente nuevo.
 */
+
+// ==========================================
+// 5.2 CONSTRUCTORES Y OPERADOR new
+// ==========================================
+
+/*
+En la sección anterior creamos objetos "a mano" usando llaves {}. Pero, ¿qué
+pasa si necesitamos crear cientos de usuarios, productos o mensajes?
+Escribirlos uno por uno sería ineficiente y propenso a errores. Ahí entran
+los constructores y el operador new.
+
+¿Qué es un constructor?
+Un constructor es como un molde o un plano de construcción: define qué
+forma tendrá el objeto (qué propiedades y métodos tendrá), pero no es el
+objeto en sí.
+
+En JavaScript, un constructor es técnicamente una función, pero se
+distingue por dos cosas:
+- Su nombre suele empezar con mayúscula (convención para indicar que es un
+  constructor).
+- Se ejecuta exclusivamente usando la palabra clave new.
+*/
+
+// El papel de "this": dentro de un constructor, this representa al nuevo
+// objeto que se está creando en ese preciso momento.
+function Auto(marca, modelo) {
+  this.marca = marca;   // el objeto que se está creando tendrá esta marca
+  this.modelo = modelo; // el objeto que se está creando tendrá este modelo
+}
+
+/*
+El operador new: es el "botón de encendido" de la fábrica de objetos.
+Cuando usamos new, JavaScript hace automáticamente cuatro pasos:
+1) Crea un nuevo objeto vacío.
+2) Vincula "this" a ese nuevo objeto.
+3) Ejecuta el código de la función constructora (llenando el objeto de datos).
+4) Devuelve automáticamente el nuevo objeto creado.
+*/
+
+const miAuto = new Auto("Toyota", "Corolla");
+console.log(miAuto); // { marca: "Toyota", modelo: "Corolla" }
+
+// Instancias: los "hijos" del molde
+// Cada objeto creado a partir de un constructor se llama "instancia".
+function Persona(nombre, edad) {
+  this.nombre = nombre;
+  this.edad = edad;
+}
+
+const persona1 = new Persona("Julieta", 27);
+const persona2Instancia = new Persona("Martín", 31);
+
+console.log(persona1);
+console.log(persona2Instancia);
+
+// Aunque persona1 y persona2Instancia comparten el mismo molde (Persona),
+// los datos de cada instancia son independientes: cambiar una no afecta
+// a la otra.
+persona1.nombre = "Julieta Fernández";
+console.log(persona1.nombre);          // "Julieta Fernández"
+console.log(persona2Instancia.nombre); // "Martín" (no se vio afectada)
+
+/*
+Aclaración importante:
+Entender cómo funciona this y cómo instanciar un objeto con new es
+fundamental, pero la función constructora ya casi no se usa en la
+actualidad: su función fue absorbida por las clases (class), que veremos
+en la próxima unidad.
+*/
