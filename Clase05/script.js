@@ -227,3 +227,139 @@ fundamental, pero la función constructora ya casi no se usa en la
 actualidad: su función fue absorbida por las clases (class), que veremos
 en la próxima unidad.
 */
+
+// ==========================================
+// 5.3 CLASES EN ES6: LA FORMA MODERNA DE CREAR OBJETOS
+// ==========================================
+
+/*
+Imaginemos un videojuego con cientos de enemigos en pantalla. Todos tienen
+una posición, una cantidad de vida y la capacidad de atacar. Crear cada uno
+a mano con objetos literales sería un caos repetitivo. Con funciones
+constructoras (como vimos recién) funcionaría, pero a medida que el juego
+crece y los enemigos se vuelven más complejos, la sintaxis se vuelve difícil
+de leer. Ahí entran las clases de ES6 (2015): no cambiaron cómo funciona
+JavaScript por dentro, pero sí cambiaron cómo escribimos y organizamos el
+código.
+
+1) ¿Qué es una clase?
+Pensá en una clase como el plano de una casa: define cuántas ventanas
+tiene, dónde va la puerta, de qué color son las paredes. No podés vivir
+dentro de un plano; para tener algo real hay que construir la casa usando
+ese plano. Ese proceso se llama "instanciación", y el resultado (la casa
+real) es el objeto o instancia.
+*/
+
+// 2) La estructura de una clase: constructor() y métodos
+// Se declara con la palabra clave "class". Por convención, el nombre
+// empieza con mayúscula (PascalCase).
+class Usuario {
+  // El constructor es el primer método que se ejecuta al crear el objeto
+  // (la función constructora se convirtió en "constructor" dentro de la class).
+  constructor(nombre, email, edad) {
+    this.nombre = nombre;
+    this.email = email;
+    this.edad = edad;
+  }
+
+  // Método de instancia: lo que el objeto "sabe hacer".
+  // Notar que no hace falta la palabra function ni =>: se escribe directo.
+  saludar() {
+    console.log("Hola, mi nombre es " + this.nombre + " y mi correo es " + this.email);
+  }
+}
+
+// Creando una instancia (un objeto real a partir del plano)
+const usuario1 = new Usuario("Ana", "ana@example.com", 25);
+const usuario2 = new Usuario("Pedro", "pedro@dev.com", 15);
+
+usuario1.saludar(); // Hola, mi nombre es Ana y mi correo es ana@example.com
+usuario2.saludar(); // Hola, mi nombre es Pedro y mi correo es pedro@dev.com
+
+/*
+Elementos clave:
+- class Usuario: define el nombre de la plantilla.
+- constructor(): función especial que se invoca automáticamente al hacer
+  new Usuario(...). Inicializa las propiedades del objeto usando this.
+- Métodos: funciones que viven dentro de la clase.
+- this: referencia al objeto que se está creando en ese momento. Al hacer
+  usuario1.saludar(), this.nombre se traduce a "Ana".
+
+3) El error más común: olvidar el new
+En funciones comunes, olvidar el new a veces genera errores silenciosos.
+Con las clases, JavaScript es mucho más estricto: no se pueden invocar sin
+new.
+*/
+
+class Animal {}
+
+// const miPerro = Animal();
+// ❌ TypeError: Class constructor Animal cannot be invoked without 'new'
+const miPerro = new Animal(); // ✅ correcto: siempre hay que usar new con las clases
+
+/*
+4) Aplicaciones en el mundo real
+- Desarrollo de videojuegos: personajes, enemigos, proyectiles, niveles.
+- Sistemas de e-commerce: clases para Producto, CarritoDeCompras, OrdenDePago.
+- Frameworks modernos: React históricamente usó clases; Angular sigue
+  basándose casi totalmente en clases para componentes y servicios.
+- Backend con Node.js: organizar el acceso a bases de datos o servicios
+  de correo.
+*/
+
+// ==========================================
+// 5.4 EJEMPLO: MODELANDO UNA ENTIDAD CON CLASS (estilo pre-entrega)
+// ==========================================
+
+/*
+Este ejemplo sigue la misma lógica que van a tener que aplicar en la
+"Pre-entrega 5: Instanciando Objetos": modelar una entidad del simulador
+elegido usando class, con propiedades esenciales, un método que modifique o
+informe sobre el estado del objeto, y varias instancias creadas con new.
+
+Acá elegimos "Tarea" como entidad de ejemplo (en la entrega real podría ser
+Producto, Usuario, Vehiculo, Socio, etc, según el simulador de cada uno).
+*/
+
+class Tarea {
+  // El constructor recibe los parámetros necesarios para inicializar
+  // al menos 4 propiedades.
+  constructor(id, titulo, prioridad, completada = false) {
+    this.id = id;
+    this.titulo = titulo;
+    this.prioridad = prioridad; // "baja", "media" o "alta"
+    this.completada = completada;
+  }
+
+  // Método que modifica el estado del objeto
+  completar() {
+    this.completada = true;
+    console.log(`Tarea "${this.titulo}" marcada como completada.`);
+  }
+
+  // Método que informa sobre el estado del objeto
+  mostrarEstado() {
+    const estado = this.completada ? "completada" : "pendiente";
+    console.log(`#${this.id} - ${this.titulo} (prioridad ${this.prioridad}): ${estado}`);
+  }
+}
+
+// Instanciación: al menos tres objetos reales creados con new
+const tarea1 = new Tarea(1, "Estudiar clases en JS", "alta");
+const tarea2 = new Tarea(2, "Hacer las compras", "media");
+const tarea3 = new Tarea(3, "Leer un libro", "baja");
+
+// La class no queda aislada: se integra con las herramientas que ya
+// veníamos usando en el simulador (arrays, bucles). Guardamos las
+// instancias en un array, como desde la Clase 4.
+const tareas = [tarea1, tarea2, tarea3];
+
+// Probamos un método que modifica el estado
+tarea1.completar();
+
+// Verificación: recorremos el array con for...of (repaso de Clase 4) y
+// mostramos el estado final de cada instancia.
+console.log("Estado de todas las tareas:");
+for (const tarea of tareas) {
+  tarea.mostrarEstado();
+}
