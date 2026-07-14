@@ -460,6 +460,7 @@ function iniciarActividad() {
 
     const resultado = mostrarResultadoFinal(datos.nombre, categoria);
     console.log(`🎯 Paso 3 - Resultado: ${resultado}`);
+    alert(resultado);
   } catch (error) {
     console.log("❌ Error en la actividad: " + error.message);
   }
