@@ -42,6 +42,35 @@ for (let i = 0; i < listaDeCompras.length; i++) {
   console.log(`${i + 1}. ${listaDeCompras[i]}`);
 }
 
+// Repaso 3: bucle while
+// Se repite mientras la condición sea verdadera; hay que actualizar la
+// variable dentro del bucle para que en algún momento se corte.
+console.log("Cuenta regresiva:");
+let contador = 3;
+
+while (contador > 0) {
+  console.log(contador);
+  contador--;
+}
+console.log("¡Despegue!");
+
+// Repaso 4: switch
+// Compara un valor contra distintos casos posibles; es una alternativa más
+// prolija que un if/else if largo cuando comparamos siempre la misma variable.
+const diaSemana = "miércoles";
+
+switch (diaSemana) {
+  case "sábado":
+  case "domingo":
+    console.log("Es fin de semana");
+    break;
+  case "miércoles":
+    console.log("Ya pasamos la mitad de la semana");
+    break;
+  default:
+    console.log("Es un día de semana");
+}
+
 // ==========================================
 // INTRODUCCIÓN A FUNCIONES
 // ==========================================
