@@ -34,6 +34,36 @@ for (const color of colores) {
   console.log(color);
 }
 
+// Repaso 4: métodos para agregar y quitar elementos
+// En JavaScript no existe "append" como en otros lenguajes: para agregar se
+// usa push (al final) o unshift (al principio).
+colores.push("violeta"); // agrega "violeta" al final
+console.log(colores);
+
+colores.pop(); // quita el último elemento
+console.log(colores);
+
+colores.unshift("blanco"); // agrega "blanco" al principio
+console.log(colores);
+
+colores.shift(); // quita el primer elemento
+console.log(colores);
+
+// splice permite agregar y/o quitar elementos en cualquier posición:
+// splice(posición, cantidadAQuitar, elementosAAgregar...)
+colores.splice(1, 1, "celeste"); // en la posición 1, quita 1 y agrega "celeste"
+console.log(colores);
+
+/*
+Lo más importante de arrays (repaso):
+- Crearlos con [] y que el índice arranca en 0.
+- Acceder/modificar un elemento puntual con array[indice].
+- length para saber cuántos elementos tiene.
+- Recorrerlos con for (necesitás el índice) o for...of (te da el valor directo).
+- Agregar/quitar elementos: push/pop (al final), unshift/shift (al
+  principio), splice (en cualquier posición).
+*/
+
 // ==========================================
 // 5.1 OBJETOS LITERALES: PROPIEDADES Y MÉTODOS
 // ==========================================
@@ -308,43 +338,50 @@ const miPerro = new Animal(); // ✅ correcto: siempre hay que usar new con las 
 */
 
 // ==========================================
-// 5.4 EJEMPLO: MODELANDO UNA ENTIDAD CON CLASS (estilo pre-entrega)
+// 5.4 EJEMPLO COMPLETO: CUMPLIENDO LA PRE-ENTREGA 5
 // ==========================================
 
 /*
-Este ejemplo sigue la misma lógica que van a tener que aplicar en la
-"Pre-entrega 5: Instanciando Objetos": modelar una entidad del simulador
-elegido usando class, con propiedades esenciales, un método que modifique o
-informe sobre el estado del objeto, y varias instancias creadas con new.
+Este es un ejemplo completo y explicado paso a paso, que cumple con todos
+los criterios de aceptación de la "Pre-entrega 5: Instanciando Objetos".
+Sirve de modelo: en la entrega real cada uno reemplaza "Tarea" por la
+entidad de su propio simulador (Producto, Usuario, Vehiculo, Socio, etc).
 
-Acá elegimos "Tarea" como entidad de ejemplo (en la entrega real podría ser
-Producto, Usuario, Vehiculo, Socio, etc, según el simulador de cada uno).
+Criterios que cubre este ejemplo:
+1) Usa class: no es un objeto literal suelto, es una "fábrica" de objetos.
+2) El constructor usa this para referenciar sus propias propiedades.
+3) Tiene más de 4 propiedades esenciales.
+4) Tiene un método que modifica el estado del objeto y otro que informa
+   sobre él.
+5) Se crean al menos 3 instancias con new, guardadas en constantes.
+6) Sigue las convenciones de nombres: PascalCase para la Class (Tarea),
+   camelCase para variables e instancias (tarea1, tarea2, tarea3).
 */
 
+// 1) y 2): class + constructor, usando this para inicializar propiedades
 class Tarea {
-  // El constructor recibe los parámetros necesarios para inicializar
-  // al menos 4 propiedades.
   constructor(id, titulo, prioridad, completada = false) {
     this.id = id;
     this.titulo = titulo;
     this.prioridad = prioridad; // "baja", "media" o "alta"
     this.completada = completada;
+    this.fechaCreacion = new Date().toLocaleDateString(); // 5ta propiedad
   }
 
-  // Método que modifica el estado del objeto
+  // 4) Método que MODIFICA el estado del objeto
   completar() {
     this.completada = true;
     console.log(`Tarea "${this.titulo}" marcada como completada.`);
   }
 
-  // Método que informa sobre el estado del objeto
+  // 4) Método que INFORMA sobre el estado del objeto
   mostrarEstado() {
     const estado = this.completada ? "completada" : "pendiente";
     console.log(`#${this.id} - ${this.titulo} (prioridad ${this.prioridad}): ${estado}`);
   }
 }
 
-// Instanciación: al menos tres objetos reales creados con new
+// 5) Instanciación: al menos 3 objetos reales creados con new
 const tarea1 = new Tarea(1, "Estudiar clases en JS", "alta");
 const tarea2 = new Tarea(2, "Hacer las compras", "media");
 const tarea3 = new Tarea(3, "Leer un libro", "baja");
@@ -354,12 +391,18 @@ const tarea3 = new Tarea(3, "Leer un libro", "baja");
 // instancias en un array, como desde la Clase 4.
 const tareas = [tarea1, tarea2, tarea3];
 
-// Probamos un método que modifica el estado
+// Verificación: mostramos el estado ANTES de modificar nada
+console.log("Estado inicial:");
+for (const tarea of tareas) {
+  tarea.mostrarEstado();
+}
+
+// Probamos el método que modifica el estado de una sola instancia
 tarea1.completar();
 
-// Verificación: recorremos el array con for...of (repaso de Clase 4) y
-// mostramos el estado final de cada instancia.
-console.log("Estado de todas las tareas:");
+// Verificación: mostramos el estado DESPUÉS, para confirmar que solo
+// tarea1 cambió y las demás siguen siendo independientes (como vimos en 5.2).
+console.log("Estado después de completar la tarea 1:");
 for (const tarea of tareas) {
   tarea.mostrarEstado();
 }
