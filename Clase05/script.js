@@ -69,10 +69,13 @@ Lo más importante de arrays (repaso):
 // ==========================================
 
 /*
+¿Por qué usamos objetos?
 Hasta ahora trabajamos con variables para guardar datos sueltos (un nombre,
 una edad) y con arrays para guardar listas ordenadas de elementos. Pero,
 ¿qué pasa cuando necesitamos representar algo más complejo, como un usuario,
-un producto o un personaje?
+un producto o un personaje? Ese "algo" no es un solo dato: es un conjunto
+de datos relacionados entre sí, y además puede necesitar comportamiento
+propio (hacer algo, no solo guardar información).
 
 Imaginemos que queremos representar un auto con variables sueltas:
 let marca = "Toyota";
@@ -80,8 +83,23 @@ let modelo = "Corolla";
 let anio = 2022;
 
 El problema es que estas variables están "sueltas" en el código: nada le
-dice a JavaScript que esa marca y ese año pertenecen a la misma cosa. Ahí
-es donde entran los objetos literales.
+dice a JavaScript que esa marca y ese año pertenecen a la misma cosa. Si
+tuviéramos que representar dos autos, tendríamos marca2, modelo2, anio2...
+y el riesgo de mezclar los datos de uno con los del otro crece rápido.
+
+Otra alternativa sería usar arrays paralelos, por ejemplo:
+const marcas = ["Toyota", "Ford"];
+const modelos = ["Corolla", "Fiesta"];
+Pero esto también es frágil: hay que mantener sincronizados varios arrays
+a mano, y el índice 0 de cada uno "significa" que pertenecen al mismo auto
+solo por convención, no porque el código lo garantice.
+
+Los objetos resuelven ambos problemas: agrupan todos los datos de "una
+cosa" bajo un solo nombre, y además permiten agregarle comportamiento
+(métodos) para que sepa hacer cosas con sus propios datos. Por eso son la
+herramienta principal para representar entidades del mundo real: un
+usuario, un producto, un personaje, un vehículo, etc. Ahí es donde entran
+los objetos literales.
 */
 
 // 1) ¿Qué es un objeto literal?
@@ -194,21 +212,29 @@ console.log(heroe); // ya no tiene la propiedad identidadSecreta
 // ==========================================
 
 /*
-En la sección anterior creamos objetos "a mano" usando llaves {}. Pero, ¿qué
-pasa si necesitamos crear cientos de usuarios, productos o mensajes?
-Escribirlos uno por uno sería ineficiente y propenso a errores. Ahí entran
-los constructores y el operador new.
+En la sección anterior creamos objetos "a mano" usando llaves {}. Eso está
+bien para un objeto único (un usuario, una configuración puntual), pero
+¿qué pasa si necesitamos crear cientos de usuarios, productos o mensajes,
+todos con la misma forma (las mismas propiedades y métodos)? Escribirlos
+uno por uno, copiando y pegando el mismo objeto literal una y otra vez,
+sería ineficiente, repetitivo y propenso a errores (¿y si en una copia nos
+olvidamos una propiedad, o escribimos mal una clave?). Ahí entran los
+constructores y el operador new.
 
 ¿Qué es un constructor?
 Un constructor es como un molde o un plano de construcción: define qué
 forma tendrá el objeto (qué propiedades y métodos tendrá), pero no es el
-objeto en sí.
+objeto en sí. El molde de galletitas no es una galletita: es lo que usamos
+para producir todas las galletitas que queramos, con la misma forma.
 
 En JavaScript, un constructor es técnicamente una función, pero se
 distingue por dos cosas:
-- Su nombre suele empezar con mayúscula (convención para indicar que es un
-  constructor).
-- Se ejecuta exclusivamente usando la palabra clave new.
+- Su nombre suele empezar con mayúscula (convención PascalCase, para
+  indicar de un vistazo que esa función es un constructor y no una función
+  común).
+- Se ejecuta exclusivamente usando la palabra clave new. Si la llamamos sin
+  new, this ya no apunta a un objeto nuevo y el código no funciona como
+  esperamos.
 */
 
 // El papel de "this": dentro de un constructor, this representa al nuevo
@@ -268,16 +294,23 @@ una posición, una cantidad de vida y la capacidad de atacar. Crear cada uno
 a mano con objetos literales sería un caos repetitivo. Con funciones
 constructoras (como vimos recién) funcionaría, pero a medida que el juego
 crece y los enemigos se vuelven más complejos, la sintaxis se vuelve difícil
-de leer. Ahí entran las clases de ES6 (2015): no cambiaron cómo funciona
-JavaScript por dentro, pero sí cambiaron cómo escribimos y organizamos el
-código.
+de leer. Ahí entran las clases de ES6 (2015, de ahí el nombre "ES6"): son la
+sintaxis moderna para lo mismo que veníamos haciendo con constructores.
+
+Importante: las clases no cambiaron cómo funciona JavaScript por dentro
+(por debajo del capó, JS sigue usando su sistema de prototipos, el mismo
+que tocamos de refilón con Usuario.prototype en otras clases), sino cómo
+escribimos y organizamos el código: es "azúcar sintáctico" sobre el mismo
+mecanismo, pero mucho más prolijo y parecido a lo que se usa en otros
+lenguajes de programación orientados a objetos.
 
 1) ¿Qué es una clase?
 Pensá en una clase como el plano de una casa: define cuántas ventanas
 tiene, dónde va la puerta, de qué color son las paredes. No podés vivir
 dentro de un plano; para tener algo real hay que construir la casa usando
 ese plano. Ese proceso se llama "instanciación", y el resultado (la casa
-real) es el objeto o instancia.
+real) es el objeto o instancia. Por eso las clases, igual que los
+constructores, se usan siempre con new.
 */
 
 // 2) La estructura de una clase: constructor() y métodos
@@ -338,50 +371,49 @@ const miPerro = new Animal(); // ✅ correcto: siempre hay que usar new con las 
 */
 
 // ==========================================
-// 5.4 EJEMPLO COMPLETO: CUMPLIENDO LA PRE-ENTREGA 5
+// 5.4 EJEMPLO: MODELANDO UNA ENTIDAD CON CLASS (estilo pre-entrega)
 // ==========================================
 
 /*
-Este es un ejemplo completo y explicado paso a paso, que cumple con todos
-los criterios de aceptación de la "Pre-entrega 5: Instanciando Objetos".
-Sirve de modelo: en la entrega real cada uno reemplaza "Tarea" por la
-entidad de su propio simulador (Producto, Usuario, Vehiculo, Socio, etc).
+Este ejemplo sigue la misma lógica que van a tener que aplicar en la
+"Pre-entrega 5: Instanciando Objetos": modelar una entidad del simulador
+elegido usando class, con propiedades esenciales, un método que modifique o
+informe sobre el estado del objeto, y varias instancias creadas con new.
 
-Criterios que cubre este ejemplo:
-1) Usa class: no es un objeto literal suelto, es una "fábrica" de objetos.
-2) El constructor usa this para referenciar sus propias propiedades.
-3) Tiene más de 4 propiedades esenciales.
-4) Tiene un método que modifica el estado del objeto y otro que informa
-   sobre él.
-5) Se crean al menos 3 instancias con new, guardadas en constantes.
-6) Sigue las convenciones de nombres: PascalCase para la Class (Tarea),
-   camelCase para variables e instancias (tarea1, tarea2, tarea3).
+Acá elegimos "Tarea" como entidad de ejemplo (en la entrega real podría ser
+Producto, Usuario, Vehiculo, Socio, etc, según el simulador de cada uno).
+
+Un detalle importante: los métodos de instancia (completar, mostrarEstado)
+siempre trabajan sobre this, es decir, sobre los datos de la instancia
+particular con la que se los llama. tarea1.completar() modifica solamente
+a tarea1, nunca a tarea2 ni a tarea3, por la misma razón que vimos en 5.2
+con persona1 y persona2: cada instancia tiene sus propios datos.
 */
 
-// 1) y 2): class + constructor, usando this para inicializar propiedades
 class Tarea {
+  // El constructor recibe los parámetros necesarios para inicializar
+  // al menos 4 propiedades.
   constructor(id, titulo, prioridad, completada = false) {
     this.id = id;
     this.titulo = titulo;
     this.prioridad = prioridad; // "baja", "media" o "alta"
     this.completada = completada;
-    this.fechaCreacion = new Date().toLocaleDateString(); // 5ta propiedad
   }
 
-  // 4) Método que MODIFICA el estado del objeto
+  // Método que modifica el estado del objeto
   completar() {
     this.completada = true;
     console.log(`Tarea "${this.titulo}" marcada como completada.`);
   }
 
-  // 4) Método que INFORMA sobre el estado del objeto
+  // Método que informa sobre el estado del objeto
   mostrarEstado() {
     const estado = this.completada ? "completada" : "pendiente";
     console.log(`#${this.id} - ${this.titulo} (prioridad ${this.prioridad}): ${estado}`);
   }
 }
 
-// 5) Instanciación: al menos 3 objetos reales creados con new
+// Instanciación: al menos tres objetos reales creados con new
 const tarea1 = new Tarea(1, "Estudiar clases en JS", "alta");
 const tarea2 = new Tarea(2, "Hacer las compras", "media");
 const tarea3 = new Tarea(3, "Leer un libro", "baja");
@@ -391,18 +423,79 @@ const tarea3 = new Tarea(3, "Leer un libro", "baja");
 // instancias en un array, como desde la Clase 4.
 const tareas = [tarea1, tarea2, tarea3];
 
-// Verificación: mostramos el estado ANTES de modificar nada
-console.log("Estado inicial:");
-for (const tarea of tareas) {
-  tarea.mostrarEstado();
-}
-
-// Probamos el método que modifica el estado de una sola instancia
+// Probamos un método que modifica el estado
 tarea1.completar();
 
-// Verificación: mostramos el estado DESPUÉS, para confirmar que solo
-// tarea1 cambió y las demás siguen siendo independientes (como vimos en 5.2).
-console.log("Estado después de completar la tarea 1:");
+// Verificación: recorremos el array con for...of (repaso de Clase 4) y
+// mostramos el estado final de cada instancia.
+console.log("Estado de todas las tareas:");
 for (const tarea of tareas) {
   tarea.mostrarEstado();
 }
+
+// ==========================================
+// 5.5 PRE-ENTREGA 5, PASO A PASO: Instanciando Objetos
+// ==========================================
+
+/*
+Acá resolvemos la consigna de la "Pre-entrega 5" siguiendo exactamente los
+pasos sugeridos en el enunciado, con la entidad Producto (una de las que
+propone la consigna) y su método sumarIva().
+
+Recordatorio de los Criterios de Aceptación que tiene que cumplir el código:
+- Utilizar class: no alcanza con un objeto literal suelto, hace falta la
+  "fábrica" de objetos.
+- Correcto uso de this: el constructor debe referenciar sus propiedades
+  usando this.
+- Instanciación: crear al menos tres instancias (objetos reales) con new.
+- Sintaxis moderna: sin errores de sintaxis, con las convenciones de
+  nombres (camelCase para variables, PascalCase para Clases).
+*/
+
+// Paso 1: Creación de la estructura
+// Definimos la Class (PascalCase) con un constructor que recibe al menos
+// 4 parámetros para inicializar las propiedades esenciales, usando this.
+class Producto {
+  constructor(nombre, precio, categoria, stock) {
+    this.nombre = nombre;
+    this.precio = precio;
+    this.categoria = categoria;
+    this.stock = stock;
+  }
+
+  // Paso 2: Añadir comportamiento
+  // Un método que modifica el estado del objeto: resta unidades del stock.
+  vender(cantidad) {
+    if (cantidad > this.stock) {
+      console.log(`No hay suficiente stock de "${this.nombre}" para vender ${cantidad} unidades.`);
+      return;
+    }
+    this.stock -= cantidad;
+    console.log(`Se vendieron ${cantidad} unidades de "${this.nombre}". Stock restante: ${this.stock}.`);
+  }
+
+  // Otro método, este informa sobre el estado del objeto: calcula un valor
+  // a partir de sus propiedades, sin modificarlas.
+  sumarIva() {
+    return this.precio * 1.21;
+  }
+}
+
+// Paso 3: Instanciación
+// Creamos al menos tres objetos diferentes con new y los guardamos en
+// constantes (camelCase).
+const producto1 = new Producto("Zapatillas", 15000, "calzado", 10);
+const producto2 = new Producto("Campera", 22000, "indumentaria", 5);
+const producto3 = new Producto("Gorra", 8000, "accesorios", 20);
+
+// Paso 4: Verificación
+// Ejecutamos los métodos y mostramos con console.log los resultados finales
+// de las propiedades modificadas.
+console.log(`Precio de "${producto1.nombre}" con IVA: $${producto1.sumarIva().toFixed(2)}`);
+
+producto1.vender(3); // modifica el stock de producto1
+producto2.vender(10); // pide más de lo que hay: no debería vender nada
+
+console.log(producto1); // stock debería haber bajado de 10 a 7
+console.log(producto2); // stock debería seguir en 5, sin cambios
+console.log(producto3); // instancia sin modificar, para comparar
