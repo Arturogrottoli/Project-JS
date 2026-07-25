@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 05: Objetos, Constructores y Clases - Coderhouse</title>
+    <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ==========================================================================
+           CODER 4.0 DESIGN SYSTEM & VARS
+           ========================================================================== */
+        :root {
+            --blanco-lienzo: #F8F2E8;
+            --negro-coder: #171717;
+            --naranja-oscuro: #260700;
+            --naranja-horizonte: #FF632B;
+            --amarillo-solar: #FE872D;
+            --rosa-energia: #FE64A3;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #dcd6cd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+
+        /* Slide Viewer (Absolute 1280x720 No-Scale-Shift) */
+        .presentation-viewport {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--blanco-lienzo);
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            color: var(--negro-coder);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 70px 40px 70px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+            z-index: 1;
+        }
+
+        .slide-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Abstract Brand Accents: Subtly warm gradients connecting to Coder 4.0 */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,99,43,0.06) 0%, rgba(248,242,232,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography & Hierarchy */
+        h1 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background-color: rgba(38, 7, 0, 0.1);
+            margin-left: 15px;
+        }
+
+        p, li {
+            font-size: 17px;
+            line-height: 1.5;
+            color: #3d3430;
+            font-weight: 400;
+        }
+
+        /* Content Area Layout Wrapper */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Grid & Column Definitions */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 45px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Coder 4.0 Split Card layouts */
+        .two-column.tiled > div {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            padding: 35px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .two-column.tiled h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--naranja-horizonte);
+            margin-bottom: 12px;
+        }
+
+        /* Warm Retro Photography Frame */
+        .image-wrapper {
+            border-radius: 16px;
+            height: 340px;
+            overflow: hidden;
+            width: 100%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(38, 7, 0, 0.08);
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Custom 2D Filled Icons & Tiles */
+        .tiled-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .tile {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .tile .icon-box {
+            background-color: rgba(255, 99, 43, 0.1);
+            color: var(--naranja-horizonte);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .tile h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--naranja-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .tile p {
+            font-size: 14px;
+        }
+
+        /* Bullet List styling */
+        .bullet-list ul {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+        }
+
+        .bullet-list li i {
+            position: absolute;
+            left: 0;
+            top: 3px;
+            color: var(--naranja-horizonte);
+            font-size: 16px;
+        }
+
+        /* Footer & Brand Branding Mark */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(38, 7, 0, 0.06);
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        .slide-footer .brand-logo {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--naranja-oscuro);
+            letter-spacing: -0.5px;
+        }
+
+        .slide-footer .brand-logo span {
+            color: var(--naranja-horizonte);
+        }
+
+        .slide-footer .slide-index {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(38, 7, 0, 0.4);
+        }
+
+        /* Slide Type Banners ("Momentos de la Clase") */
+        .moment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .moment-badge.live {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .moment-badge.bug {
+            background-color: var(--rosa-energia);
+        }
+
+        .moment-badge.tip {
+            background-color: var(--amarillo-solar);
+            color: var(--naranja-oscuro);
+        }
+
+        /* Slido Interactive layout */
+        .slido-box {
+            background-color: #ffffff;
+            border: 2px dashed var(--naranja-horizonte);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 99, 43, 0.05);
+        }
+
+        .slido-box h3 {
+            font-size: 26px;
+            color: var(--naranja-oscuro);
+            margin-bottom: 10px;
+        }
+
+        .slido-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--naranja-horizonte);
+            margin: 15px 0;
+            letter-spacing: -1px;
+        }
+
+        /* Transition slide */
+        .transition-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .transition-layout h2 {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .transition-layout hr {
+            width: 80px;
+            height: 5px;
+            background-color: var(--naranja-horizonte);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        /* Clean retro table */
+        .table-layout {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+            width: 100%;
+        }
+
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th, .table-layout td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(38, 7, 0, 0.06);
+            font-size: 14px;
+        }
+
+        .table-layout th {
+            background-color: rgba(38, 7, 0, 0.03);
+            color: var(--naranja-oscuro);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Break Slide Design */
+        .break-slide {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+        }
+
+        .break-slide::before {
+            display: none;
+        }
+
+        .break-slide h2 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--blanco-lienzo);
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .break-slide p {
+            color: rgba(248, 242, 232, 0.75);
+            font-size: 22px;
+        }
+
+        .break-logo {
+            font-size: 80px;
+            color: var(--naranja-horizonte);
+            margin-bottom: 30px;
+        }
+
+        /* Q&A / Legal section */
+        .legal-notice {
+            font-size: 10px;
+            line-height: 1.4;
+            color: rgba(38, 7, 0, 0.4);
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        /* Presentation controls toolbar */
+        .controls-toolbar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(38, 7, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--naranja-horizonte);
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Code Block Container */
+        .code-block {
+            background-color: #ffffff;
+            border-left: 4px solid var(--naranja-horizonte);
+            padding: 15px 20px;
+            font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-viewport">
+
+    <!-- SLIDE 1: Portada General -->
+    <div class="slide-container active" id="slide1">
+        <div></div>
+        <div class="transition-layout" style="margin-bottom: 30px;">
+            <span class="moment-badge">CODER 4.0 • BIENVENIDA</span>
+            <h1 style="font-size: 54px;">Objetos Literales, Constructores y Clases en JavaScript</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">
+                Clase 05: Objetos Literales | Constructores y new | Clases ES6
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">01 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: División Módulo 01 -->
+    <div class="slide-container" id="slide2">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Módulo 01</span>
+            <h2>Objetos Literales: Propiedades y Métodos</h2>
+            <p style="font-size: 20px;">Aprenderás a agrupar datos relacionados en una sola entidad y a dotarla de comportamiento propio.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">02 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: ¿Por qué objetos literales? -->
+    <div class="slide-container" id="slide3">
+        <h2 class="slide-title">¿Por Qué Objetos Literales?</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Fundamentos</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Hasta ahora usamos variables sueltas y arrays. Pero, ¿qué pasa cuando necesitamos representar algo más complejo, como un usuario o un producto?
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-car"></i> <strong>El problema:</strong> variables sueltas como <code>marca</code>, <code>modelo</code> y <code>year</code> no le dicen a JavaScript que pertenecen al mismo auto.</li>
+                            <li><i class="fa-solid fa-layer-group"></i> Un objeto agrupa valores relacionados bajo un solo nombre, usando llaves <code>{}</code>.</li>
+                            <li><i class="fa-solid fa-key"></i> A diferencia de los arrays (por posición/índice), los objetos acceden a los datos mediante nombres o claves.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+<span style="color: #6a737d;">// Variables sueltas (el problema)</span>
+let marca = <span style="color: #032f62;">"Toyota"</span>
+let modelo = <span style="color: #032f62;">"Corolla"</span>
+let year = 2022
+
+<span style="color: #6a737d;">// Nada indica que pertenecen al mismo auto</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">03 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: La anatomía de un objeto -->
+    <div class="slide-container" id="slide4">
+        <h2 class="slide-title">La Anatomía de un Objeto</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Sintaxis Core</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Un objeto literal es la forma más directa de crear un objeto en JavaScript, utilizando llaves <code>{}</code>.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-tag"></i> <strong>usuario</strong> es el nombre de nuestro objeto.</li>
+                            <li><i class="fa-solid fa-key"></i> <strong>nombre, edad, ciudad</strong> son las claves (keys) o etiquetas.</li>
+                            <li><i class="fa-solid fa-database"></i> <strong>"Ana", 25, "Madrid"</strong> son los valores (values).</li>
+                            <li><i class="fa-solid fa-link"></i> Cada combinación de clave y valor se denomina <strong>propiedad</strong>.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+const usuario = {
+  nombre: <span style="color: #032f62;">"Ana"</span>,
+  edad: 25,
+  ciudad: <span style="color: #032f62;">"Madrid"</span>
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: Propiedades -->
+    <div class="slide-container" id="slide5">
+        <h2 class="slide-title">Propiedades: Los Datos del Objeto</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Ejemplo E-commerce</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Las propiedades son como variables que viven dentro del objeto: strings, números, booleanos, e incluso arrays u otros objetos.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-box"></i> Un producto no es solo un nombre: es un conjunto de datos heterogéneo.</li>
+                            <li><i class="fa-solid fa-shapes"></i> Agrupar esta información en una sola entidad hace el código más organizado y fácil de entender.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+const producto = {
+  id: <span style="color: #032f62;">"A152"</span>,
+  nombre: <span style="color: #032f62;">"Auriculares Bluetooth"</span>,
+  precio: 59.90,
+  enStock: true,
+  coloresDisponibles: [<span style="color: #032f62;">"Negro"</span>, <span style="color: #032f62;">"Blanco"</span>, <span style="color: #032f62;">"Azul"</span>]
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: Métodos y this -->
+    <div class="slide-container" id="slide6">
+        <h2 class="slide-title">Métodos: El Comportamiento del Objeto</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">La Palabra Clave this</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Cuando guardamos una función dentro de una propiedad, esa función pasa a llamarse <strong>método</strong>.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-bolt"></i> Los métodos representan acciones que el objeto puede realizar. Se ejecutan con paréntesis: <code>persona.presentarse()</code>.</li>
+                            <li><i class="fa-solid fa-hand-point-right"></i> <code>this</code> hace referencia al objeto mismo: permite que un método use los propios datos del objeto.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+const persona = {
+  nombre: <span style="color: #032f62;">"Carlos"</span>,
+  presentarse: function() {
+    console.log(<span style="color: #032f62;">"Hola, mi nombre es "</span> + this.nombre)
+  }
+}
+
+persona.presentarse() <span style="color: #6a737d;">// Hola, mi nombre es Carlos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">06 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: Acceso: punto vs corchetes -->
+    <div class="slide-container" id="slide7">
+        <h2 class="slide-title">Acceso a la Información: Punto vs Corchetes</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Dos Herramientas</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Para leer, modificar o crear propiedades, tenemos notación de punto y notación de corchetes.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-circle-dot"></i> <strong>Punto (.):</strong> la más común, cuando sabemos el nombre de la propiedad de antemano.</li>
+                            <li><i class="fa-solid fa-brackets-curly"></i> <strong>Corchetes ([]):</strong> obligatorio si el nombre tiene espacios/caracteres especiales, o si está guardado en una variable.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+console.log(producto.nombre) <span style="color: #6a737d;">// "Auriculares Bluetooth"</span>
+producto.precio = 55.00      <span style="color: #6a737d;">// Modificamos el valor</span>
+
+const propiedadABuscar = <span style="color: #032f62;">"nombre"</span>
+console.log(producto[propiedadABuscar]) <span style="color: #6a737d;">// "Auriculares Bluetooth"</span>
+<span style="color: #6f42c1;">// producto.propiedadABuscar daría undefined</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: Manipulación: agregar y eliminar -->
+    <div class="slide-container" id="slide8">
+        <h2 class="slide-title">Manipulación de Objetos: Agregar y Eliminar</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Objetos Dinámicos</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Los objetos en JavaScript son dinámicos: se puede cambiar su estructura después de haberlos creado.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-plus"></i> <strong>Agregar:</strong> simplemente asignamos un valor a una clave que todavía no existe.</li>
+                            <li><i class="fa-solid fa-trash"></i> <strong>Eliminar:</strong> usamos el operador <code>delete</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+const auto = { marca: <span style="color: #032f62;">"Fiat"</span> }
+auto.modelo = <span style="color: #032f62;">"Cronos"</span> <span style="color: #6a737d;">// Ahora tiene dos propiedades</span>
+
+const heroe = {
+  nombre: <span style="color: #032f62;">"Batman"</span>,
+  identidadSecreta: <span style="color: #032f62;">"Bruce Wayne"</span>
+}
+delete heroe.identidadSecreta <span style="color: #6a737d;">// Desaparece del objeto</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: Errores comunes y buenas prácticas -->
+    <div class="slide-container" id="slide9">
+        <h2 class="slide-title">Errores Comunes y Buenas Prácticas</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-shuffle"></i></div>
+                    <h3>Objetos vs Arrays</h3>
+                    <p>Los arrays usan <code>[]</code> y se basan en orden/posición. Los objetos usan <code>{}</code> y se basan en nombres/etiquetas.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-comma"></i></div>
+                    <h3>Olvidar las Comas</h3>
+                    <p>Entre cada propiedad de un objeto debe haber una coma. Es una de las causas más frecuentes de errores de sintaxis.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-circle-question"></i></div>
+                    <h3>Propiedades Inexistentes</h3>
+                    <p>Acceder a una propiedad que no existe no da un error fatal: JavaScript devuelve <code>undefined</code>.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-lock-open"></i></div>
+                    <h3>const No es Inmutable</h3>
+                    <p>Con <code>const</code> podés modificar propiedades internas. Lo que no podés hacer es reasignar la variable a un objeto nuevo.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">09 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: División Módulo 02 -->
+    <div class="slide-container" id="slide10">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Módulo 02</span>
+            <h2>Constructores y Operador new</h2>
+            <p style="font-size: 20px;">Aprende a fabricar muchos objetos con la misma estructura, sin repetir código.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">10 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 11: ¿Qué es un constructor? -->
+    <div class="slide-container" id="slide11">
+        <h2 class="slide-title">¿Qué es un Constructor?</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">El Molde</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Un constructor es como un molde o un plano de construcción: define la forma del objeto, pero no es el objeto en sí.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-signature"></i> Técnicamente es una función, pero su nombre suele empezar con <strong>Mayúscula</strong> (convención).</li>
+                            <li><i class="fa-solid fa-key"></i> Se ejecuta exclusivamente usando la palabra clave <code>new</code>.</li>
+                            <li><i class="fa-solid fa-hand-point-right"></i> <code>this</code> representa al nuevo objeto que se está creando en ese preciso momento.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+function Auto(marca, modelo) {
+  this.marca = marca   <span style="color: #6a737d;">// El objeto tendrá esta marca</span>
+  this.modelo = modelo <span style="color: #6a737d;">// El objeto tendrá este modelo</span>
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">11 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 12: El operador new -->
+    <div class="slide-container" id="slide12">
+        <h2 class="slide-title">El Operador new: El Botón de Encendido</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">4 Pasos Automáticos</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Cuando usás <code>new</code>, JavaScript realiza cuatro pasos automáticos:
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-cube"></i> Crea un nuevo objeto vacío.</li>
+                            <li><i class="fa-solid fa-link"></i> Vincula <code>this</code> a ese nuevo objeto.</li>
+                            <li><i class="fa-solid fa-gears"></i> Ejecuta el código de la función constructora.</li>
+                            <li><i class="fa-solid fa-arrow-turn-up"></i> Devuelve automáticamente el nuevo objeto creado.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+const miAuto = new Auto(<span style="color: #032f62;">"Toyota"</span>, <span style="color: #032f62;">"Corolla"</span>)
+<span style="color: #6a737d;">// miAuto ahora es: { marca: "Toyota", modelo: "Corolla" }</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">12 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 13: Instancias -->
+    <div class="slide-container" id="slide13">
+        <h2 class="slide-title">Instancias: Los "Hijos" del Molde</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Independencia de Datos</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Cada objeto creado a partir de un constructor se llama <strong>instancia</strong>.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-clone"></i> persona1 y persona2 comparten la misma estructura (el mismo molde)...</li>
+                            <li><i class="fa-solid fa-user-lock"></i> ...pero sus datos son independientes: cambiar persona1 no afecta a persona2.</li>
+                            <li><i class="fa-solid fa-circle-info"></i> La función constructora ya casi no se usa: su rol fue absorbido por las <strong>clases</strong> (class).</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+function Persona(nombre, edad) {
+  this.nombre = nombre
+  this.edad = edad
+}
+
+const persona1 = new Persona(<span style="color: #032f62;">"Julieta"</span>, 27)
+const persona2 = new Persona(<span style="color: #032f62;">"Martín"</span>, 31)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">13 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 14: División Módulo 03 -->
+    <div class="slide-container" id="slide14">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Módulo 03</span>
+            <h2>Clases en ES6: La Forma Moderna</h2>
+            <p style="font-size: 20px;">La sintaxis moderna para crear objetos, adoptada por los frameworks profesionales.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">14 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 15: ¿Qué es una clase? -->
+    <div class="slide-container" id="slide15">
+        <h2 class="slide-title">¿Qué es una Clase en JavaScript?</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Analogía</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Pensá en una clase como el plano de una casa: define ventanas, puertas y paredes, pero no podés vivir dentro de un plano.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-house-chimney"></i> Para tener algo real hay que construir la casa usando ese plano.</li>
+                            <li><i class="fa-solid fa-wand-magic-sparkles"></i> Ese proceso se llama <strong>instanciación</strong>, y el resultado es el objeto o instancia.</li>
+                            <li><i class="fa-solid fa-calendar"></i> Introducidas en ES6 (2015): no cambiaron cómo funciona JS por dentro, pero sí cómo organizamos el código.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="image-wrapper">
+                        <img alt="Plano arquitectónico de una casa" src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1280&auto=format&fit=crop">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">15 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 16: Estructura de una clase -->
+    <div class="slide-container" id="slide16">
+        <h2 class="slide-title">Estructura de una Clase: constructor() y Métodos</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Sintaxis</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Se declara con la palabra clave <code>class</code>. Por convención, el nombre empieza con Mayúscula (PascalCase).
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-play"></i> <strong>constructor():</strong> se invoca automáticamente con <code>new Usuario(...)</code>; usa <code>this</code> para inicializar propiedades.</li>
+                            <li><i class="fa-solid fa-list-check"></i> <strong>Métodos:</strong> funciones que viven dentro de la clase, sin <code>function</code> ni <code>=&gt;</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+class Usuario {
+  constructor(nombre, email, edad) {
+    this.nombre = nombre
+    this.email = email
+    this.edad = edad
+  }
+
+  saludar() {
+    console.log(<span style="color: #032f62;">"Hola, soy "</span> + this.nombre)
+  }
+}
+
+const usuario1 = new Usuario(<span style="color: #032f62;">"Ana"</span>, <span style="color: #032f62;">"ana@example.com"</span>, 25)
+usuario1.saludar()
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">16 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 17: Error común: olvidar el new (#FindTheBug) -->
+    <div class="slide-container" id="slide17">
+        <h2 class="slide-title">El Error Más Común: Olvidar el new</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge bug"><i class="fa-solid fa-bug"></i> #FindTheBug</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Con funciones comunes, olvidar el <code>new</code> a veces genera errores silenciosos. Con las clases, JavaScript es mucho más estricto.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-shield-halved"></i> Las clases están protegidas: siempre hay que usar la palabra clave <code>new</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+class Animal {}
+
+<span style="color: #6a737d;">// Error frecuente</span>
+const miPerro = Animal()
+<span style="color: #6f42c1;">// TypeError: Class constructor Animal cannot be invoked without 'new'</span>
+
+<span style="color: #6a737d;">// Correcto</span>
+const miPerro2 = new Animal()
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">17 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 18: Aplicaciones en el mundo real -->
+    <div class="slide-container" id="slide18">
+        <h2 class="slide-title">Aplicaciones en el Mundo Real</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-gamepad"></i></div>
+                    <h3>Videojuegos</h3>
+                    <p>Representar personajes, enemigos, proyectiles y niveles.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-cart-shopping"></i></div>
+                    <h3>E-commerce</h3>
+                    <p>Clases para Producto, CarritoDeCompras, OrdenDePago.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-layer-group"></i></div>
+                    <h3>Frameworks Modernos</h3>
+                    <p>React históricamente usó clases; Angular sigue basándose casi totalmente en ellas.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-server"></i></div>
+                    <h3>Backend con Node.js</h3>
+                    <p>Organizar el acceso a bases de datos o servicios de correo.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">18 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 19: Break de Coder ("Recreo") -->
+    <div class="slide-container break-slide" id="slide19">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
+            <h2>Break del Coder</h2>
+            <p>Andá por un cafecito o mate, ¡y en 10 minutos volvemos!</p>
+        </div>
+        <div class="slide-footer" style="border-top: 1px solid rgba(248, 242, 232, 0.2);">
+            <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span style="color: var(--naranja-horizonte);">HOUSE</span></div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.4);">19 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 20: Quiz: Objetos -->
+    <div class="slide-container" id="slide20">
+        <h2 class="slide-title">Quiz: Objetos</h2>
+        <div class="content-area">
+            <div class="slido-box">
+                <span class="moment-badge live"><i class="fa-solid fa-circle-question"></i> Momento de Evaluación</span>
+                <h3>Repaso de Objetos en JavaScript</h3>
+                <p>Pon a prueba tus conocimientos sobre la creación, estructura y manipulación de objetos: desde literales hasta clases modernas.</p>
+                <div class="slido-code" style="font-size: 18px; font-weight: 700; text-align: left; letter-spacing: normal;">
+                    ✓ La naturaleza de los objetos como colecciones de clave-valor<br>
+                    ✓ Diferencia entre creación manual (literales) y plantillas (clases/constructores)<br>
+                    ✓ La manipulación de propiedades y métodos
+                </div>
+                <p style="font-weight: 600; color: var(--naranja-oscuro);">5 preguntas · Nota de aprobación: 70% · Intentos: 3</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">20 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 21: Pre-Entrega 5: Instanciando Objetos -->
+    <div class="slide-container" id="slide21">
+        <h2 class="slide-title">Pre-Entrega 5</h2>
+        <div class="content-area">
+            <div class="slido-box">
+                <span class="moment-badge live"><i class="fa-solid fa-laptop-code"></i> Actividad Integradora</span>
+                <h3>Instanciando Objetos</h3>
+                <p>Une todo lo aprendido para crear la estructura de datos que será el "corazón" de tu proyecto final: el simulador.</p>
+                <div class="slido-code" style="font-size: 18px; font-weight: 700; text-align: left; letter-spacing: normal;">
+                    ✓ Una Class que defina objetos de tu simulador (Producto, Usuario, Tarea, Vehiculo...)<br>
+                    ✓ Al menos 4 propiedades esenciales (id, nombre, precio, stock...)<br>
+                    ✓ Al menos un método que modifique o informe el estado (vender(), completar()...)<br>
+                    ✓ Correcto uso de <code>this</code> dentro del constructor<br>
+                    ✓ Al menos 3 instancias creadas con <code>new</code>
+                </div>
+                <p style="font-weight: 600; color: var(--naranja-oscuro);">Entregable: repositorio de GitHub público con un archivo HTML y un archivo JS.</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">21 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 22: Consolidación de Conceptos (Table) -->
+    <div class="slide-container" id="slide22">
+        <h2 class="slide-title">Consolidación de Conceptos</h2>
+        <div class="content-area">
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Módulo</th>
+                            <th>Tema Principal</th>
+                            <th>Herramienta o Técnica Clave</th>
+                            <th>Meta Pedagógica</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Módulo 1</strong></td>
+                            <td>Objetos Literales</td>
+                            <td>{}, propiedades, métodos &amp; this</td>
+                            <td>Agrupar datos relacionados y dotarlos de comportamiento propio.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Módulo 2</strong></td>
+                            <td>Constructores y Operador new</td>
+                            <td>Función constructora, this &amp; new</td>
+                            <td>Fabricar múltiples objetos con la misma estructura sin repetir código.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Módulo 3</strong></td>
+                            <td>Clases en ES6</td>
+                            <td>class, constructor() &amp; métodos</td>
+                            <td>Adoptar la sintaxis moderna usada en frameworks profesionales.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Evaluación</strong></td>
+                            <td>Quiz + Pre-Entrega 5: Instanciando Objetos</td>
+                            <td>Repositorio de GitHub público</td>
+                            <td>Aplicación práctica del modelado de datos con class en un proyecto real.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">22 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 23: ¿Dudas? ¿Consultas? -->
+    <div class="slide-container" id="slide23">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 90px; color: var(--naranja-horizonte);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 60px; color: var(--rosa-energia);"></i>
+            </div>
+            <h1 style="font-size: 64px;">¿Dudas? ¿Consultas?</h1>
+            <p style="font-size: 22px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">
+                Este es el momento de preguntar todo lo que necesites
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">23 / 24</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 24: Q&A / Legal Disclaimer -->
+    <div class="slide-container" id="slide24" style="background-color: var(--blanco-lienzo);">
+        <div class="content-area" style="justify-content: center;">
+            <h1 style="color: var(--naranja-oscuro); font-size: 60px; font-weight: 800; letter-spacing: -2px;">¡Muchas gracias!</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 5px;">Clase 05: Objetos, Constructores y Clases en JavaScript</p>
+
+            <p class="legal-notice">
+                La información contenida en este documento es altamente sensible y de carácter educativo para los participantes inscriptos en Coderhouse. Queda estrictamente prohibida la reproducción, duplicación o revelación total o parcial del contenido pedagógico sin previa autorización escrita de Coderhouse. Copyright © 2026 Coderhouse. Todos los derechos reservados.
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">24 / 24</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Presentation navigation controls toolbar -->
+<div class="controls-toolbar">
+    <button class="control-btn" id="prev-slide"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+    <div class="slide-dots" id="slide-dots"></div>
+    <button class="control-btn" id="next-slide">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<script>
+    // Slider Presentation Logic
+    const slides = document.querySelectorAll('.slide-container');
+    const prevBtn = document.getElementById('prev-slide');
+    const nextBtn = document.getElementById('next-slide');
+    const dotsContainer = document.getElementById('slide-dots');
+
+    let currentSlideIndex = 0;
+
+    // Create Navigation Indicators Dynamically
+    slides.forEach((slide, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            goToSlide(idx);
+        });
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateControls() {
+        dots.forEach((dot, idx) => {
+            if (idx === currentSlideIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function goToSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = index;
+        slides[currentSlideIndex].classList.add('active');
+
+        updateControls();
+    }
+
+    // Keyboard Navigation Handlers
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            goToSlide(currentSlideIndex + 1);
+        } else if (e.key === 'ArrowLeft') {
+            goToSlide(currentSlideIndex - 1);
+        }
+    });
+
+    // Button Click Event Listeners
+    prevBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex + 1);
+    });
+</script>
+
+</body>
+</html>
