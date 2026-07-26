@@ -54,6 +54,18 @@ console.log(colores);
 colores.splice(1, 1, "celeste"); // en la posición 1, quita 1 y agrega "celeste"
 console.log(colores);
 
+// Repaso 5: length, buscar elementos y convertir a texto
+console.log("Cantidad de elementos:", colores.length); // 3
+
+// includes/indexOf sirven para buscar sin tener que escribir un for a mano.
+console.log(colores.includes("azul")); // true: ¿el array contiene "azul"?
+console.log(colores.indexOf("azul"));  // 2: en qué posición está
+console.log(colores.indexOf("negro")); // -1: no existe en el array
+
+// join convierte el array en un único string, uniendo los elementos con
+// el separador que le pasemos.
+console.log(colores.join(", ")); // "rojo, celeste, azul"
+
 /*
 Lo más importante de arrays (repaso):
 - Crearlos con [] y que el índice arranca en 0.
@@ -62,6 +74,10 @@ Lo más importante de arrays (repaso):
 - Recorrerlos con for (necesitás el índice) o for...of (te da el valor directo).
 - Agregar/quitar elementos: push/pop (al final), unshift/shift (al
   principio), splice (en cualquier posición).
+- Buscar elementos: includes (¿está o no?) e indexOf (¿en qué posición?).
+- join para convertir el array en un string.
+- Lo que dejamos para más adelante: map, filter, reduce y sort (por ahora,
+  ese tipo de transformaciones las resolvemos "a mano" con bucles).
 */
 
 // ==========================================
