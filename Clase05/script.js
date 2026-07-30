@@ -208,6 +208,21 @@ const heroe = {
 delete heroe.identidadSecreta;
 console.log(heroe); // ya no tiene la propiedad identidadSecreta
 
+// 5b) Objetos anidados: una propiedad puede ser otro objeto
+// Esto nos permite modelar información con más de un nivel, como la
+// dirección de un empleado, encadenando puntos para llegar hasta el dato.
+const empleado = {
+  nombre: "Diego",
+  puesto: "Desarrollador",
+  direccion: {
+    calle: "Av. Corrientes 1234",
+    ciudad: "Buenos Aires",
+  },
+};
+
+console.log(empleado.direccion.ciudad); // "Buenos Aires"
+console.log(empleado.direccion.calle);  // "Av. Corrientes 1234"
+
 /*
 6) Errores comunes y buenas prácticas
 - No confundir objetos con arrays: los arrays usan [] y se basan en orden
@@ -221,7 +236,13 @@ console.log(heroe); // ya no tiene la propiedad identidadSecreta
 - Con const: se puede modificar el contenido interno del objeto (cambiar o
   agregar propiedades). Lo que NO se puede hacer es reasignar la variable a
   un objeto completamente nuevo.
+- Comparar objetos con === compara referencias, no contenido: dos objetos
+  con exactamente las mismas propiedades y valores NO son "iguales" entre
+  sí, porque son dos objetos distintos guardados en lugares distintos de
+  la memoria.
 */
+
+console.log({ a: 1 } === { a: 1 }); // false: son dos objetos distintos, aunque "se vean" iguales
 
 // ==========================================
 // 5.2 CONSTRUCTORES Y OPERADOR new
@@ -291,6 +312,21 @@ console.log(persona2Instancia);
 persona1.nombre = "Julieta Fernández";
 console.log(persona1.nombre);          // "Julieta Fernández"
 console.log(persona2Instancia.nombre); // "Martín" (no se vio afectada)
+
+// La ventaja concreta de tener un constructor: podemos fabricar muchas
+// instancias a partir de datos "crudos" (por ejemplo, un array), sin
+// copiar y pegar objetos literales a mano uno por uno.
+const datosPersonas = [
+  { nombre: "Sofía", edad: 22 },
+  { nombre: "Nicolás", edad: 35 },
+  { nombre: "Valentina", edad: 19 },
+];
+
+const listaPersonas = [];
+for (const dato of datosPersonas) {
+  listaPersonas.push(new Persona(dato.nombre, dato.edad));
+}
+console.log(listaPersonas); // 3 instancias de Persona, fabricadas en un loop
 
 /*
 Aclaración importante:
@@ -384,6 +420,88 @@ const miPerro = new Animal(); // ✅ correcto: siempre hay que usar new con las 
   basándose casi totalmente en clases para componentes y servicios.
 - Backend con Node.js: organizar el acceso a bases de datos o servicios
   de correo.
+*/
+
+// 5) Cerrando la idea: la clase Enemigo del videojuego con el que abrimos
+// esta sección. Con una sola class fabricamos todos los enemigos que
+// necesitemos, cada uno con su propia vida, sin repetir código.
+class Enemigo {
+  constructor(tipo, vida, posicionX) {
+    this.tipo = tipo;
+    this.vida = vida;
+    this.posicionX = posicionX;
+  }
+
+  atacar() {
+    console.log(`${this.tipo} ataca!`);
+  }
+
+  recibirDanio(cantidad) {
+    this.vida -= cantidad;
+    if (this.vida <= 0) {
+      console.log(`${this.tipo} fue derrotado.`);
+    } else {
+      console.log(`${this.tipo} tiene ${this.vida} de vida restante.`);
+    }
+  }
+}
+
+const enemigos = [
+  new Enemigo("Goblin", 30, 100),
+  new Enemigo("Orco", 50, 250),
+  new Enemigo("Dragón", 120, 400),
+];
+
+for (const enemigo of enemigos) {
+  enemigo.atacar();
+}
+
+enemigos[0].recibirDanio(35); // el Goblin tenía 30 de vida: queda derrotado
+
+// ==========================================
+// UN AVANCE: ¿QUÉ TIENE QUE VER TODO ESTO CON JSON?
+// ==========================================
+
+/*
+Seguramente ya escuchaste la palabra JSON dando vueltas. JSON (JavaScript
+Object Notation) es un formato de texto para representar datos, y lo
+mencionamos acá porque su sintaxis es prácticamente idéntica a la de un
+objeto literal: claves entre comillas, dos puntos, valores, todo entre
+llaves. Por eso, todo lo que aprendimos sobre la "forma" de un objeto en
+5.1 nos sirve directamente para entender JSON.
+
+La diferencia clave: un objeto literal es código JavaScript que vive en tu
+programa; JSON es texto (un string), pensado para viajar: guardarse en un
+archivo, mandarse por internet, guardarse en localStorage, etc.
+
+¿Por qué lo mencionamos justo acá? Porque más adelante, cuando trabajen con
+APIs (pedirle datos a un servidor), la respuesta que reciban va a venir en
+formato JSON, con esta pinta:
+
+  {"nombre": "Ana", "edad": 25, "ciudad": "Madrid"}
+
+Para poder usar esos datos como un objeto real de JavaScript (acceder con
+producto.nombre, por ejemplo), hay que convertir ese texto con
+JSON.parse(). Y a la inversa, si necesitan enviar un objeto de JS hacia un
+servidor, lo convierten a texto con JSON.stringify().
+*/
+
+const textoJSON = '{"nombre": "Ana", "edad": 25, "ciudad": "Madrid"}';
+const objetoDesdeJSON = JSON.parse(textoJSON);
+console.log(objetoDesdeJSON.nombre); // "Ana": ya es un objeto real de JS
+
+const objetoAConvertir = { nombre: "Luis", edad: 40 };
+console.log(JSON.stringify(objetoAConvertir)); // '{"nombre":"Luis","edad":40}'
+
+/*
+Un detalle para tener en cuenta cuando lleguemos al módulo de APIs:
+JSON.parse siempre devuelve un objeto literal "plano", nunca una instancia
+de una class. Si un servidor te manda un producto, vas a recibir sus
+propiedades (nombre, precio, etc), pero no vas a tener automáticamente los
+métodos que definiste en tu class Producto (como sumarIva() o vender()):
+eso hay que reconstruirlo aparte si lo necesitás. Por ahora quedate con la
+idea general de la relación entre objetos y JSON; el uso real con fetch lo
+vamos a ver más adelante, en el módulo de APIs.
 */
 
 // ==========================================
