@@ -175,6 +175,31 @@ const persona2 = {
 
 persona2.presentarse(); // Hola, mi nombre es Carlos
 
+// 3b) Otro ejemplo combinando propiedades y métodos: un perro. Las
+// propiedades describen "cómo es" (raza, pelo, edad); los métodos
+// describen "qué sabe hacer" (ladrar, correr, comer), y usan this para
+// referirse a los propios datos del perro.
+const perro = {
+  nombre: "Firulais",
+  raza: "Labrador",
+  pelo: "corto",
+  edad: 3,
+  ladrar: function () {
+    console.log(`${this.nombre} dice: ¡Guau, guau!`);
+  },
+  correr: function () {
+    console.log(`${this.nombre} sale corriendo por el patio.`);
+  },
+  comer: function () {
+    console.log(`${this.nombre} está comiendo su comida.`);
+  },
+};
+
+perro.ladrar();
+perro.correr();
+perro.comer();
+console.log(`${perro.nombre} es un ${perro.raza} de ${perro.edad} años, con pelo ${perro.pelo}.`);
+
 // 4) Acceso a la información: punto vs corchetes
 
 // A. Notación de punto: la más común, cuando sabemos el nombre de la
@@ -458,51 +483,51 @@ for (const enemigo of enemigos) {
 
 enemigos[0].recibirDanio(35); // el Goblin tenía 30 de vida: queda derrotado
 
-// ==========================================
-// UN AVANCE: ¿QUÉ TIENE QUE VER TODO ESTO CON JSON?
-// ==========================================
+// 6) Otro ejemplo, con una entidad distinta a la de las filminas: una
+// cuenta bancaria. Es un clásico para practicar clases porque un método
+// que "modifica" el estado (depositar/retirar) puede necesitar validar
+// antes de aplicar el cambio, y un método que "informa" no cambia nada.
+class CuentaBancaria {
+  constructor(titular, saldoInicial = 0) {
+    this.titular = titular;
+    this.saldo = saldoInicial;
+  }
 
-/*
-Seguramente ya escuchaste la palabra JSON dando vueltas. JSON (JavaScript
-Object Notation) es un formato de texto para representar datos, y lo
-mencionamos acá porque su sintaxis es prácticamente idéntica a la de un
-objeto literal: claves entre comillas, dos puntos, valores, todo entre
-llaves. Por eso, todo lo que aprendimos sobre la "forma" de un objeto en
-5.1 nos sirve directamente para entender JSON.
+  // Método que modifica el estado
+  depositar(monto) {
+    this.saldo += monto;
+    console.log(`${this.titular} depositó $${monto}. Saldo actual: $${this.saldo}.`);
+  }
 
-La diferencia clave: un objeto literal es código JavaScript que vive en tu
-programa; JSON es texto (un string), pensado para viajar: guardarse en un
-archivo, mandarse por internet, guardarse en localStorage, etc.
+  // Método que modifica el estado, con validación
+  retirar(monto) {
+    if (monto > this.saldo) {
+      console.log(`${this.titular} no puede retirar $${monto}: fondos insuficientes (saldo: $${this.saldo}).`);
+      return;
+    }
+    this.saldo -= monto;
+    console.log(`${this.titular} retiró $${monto}. Saldo actual: $${this.saldo}.`);
+  }
 
-¿Por qué lo mencionamos justo acá? Porque más adelante, cuando trabajen con
-APIs (pedirle datos a un servidor), la respuesta que reciban va a venir en
-formato JSON, con esta pinta:
+  // Método que informa sobre el estado, sin modificarlo
+  consultarSaldo() {
+    console.log(`Saldo de ${this.titular}: $${this.saldo}`);
+  }
+}
 
-  {"nombre": "Ana", "edad": 25, "ciudad": "Madrid"}
+// Tres instancias independientes, como venimos viendo en toda la unidad
+const cuenta1 = new CuentaBancaria("Rocío", 5000);
+const cuenta2 = new CuentaBancaria("Tomás", 1200);
+const cuenta3 = new CuentaBancaria("Marcos"); // sin saldoInicial: arranca en 0
 
-Para poder usar esos datos como un objeto real de JavaScript (acceder con
-producto.nombre, por ejemplo), hay que convertir ese texto con
-JSON.parse(). Y a la inversa, si necesitan enviar un objeto de JS hacia un
-servidor, lo convierten a texto con JSON.stringify().
-*/
+cuenta1.depositar(1500);
+cuenta2.retirar(2000); // falla: no tiene fondos suficientes
+cuenta3.depositar(300);
 
-const textoJSON = '{"nombre": "Ana", "edad": 25, "ciudad": "Madrid"}';
-const objetoDesdeJSON = JSON.parse(textoJSON);
-console.log(objetoDesdeJSON.nombre); // "Ana": ya es un objeto real de JS
-
-const objetoAConvertir = { nombre: "Luis", edad: 40 };
-console.log(JSON.stringify(objetoAConvertir)); // '{"nombre":"Luis","edad":40}'
-
-/*
-Un detalle para tener en cuenta cuando lleguemos al módulo de APIs:
-JSON.parse siempre devuelve un objeto literal "plano", nunca una instancia
-de una class. Si un servidor te manda un producto, vas a recibir sus
-propiedades (nombre, precio, etc), pero no vas a tener automáticamente los
-métodos que definiste en tu class Producto (como sumarIva() o vender()):
-eso hay que reconstruirlo aparte si lo necesitás. Por ahora quedate con la
-idea general de la relación entre objetos y JSON; el uso real con fetch lo
-vamos a ver más adelante, en el módulo de APIs.
-*/
+console.log("Resumen de cuentas:");
+for (const cuenta of [cuenta1, cuenta2, cuenta3]) {
+  cuenta.consultarSaldo();
+}
 
 // ==========================================
 // 5.4 EJEMPLO: MODELANDO UNA ENTIDAD CON CLASS (estilo pre-entrega)
@@ -566,6 +591,43 @@ console.log("Estado de todas las tareas:");
 for (const tarea of tareas) {
   tarea.mostrarEstado();
 }
+
+// ==========================================
+// UN AVANCE, ANTES DE LA PRE-ENTREGA: ¿QUÉ TIENE QUE VER ESTO CON JSON?
+// ==========================================
+
+/*
+Antes de meternos con la pre-entrega, una aclaración importante: seguramente
+ya escuchaste la palabra JSON dando vueltas. JSON (JavaScript Object
+Notation) es un formato de texto para representar datos, y se parece MUCHO
+a un objeto literal: claves entre comillas, dos puntos, valores, todo entre
+llaves. Pero ojo, no hay que confundirlos:
+- Un objeto literal (como los que venimos usando: usuario, producto, perro)
+  es código JavaScript que vive en tu programa, en memoria.
+- JSON es texto (un string), pensado para viajar: guardarse en un archivo,
+  mandarse por internet, guardarse en localStorage, etc. Se parece a un
+  objeto, pero no lo es hasta que lo convertís.
+
+¿Por qué lo mencionamos justo acá, antes de la pre-entrega? Porque más
+adelante, cuando lleguemos al módulo de APIs, van a pedirle datos a un
+servidor y la respuesta va a venir en formato JSON, con esta pinta:
+
+  {"nombre": "Ana", "edad": 25, "ciudad": "Madrid"}
+
+Para poder usarlo como un objeto real de JavaScript (acceder con
+producto.nombre, por ejemplo) hay que convertir ese texto con
+JSON.parse(). Y al revés, para mandar un objeto de JS hacia un servidor, se
+convierte a texto con JSON.stringify(). Por ahora no hace falta que hagan
+nada con esto: es solo para que la palabra JSON no les resulte nueva ni
+rara cuando la volvamos a ver, más en profundidad, en las próximas clases.
+*/
+
+const textoJSON = '{"nombre": "Ana", "edad": 25, "ciudad": "Madrid"}';
+const objetoDesdeJSON = JSON.parse(textoJSON);
+console.log(objetoDesdeJSON.nombre); // "Ana": ya es un objeto real de JS
+
+const objetoAConvertir = { nombre: "Luis", edad: 40 };
+console.log(JSON.stringify(objetoAConvertir)); // '{"nombre":"Luis","edad":40}'
 
 // ==========================================
 // 5.5 PRE-ENTREGA 5, PASO A PASO: Instanciando Objetos
