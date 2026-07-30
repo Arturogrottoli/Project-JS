@@ -80,6 +80,21 @@ Lo más importante de arrays (repaso):
   ese tipo de transformaciones las resolvemos "a mano" con bucles).
 */
 
+/*
+EXTRA (opcional, si sobra tiempo): reverse()
+¿Para qué? Invierte el orden de los elementos del array.
+¿Cuándo conviene usarlo? Cuando necesitás mostrar una lista al revés, por
+ejemplo el historial de compras del más reciente al más viejo, sin
+importar el valor de cada elemento (a diferencia de un ordenamiento, que sí
+mira el valor).
+¿Por qué así? Es un método directo del array: evita escribir un for manual
+que recorra de atrás para adelante armando un array nuevo. Ojo con un
+detalle: reverse() modifica el array original (no devuelve uno nuevo), así
+que si necesitás conservar el orden original en otra variable, hay que
+copiar el array antes.
+*/
+console.log(colores.reverse());
+
 // ==========================================
 // 5.1 OBJETOS LITERALES: PROPIEDADES Y MÉTODOS
 // ==========================================
@@ -269,6 +284,23 @@ console.log(empleado.direccion.calle);  // "Av. Corrientes 1234"
 
 console.log({ a: 1 } === { a: 1 }); // false: son dos objetos distintos, aunque "se vean" iguales
 
+/*
+EXTRA (opcional, si sobra tiempo): Object.keys() y Object.values()
+¿Para qué? Object.keys() devuelve un array con los nombres de las
+propiedades de un objeto; Object.values() devuelve un array con sus
+valores.
+¿Cuándo conviene usarlo? Cuando necesitás recorrer o inspeccionar un objeto
+sin conocer de antemano qué propiedades tiene, por ejemplo un objeto que
+llega de afuera (un formulario, una API) y no sabés su forma exacta de
+memoria.
+¿Por qué así? Sin esto, la única forma de "recorrer" un objeto sería
+escribir a mano objeto.propiedad1, objeto.propiedad2... Convertirlo en un
+array nos permite reutilizar todo lo que ya sabemos de arrays (length,
+for...of, etc) para trabajar con las propiedades de un objeto.
+*/
+console.log(Object.keys(usuario));   // ["nombre", "edad", "ciudad"]
+console.log(Object.values(usuario)); // ["Ana", 25, "Madrid"]
+
 // ==========================================
 // 5.2 CONSTRUCTORES Y OPERADOR new
 // ==========================================
@@ -360,6 +392,22 @@ fundamental, pero la función constructora ya casi no se usa en la
 actualidad: su función fue absorbida por las clases (class), que veremos
 en la próxima unidad.
 */
+
+/*
+EXTRA (opcional, si sobra tiempo): instanceof
+¿Para qué? Chequea si un objeto fue fabricado a partir de un constructor
+(o class) puntual. Devuelve true o false.
+¿Cuándo conviene usarlo? Cuando tenés objetos de distinto "tipo" mezclados,
+por ejemplo en un mismo array, y necesitás tratarlos distinto según de
+dónde salieron (ej: solo aplicarle un método a los que son Auto, y no a
+los que son Persona).
+¿Por qué así? Sin instanceof, tendrías que confiar en revisar propiedades
+sueltas para "adivinar" el tipo de objeto (algo frágil y propenso a
+errores). instanceof lo confirma directamente, apoyándose en el mismo
+mecanismo (constructor/prototype) que vimos en esta sección.
+*/
+console.log(miAuto instanceof Auto);    // true
+console.log(miAuto instanceof Persona); // false: miAuto no salió de Persona
 
 // ==========================================
 // 5.3 CLASES EN ES6: LA FORMA MODERNA DE CREAR OBJETOS
@@ -529,6 +577,33 @@ for (const cuenta of [cuenta1, cuenta2, cuenta3]) {
   cuenta.consultarSaldo();
 }
 
+/*
+EXTRA (opcional, si sobra tiempo): otra class chiquita
+¿Para qué? A diferencia de los otros extras, este no es una herramienta
+nueva: es directamente otra vuelta a la sintaxis completa de una class
+(constructor + método), pero con una entidad distinta (Vehiculo).
+¿Cuándo conviene usarlo? Cuando querés confirmar que el patrón class +
+constructor + this + método te queda claro antes de aplicarlo a la entidad
+de tu propio simulador, sin depender de los ejemplos que ya vimos.
+¿Por qué de esta forma? Porque repetir el mismo patrón con datos distintos
+(acá un vehículo, en vez de un usuario o un enemigo) es la forma más rápida
+de comprobar que entendiste la estructura, y no solo memorizaste un ejemplo
+puntual.
+*/
+class Vehiculo {
+  constructor(marca, modelo) {
+    this.marca = marca;
+    this.modelo = modelo;
+  }
+
+  arrancar() {
+    console.log(`${this.marca} ${this.modelo} arrancó.`);
+  }
+}
+
+const miMoto = new Vehiculo("Honda", "Wave");
+miMoto.arrancar();
+
 // ==========================================
 // 5.4 EJEMPLO: MODELANDO UNA ENTIDAD CON CLASS (estilo pre-entrega)
 // ==========================================
@@ -592,6 +667,29 @@ for (const tarea of tareas) {
   tarea.mostrarEstado();
 }
 
+/*
+EXTRA (opcional, si sobra tiempo): contar pendientes y completadas
+¿Para qué? Sacar una métrica/resumen a partir de una colección de objetos
+(cuántos cumplen una condición y cuántos no).
+¿Cuándo conviene usarlo? Es un patrón buscadísimo en aplicaciones reales:
+un dashboard, un contador de notificaciones, un resumen tipo "3 de 5
+tareas completadas" en la UI de una app.
+¿Por qué lo hacemos con un for...of y dos contadores, en vez de una sola
+línea? Porque explícitamente dejamos reduce (y map/filter) para más
+adelante; el for...of nos permite entender paso a paso qué está pasando
+con cada elemento antes de resolverlo en una sola línea más adelante.
+*/
+let pendientes = 0;
+let completadas = 0;
+for (const tarea of tareas) {
+  if (tarea.completada) {
+    completadas++;
+  } else {
+    pendientes++;
+  }
+}
+console.log(`Pendientes: ${pendientes} - Completadas: ${completadas}`);
+
 // ==========================================
 // UN AVANCE, ANTES DE LA PRE-ENTREGA: ¿QUÉ TIENE QUE VER ESTO CON JSON?
 // ==========================================
@@ -628,6 +726,20 @@ console.log(objetoDesdeJSON.nombre); // "Ana": ya es un objeto real de JS
 
 const objetoAConvertir = { nombre: "Luis", edad: 40 };
 console.log(JSON.stringify(objetoAConvertir)); // '{"nombre":"Luis","edad":40}'
+
+/*
+EXTRA (opcional, si sobra tiempo): JSON.stringify con indentación
+¿Para qué? El tercer parámetro de JSON.stringify (acá, 2) le agrega
+espacios e indentación al texto resultante.
+¿Cuándo conviene usarlo? Al debuggear o mostrar en consola un objeto
+grande: sin indentación, JSON.stringify devuelve todo en una sola línea
+larga, difícil de leer. Es exactamente lo que van a ver cuando inspeccionen
+la respuesta de una API en las herramientas de desarrollador.
+¿Por qué así? Ese "2" no cambia el dato en absoluto, solo el formato del
+texto: es una ayuda puramente para que un humano lo lea más cómodo, nunca
+hace falta para que el JSON funcione.
+*/
+console.log(JSON.stringify(objetoAConvertir, null, 2));
 
 // ==========================================
 // 5.5 PRE-ENTREGA 5, PASO A PASO: Instanciando Objetos
@@ -695,3 +807,23 @@ producto2.vender(10); // pide más de lo que hay: no debería vender nada
 console.log(producto1); // stock debería haber bajado de 10 a 7
 console.log(producto2); // stock debería seguir en 5, sin cambios
 console.log(producto3); // instancia sin modificar, para comparar
+
+/*
+EXTRA (opcional, si sobra tiempo): agregar un método con prototype
+¿Para qué? La consigna también menciona, como alternativa a vender(), un
+método aplicarDescuento(porcentaje) que modifique el precio. Acá lo
+agregamos a la class Producto ya definida, sin reescribirla.
+¿Cuándo conviene usarlo? Cuando estás extendiendo código que ya existe
+(una class de otro archivo, de una librería, etc) y no querés o no podés
+tocar su definición original.
+¿Por qué así? Porque, como vimos en 5.3, por debajo de una class sigue
+existiendo el mismo prototype que usamos en 5.2 con las funciones
+constructoras: Clase.prototype.metodo = function() {...} agrega un método
+compartido por todas las instancias, sin duplicarlo en cada una.
+*/
+Producto.prototype.aplicarDescuento = function (porcentaje) {
+  this.precio = this.precio - this.precio * (porcentaje / 100);
+  console.log(`Nuevo precio de "${this.nombre}" con descuento: $${this.precio.toFixed(2)}`);
+};
+
+producto3.aplicarDescuento(15); // 15% de descuento sobre la Gorra
