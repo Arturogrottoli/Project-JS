@@ -21,6 +21,21 @@ variables sueltas como tituloPelicula, directorPelicula, duracionPelicula
 (sin ninguna relación explícita entre ellas para JavaScript), agrupamos
 todo eso dentro de UN objeto que representa "una película".
 
+¿Qué es una propiedad?
+Es cada uno de los datos que describen al objeto: un par "nombre: valor".
+En nuestra película, titulo, director, duracionMinutos y vista son
+propiedades. Se accede a ellas con punto: pelicula1.titulo.
+
+¿Qué es un método?
+Es una propiedad especial cuyo valor es una función, en vez de un dato
+suelto. Representa algo que el objeto "sabe hacer". marcarVista es un
+método: en vez de guardar un dato, guarda una acción que el objeto puede
+ejecutar sobre sí mismo (usando this para tocar sus propias propiedades).
+Se ejecuta con paréntesis: pelicula1.marcarVista().
+
+En resumen: las propiedades son el "qué es" del objeto (sus datos), y los
+métodos son el "qué sabe hacer" (su comportamiento).
+
 ¿Para qué se usan?
 - Para modelar entidades del mundo real dentro del código: una película,
   un usuario, un producto, un pedido. Cualquier "cosa" que tenga varias
@@ -88,6 +103,41 @@ function Pelicula(titulo, director, duracionMinutos) {
   this.vista = false; // arranca sin ver, igual que en el objeto literal
 }
 
+/*
+¿Y qué es exactamente "prototype"?
+Cada función constructora en JavaScript trae, automáticamente, un objeto
+extra colgado llamado "prototype" (aunque no lo veamos, siempre está ahí).
+Ese objeto prototype es un lugar compartido por TODAS las instancias que
+se creen con esa función: si le agregamos un método ahí (como hacemos
+abajo), automáticamente queda disponible para pelicula2, pelicula3, y
+cualquier otra que creemos con new Pelicula(...), sin tener que copiar el
+método adentro de cada una.
+
+Para verlo con un ejemplo bien simple, sin películas de por medio:
+*/
+
+function Persona(nombre) {
+  this.nombre = nombre; // esto SÍ se duplica: cada instancia tiene su propio nombre
+}
+
+// Este método se define UNA sola vez, en el prototype de Persona...
+Persona.prototype.saludar = function () {
+  console.log(`Hola, soy ${this.nombre}`);
+};
+
+const persona1 = new Persona("Lucía");
+const persona2 = new Persona("Martín");
+
+// ...pero funciona en cualquier instancia, porque JavaScript va a buscar
+// el método al prototype cuando no lo encuentra en el objeto mismo.
+persona1.saludar(); // Hola, soy Lucía
+persona2.saludar(); // Hola, soy Martín
+
+// Prueba de que es EL MISMO método compartido, no una copia por instancia:
+console.log(persona1.saludar === persona2.saludar); // true
+
+// Volviendo a nuestro ejemplo de películas: acá agregamos marcarVista al
+// prototype de Pelicula, con la misma lógica que recién con Persona.
 Pelicula.prototype.marcarVista = function () {
   this.vista = true;
   console.log(`Marcaste "${this.titulo}" como vista.`);
@@ -173,6 +223,12 @@ temperatura exacta se calienta el agua, cuánta presión ejerce la bomba
 sobre los granos molidos, o cómo se vaporiza la leche. Alguien más ya
 resolvió esos detalles técnicos por vos y te entregó una interfaz simple:
 un botón.
+
+Otro ejemplo de lo mismo: el control remoto de un televisor. Apretás el
+botón de subir volumen y listo, el volumen sube. No necesitás saber que
+por adentro se envía una señal infrarroja con un código binario específico
+que el televisor tiene que recibir, decodificar e interpretar. Alguien ya
+resolvió toda esa complejidad y te dejó, de nuevo, un simple botón.
 
 En programación esto se llama ABSTRACCIÓN, y consiste en ocultar los
 detalles complejos de la implementación para concentrarnos en QUÉ hace
@@ -266,6 +322,35 @@ las dos hayan salido de la misma función crearMultiplicador.
 
 console.log(duplicar(5));  // 10: sigue recordando factor = 2
 console.log(triplicar(5)); // 15: sigue recordando factor = 3
+
+/*
+¿Para qué sirve esto en la vida real?
+El Pattern Factory es muy común cuando necesitamos varias funciones
+"parecidas", que hacen lo mismo pero con un parámetro fijo distinto: en
+vez de escribir duplicar(), triplicar(), cuadriplicar()... una por una,
+fabricamos la que necesitemos, con el valor que le pasemos.
+
+Otro ejemplo, esta vez conectado con el catálogo de Netflix que vamos a
+usar más adelante: en vez de una función fabricando multiplicadores,
+fabricamos funciones que SABEN buscar un género en particular. Cada
+función fabricada "recuerda" su propio género, gracias al mismo closure
+que usamos arriba con factor.
+*/
+
+function crearBuscadorPorGenero(genero) {
+  // La función interna recuerda "genero" y la usamos después, cuando
+  // filtremos el catálogo (lo vamos a ver en la sección de búsqueda).
+  return (pelicula) => pelicula.genero === genero;
+}
+
+const esAnimacion = crearBuscadorPorGenero("Animación");
+const esDrama = crearBuscadorPorGenero("Drama");
+
+console.log(esAnimacion({ titulo: "Coco", genero: "Animación" })); // true
+console.log(esDrama({ titulo: "Coco", genero: "Animación" }));     // false
+
+// Guardate esta idea: más adelante, en 6.4, vamos a poder pasar
+// directamente esAnimacion o esDrama como el callback de un filter().
 
 // ==========================================
 // 6.3 FUNCIONES QUE RECIBEN OTRAS FUNCIONES (CALLBACKS)
@@ -387,6 +472,13 @@ console.log(peliculasLargas);
 // Resultado: filter devuelve un nuevo array con los elementos que cumplen
 // la condición (acá, las que duran 130 minutos o más):
 // [{ titulo: "Inception", ... }, { titulo: "El Padrino", ... }, { titulo: "Parasite", ... }]
+
+// Acá cumplimos lo que prometimos en 6.2: filter() recibe un callback, y
+// esAnimacion (fabricada con crearBuscadorPorGenero) es exactamente eso:
+// una función que devuelve true/false. No hace falta escribir de nuevo la
+// condición "pelicula.genero === ...", ya la tenemos guardada y lista.
+const animadas = catalogoNetflix.filter(esAnimacion);
+console.log(animadas); // [{ titulo: "Toy Story", ... }, { titulo: "Coco", ... }]
 
 /*
 4) some()
