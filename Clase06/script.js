@@ -12,36 +12,80 @@ la misma información modelada de las tres formas, una atrás de la otra,
 para que quede clarísima la evolución de un enfoque al otro.
 */
 
+/*
+¿Qué es un objeto, exactamente?
+Un objeto es una forma de agrupar, bajo un solo nombre, varios datos que
+están relacionados entre sí (sus "propiedades"), y opcionalmente también
+acciones que ese objeto puede realizar (sus "métodos"). En vez de tener
+variables sueltas como tituloPelicula, directorPelicula, duracionPelicula
+(sin ninguna relación explícita entre ellas para JavaScript), agrupamos
+todo eso dentro de UN objeto que representa "una película".
+
+¿Para qué se usan?
+- Para modelar entidades del mundo real dentro del código: una película,
+  un usuario, un producto, un pedido. Cualquier "cosa" que tenga varias
+  características (datos) y, muchas veces, comportamiento propio.
+- Para mantener organizada la información de esa entidad en un solo
+  lugar, en vez de tener que hacer malabares con múltiples variables o
+  arrays sueltos que "deberían" ir juntos pero nada lo garantiza.
+- Para poder crear MUCHAS instancias de la misma entidad (muchas
+  películas, muchos usuarios) que comparten la misma estructura, pero
+  cada una con sus propios valores.
+*/
+
 // 1) Objeto literal: la forma más directa de crear UN objeto. Sirve para
 // un caso puntual, como una única película que queremos guardar rápido.
 // Las propiedades son los datos (titulo, director, duracionMinutos, vista)
 // y el método (marcarVista) usa this para modificar los propios datos del
 // objeto.
+//
+// Sobre la propiedad "vista": es un valor booleano (true o false) que
+// funciona como una especie de "casillero" o bandera de estado: nos dice
+// si esa película YA fue vista por el usuario o no. La arrancamos en
+// false porque, al agregar la película, todavía nadie la vio. Cuando el
+// usuario efectivamente la mira, ejecutamos el método marcarVista(), que
+// cambia esa propiedad a true. Es el mismo patrón que usamos en la Clase
+// 5 con "completada" en las tareas: un booleano que arranca en un estado
+// inicial, y algún método se encarga de "prenderlo" cuando corresponde.
 const pelicula1 = {
   titulo: "El Padrino",
   director: "Francis Ford Coppola",
   duracionMinutos: 175,
-  vista: false,
+  vista: false, // false = "todavía no la vimos"; el método la pone en true
   marcarVista: function () {
-    this.vista = true;
+    this.vista = true; // acá "prendemos" el casillero: ahora sí está vista
     console.log(`Marcaste "${this.titulo}" como vista.`);
   },
 };
 
 pelicula1.marcarVista();
-console.log(pelicula1);
+console.log(pelicula1); // fijate que ahora "vista" pasó de false a true
 
 // 2) Función constructora: el problema del objeto literal es que si
 // Netflix tuviera que cargar miles de películas, no podemos escribir un
-// objeto literal por cada una a mano. Para eso usamos una función
-// constructora: un "molde" que se ejecuta con new y arma el objeto por
-// nosotros. Los métodos compartidos por todas las películas se agregan
-// una sola vez con prototype (así no se duplican en cada instancia).
+// objeto literal por cada una a mano: sería muchísimo código repetido, y
+// cualquier error de tipeo en una copia generaría una película "rota".
+//
+// Para eso usamos una función constructora: un "molde" (una función
+// normal, pero pensada para fabricar objetos) que se ejecuta con la
+// palabra clave new. Cuando hacemos new Pelicula(...), JavaScript:
+// 1) Crea un objeto vacío nuevo.
+// 2) Hace que, DENTRO de esta función, la palabra this apunte a ese
+//    objeto nuevo (por eso this.titulo = titulo termina siendo una
+//    propiedad del objeto que se está creando, no de otra cosa).
+// 3) Ejecuta todo el código de la función, completando el objeto.
+// 4) Devuelve automáticamente ese objeto ya armado.
+//
+// Los métodos que van a compartir TODAS las películas (como marcarVista)
+// no los ponemos dentro de la función: los agregamos una sola vez afuera,
+// con prototype. Así, en vez de crear una copia del método en cada
+// película (lo cual gastaría memoria de más), todas las instancias
+// comparten la misma función.
 function Pelicula(titulo, director, duracionMinutos) {
   this.titulo = titulo;
   this.director = director;
   this.duracionMinutos = duracionMinutos;
-  this.vista = false;
+  this.vista = false; // arranca sin ver, igual que en el objeto literal
 }
 
 Pelicula.prototype.marcarVista = function () {
@@ -53,26 +97,46 @@ const pelicula2 = new Pelicula("Parasite", "Bong Joon-ho", 132);
 pelicula2.marcarVista();
 console.log(pelicula2);
 
-// 3) Class: la sintaxis moderna de ES6. Por debajo hace exactamente lo
-// mismo que la función constructora (sigue usando prototype), pero el
-// constructor() y los métodos quedan organizados juntos, dentro de la
-// misma declaración, mucho más prolijo de leer.
+/*
+3) Class: la sintaxis moderna (ES6) para hacer exactamente lo mismo que
+una función constructora, pero con una sintaxis pensada específicamente
+para esto, mucho más clara de leer.
+
+Por dentro, una class sigue usando el mismo mecanismo de prototype que
+usamos recién a mano con Pelicula.prototype.marcarVista: JavaScript no
+inventó un sistema nuevo, solo nos dio una forma más prolija de escribirlo.
+
+Partes de una class:
+- constructor(...): es un método especial, que se ejecuta automáticamente
+  al hacer new PeliculaClase(...). Cumple el mismo rol que el cuerpo de la
+  función constructora de arriba: usa this para ir asignando cada
+  propiedad al objeto que se está creando.
+- Los métodos (marcarVista, mostrarInfo) se escriben directamente adentro
+  de la class, sin la palabra function, y JavaScript los agrega
+  automáticamente al prototype por nosotros (no hace falta escribir
+  PeliculaClase.prototype.marcarVista a mano, como sí tuvimos que hacer
+  con la función constructora).
+- Por convención, el nombre de la class siempre empieza con mayúscula
+  (PascalCase), igual que el nombre de una función constructora.
+*/
 class PeliculaClase {
   constructor(titulo, director, duracionMinutos, genero) {
     this.titulo = titulo;
     this.director = director;
     this.duracionMinutos = duracionMinutos;
     this.genero = genero;
-    this.vista = false;
+    this.vista = false; // arranca "no vista"; ver marcarVista() más abajo
   }
 
-  // Método que MODIFICA el estado de la instancia
+  // Método que MODIFICA el estado de la instancia: cambia el "casillero"
+  // vista de false a true, para esta película en particular.
   marcarVista() {
     this.vista = true;
     console.log(`Marcaste "${this.titulo}" como vista.`);
   }
 
-  // Método que INFORMA sobre el estado de la instancia, sin modificarlo
+  // Método que INFORMA sobre el estado de la instancia, sin modificarlo:
+  // simplemente lee this.vista y arma un texto legible con el resultado.
   mostrarInfo() {
     const estado = this.vista ? "Vista" : "Pendiente";
     console.log(`${this.titulo} (${this.genero}, ${this.duracionMinutos} min) - ${estado}`);
