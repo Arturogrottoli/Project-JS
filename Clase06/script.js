@@ -357,23 +357,50 @@ console.log(esDrama({ titulo: "Coco", genero: "Animación" }));     // false
 // ==========================================
 
 /*
-Así como una función puede RETORNAR otra función (lo que acabamos de ver),
-también puede RECIBIR una función como parámetro. A esa función que se
-pasa como argumento se la llama, normalmente, CALLBACK.
+¿Qué es, literalmente, un callback?
+La palabra viene del inglés "call back": "volver a llamar" o "llamar de
+vuelta". La idea es esta: en vez de ejecutar vos mismo una función ahí
+mismo, se la ENTREGÁS a otra función para que sea ELLA la que la ejecute
+("te llame de vuelta") en el momento que corresponda. Por eso a una
+función que se pasa como argumento de otra función se la llama callback:
+es una función en "espera", lista para ser invocada por otra.
 
-La idea es simple: una función "delegada" recibe otra función para decidir
-qué hacer más adelante, en lugar de tener la lógica ya fija de antemano.
+Así como una función puede RETORNAR otra función (lo que acabamos de ver
+en 6.2, con el Pattern Factory), una función también puede RECIBIR una
+función como parámetro. Son dos caras de la misma idea: las funciones son
+valores, y como cualquier valor, pueden viajar hacia adentro o hacia
+afuera de otra función.
 
-Ejemplo: imaginemos que queremos ejecutar distintas acciones sobre un
-número, sin escribir una función distinta para cada operación posible.
+La idea central es simple: una función "delegada" recibe otra función
+para decidir qué hacer más adelante, en lugar de tener la lógica ya fija
+de antemano escrita adentro suyo.
+
+¿Por qué se usan? (razones concretas)
+- Separan el "cómo recorrer/organizar algo" del "qué hacer con cada
+  elemento". La función que recibe el callback se ocupa de la mecánica
+  (por ejemplo, recorrer un array); el callback se ocupa de la decisión
+  puntual (qué hacer con cada elemento en particular).
+- Evitan escribir una función casi idéntica por cada variante de
+  comportamiento que necesitemos (como vimos en 6.2 con los
+  multiplicadores, y ahora vamos a ver con las operaciones sobre números).
+- Son la base absoluta de casi todos los métodos de array que vamos a ver
+  hoy (forEach, find, filter, some, map, reduce): todos reciben un
+  callback para decidir, elemento por elemento, qué hacer.
+- También son la base de código asincrónico (por ejemplo, "cuando termine
+  de cargar la página, ejecutá esta función" o "cuando pasen 3 segundos,
+  hacé esto"), aunque eso lo vamos a ver más adelante en el curso.
+
+Primer ejemplo: imaginemos que queremos ejecutar distintas acciones sobre
+un número, sin escribir una función distinta para cada operación posible.
 */
 
-// La función recibe otra función como parámetro (accion)
+// La función recibe otra función como parámetro (accion): ese parámetro
+// ES el callback.
 function procesarNumero(numero, accion) {
   return accion(numero);
 }
 
-// Funciones que podemos pasar como argumento (el callback)
+// Funciones que podemos pasar como argumento (los callbacks)
 const porDos = (n) => n * 2;
 const alCuadrado = (n) => n * n;
 
@@ -401,20 +428,52 @@ find, filter, map, reduce... todos reciben un callback para decidir qué
 hacer con cada elemento.
 */
 
+/*
+Segundo ejemplo, totalmente aislado (sin números esta vez), para terminar
+de fijar la idea: una función que arma un saludo, y recibe como callback
+el "formato" con el que se arma ese saludo.
+*/
+
+function saludarCon(nombre, formato) {
+  // Otra vez: saludarCon no sabe, de antemano, si el resultado va a ser
+  // formal o informal. Delega esa decisión al callback "formato".
+  return formato(nombre);
+}
+
+const formatoFormal = (nombre) => `Estimado/a ${nombre}, ¿cómo está?`;
+const formatoInformal = (nombre) => `¡Che, ${nombre}! ¿Todo bien?`;
+
+console.log(saludarCon("Sofía", formatoFormal));   // Estimado/a Sofía, ¿cómo está?
+console.log(saludarCon("Sofía", formatoInformal)); // ¡Che, Sofía! ¿Todo bien?
+
+// Importante: fijate que pasamos formatoFormal y formatoInformal SIN los
+// paréntesis (formatoFormal, no formatoFormal()). Si le pusiéramos
+// paréntesis, JavaScript ejecutaría la función ahí mismo y le pasaría a
+// saludarCon el RESULTADO (un string), no la función en sí. El callback
+// se pasa "crudo": es saludarCon quien decide cuándo ejecutarlo.
+
 // ==========================================
 // 6.4 BÚSQUEDA INTELIGENTE: forEach, find, filter y some
 // ==========================================
 
 /*
 Así como podemos construir nuestras propias funciones de orden superior
-(como procesarNumero), también es muy común usar los métodos ya
-incorporados en los arrays de JavaScript, que nos ahorran muchísimo
-trabajo al momento de interactuar con arrays de objetos.
+(como procesarNumero o saludarCon), también es muy común usar los métodos
+que YA vienen incorporados en los arrays de JavaScript, que nos ahorran
+muchísimo trabajo al momento de interactuar con arrays de objetos.
 
-Vamos a repasar los métodos más comunes de búsqueda y transformación,
-usando como punto de partida nuestro catálogo de películas (parecido al
-"miListaNetflix" del repaso, pero pensemos en este como el catálogo
-COMPLETO de la plataforma, no solo lo que ya agregamos a nuestra lista).
+¿Qué es una "función de orden superior"? Es, justamente, cualquier función
+que reciba otra función como parámetro (un callback) o que devuelva una
+función (como vimos en 6.2 con el Pattern Factory). Todos los métodos que
+vamos a ver ahora (forEach, find, filter, some) son funciones de orden
+superior: cada uno recibe un callback, y lo ejecuta una vez por cada
+elemento del array, decidiendo qué hacer según lo que ese callback
+devuelva.
+
+Vamos a repasar los métodos más comunes de búsqueda, usando como punto de
+partida nuestro catálogo de películas (parecido al "miListaNetflix" del
+repaso, pero pensemos en este como el catálogo COMPLETO de la plataforma,
+no solo lo que ya agregamos a nuestra lista).
 */
 
 const catalogoNetflix = [
@@ -427,13 +486,21 @@ const catalogoNetflix = [
 
 /*
 1) forEach()
-Muy similar al for...of que ya conocemos: forEach() se usa para recorrer
-cada elemento de un array y ejecutar una función (el callback) sobre cada
-uno de ellos. Es una forma más moderna y clara de iterar que un for
-tradicional, aunque por dentro haga básicamente lo mismo.
+¿Qué hace? Recorre el array de punta a punta y ejecuta el callback que le
+pasamos UNA vez por cada elemento, en orden. Es muy similar al for...of
+que ya conocemos de clases anteriores: la diferencia es que, en vez de
+escribir nosotros el "for" y el "of", se lo delegamos al método, y solo
+nos preocupamos por decirle QUÉ hacer con cada elemento (el callback).
 
-Sintaxis: array.forEach((elemento) => { // código a ejecutar });
-- elemento: el valor actual del array en cada vuelta.
+Sintaxis: array.forEach((elemento) => { ...código a ejecutar... });
+- elemento: el valor actual del array en cada vuelta (nosotros elegimos
+  cómo llamarlo: puede ser "elemento", "pelicula", "n", lo que sea más
+  claro según el contexto).
+
+¿Qué devuelve forEach()? Nada: siempre devuelve undefined. No sirve para
+"construir" un resultado nuevo (para eso están map, filter y reduce, que
+vamos a ver enseguida); forEach es puramente para "hacer algo" con cada
+elemento, como mostrarlo en pantalla, guardarlo en otro lado, etc.
 */
 
 console.log("Catálogo completo:");
@@ -442,12 +509,30 @@ catalogoNetflix.forEach((pelicula) => console.log(pelicula));
 // array, en orden, y no devuelve nada (undefined). Solo sirve para
 // "hacer algo" con cada elemento, no para construir un resultado nuevo.
 
+// Ejemplo aislado, con números, para ver el mismo método sin películas de
+// por medio:
+const numerosDeEjemplo = [1, 2, 3];
+numerosDeEjemplo.forEach((numero) => {
+  console.log(`El doble de ${numero} es ${numero * 2}`);
+});
+// El doble de 1 es 2
+// El doble de 2 es 4
+// El doble de 3 es 6
+
 /*
 2) find()
-find() se usa para buscar un elemento dentro de un array y devolver el
-PRIMERO que cumpla una condición. Si ninguno cumple, devuelve undefined.
+¿Qué hace? Recorre el array elemento por elemento, ejecutando el callback
+sobre cada uno. Apenas encuentra UN elemento para el que el callback
+devuelve true, se DETIENE ahí mismo y devuelve ESE elemento (no sigue
+recorriendo el resto del array, aunque haya más que también cumplirían).
+Si recorre todo el array y ninguno cumple, devuelve undefined.
 
-Sintaxis: array.find((elemento) => { // condición });
+Sintaxis: array.find((elemento) => { ...condición que devuelve true/false... });
+
+Ojo con la diferencia clave respecto de forEach: el callback de find debe
+devolver un valor booleano (true o false) para cada elemento; el callback
+de forEach no necesita devolver nada, porque forEach no está "decidiendo"
+nada, solo ejecuta código.
 */
 
 const primeraAnimacion = catalogoNetflix.find(
@@ -457,12 +542,26 @@ console.log(primeraAnimacion);
 // Resultado: el primer elemento que cumple la condición.
 // { titulo: "Toy Story", duracionMinutos: 81, genero: "Animación" }
 
+// Ejemplo aislado: buscar el primer número par en un array de números.
+const numeros = [3, 7, 10, 15, 22];
+const primerPar = numeros.find((numero) => numero % 2 === 0);
+console.log(primerPar); // 10: el primero que cumple "es divisible por 2"
+// (aunque 22 también es par, find se detiene en el primero que encuentra)
+
 /*
 3) filter()
-filter() se usa para crear un NUEVO array con todos los elementos que
-cumplan una condición (puede ser ninguno, uno, o varios).
+¿Qué hace? Recorre el array completo, ejecutando el callback sobre cada
+elemento, igual que find. La diferencia es que filter NO se detiene en el
+primero: sigue recorriendo TODO el array, junta en un array nuevo a todos
+los elementos para los que el callback devolvió true, y al final devuelve
+ese array nuevo (puede tener 0, 1, o todos los elementos originales).
 
-Sintaxis: array.filter((elemento) => { // condición });
+Sintaxis: array.filter((elemento) => { ...condición que devuelve true/false... });
+
+Comparación rápida find vs. filter: find te da UN elemento (o undefined);
+filter te da SIEMPRE un array (aunque quede vacío). Si tu pregunta es
+"¿cuál es el primero que...?", usá find. Si tu pregunta es "¿cuáles son
+todos los que...?", usá filter.
 */
 
 const peliculasLargas = catalogoNetflix.filter(
@@ -473,6 +572,11 @@ console.log(peliculasLargas);
 // la condición (acá, las que duran 130 minutos o más):
 // [{ titulo: "Inception", ... }, { titulo: "El Padrino", ... }, { titulo: "Parasite", ... }]
 
+// Ejemplo aislado: quedarnos solo con las palabras de más de 4 letras.
+const palabras = ["sol", "luna", "estrella", "mar", "cometa"];
+const palabrasLargas = palabras.filter((palabra) => palabra.length > 4);
+console.log(palabrasLargas); // ["estrella", "cometa"]
+
 // Acá cumplimos lo que prometimos en 6.2: filter() recibe un callback, y
 // esAnimacion (fabricada con crearBuscadorPorGenero) es exactamente eso:
 // una función que devuelve true/false. No hace falta escribir de nuevo la
@@ -482,11 +586,16 @@ console.log(animadas); // [{ titulo: "Toy Story", ... }, { titulo: "Coco", ... }
 
 /*
 4) some()
-some() se usa para comprobar si AL MENOS UN elemento de un array cumple
-una condición. A diferencia de find, no devuelve el elemento: devuelve un
-booleano (true o false).
+¿Qué hace? Recorre el array preguntando, elemento por elemento, si cumple
+la condición del callback. Apenas encuentra UNO que cumple, se detiene
+(como find) y devuelve true. Si termina de recorrer todo el array sin
+encontrar ninguno, devuelve false. A diferencia de find, some NUNCA
+devuelve el elemento en sí: solo responde true o false.
 
-Sintaxis: array.some((elemento) => { // condición });
+Sintaxis: array.some((elemento) => { ...condición que devuelve true/false... });
+
+Pensalo como una pregunta de sí/no sobre el array completo: "¿hay AL MENOS
+UNO que...?".
 */
 
 const hayTerror = catalogoNetflix.some(
@@ -498,6 +607,11 @@ const hayDrama = catalogoNetflix.some(
   (pelicula) => pelicula.genero === "Drama"
 );
 console.log(hayDrama); // true: hay al menos una (El Padrino, Parasite)
+
+// Ejemplo aislado: ¿hay algún número negativo en esta lista de saldos?
+const saldos = [400, 850, -200, 90];
+const haySaldoNegativo = saldos.some((saldo) => saldo < 0);
+console.log(haySaldoNegativo); // true: -200 es negativo
 
 /*
 Resumen rápido de la diferencia entre find y some:
@@ -534,10 +648,19 @@ filter o reduce sobre él.
 
 /*
 2) map(): "La Línea de Traducción"
-map() se usa cuando querés transformar CADA elemento de un array en algo
-nuevo.
+¿Qué hace? Recorre TODO el array, ejecuta el callback sobre cada elemento,
+y junta en un array nuevo lo que ESE callback devuelve en cada vuelta (no
+un true/false como find/filter/some, sino el valor transformado que
+querramos). Pensalo como una línea de producción: entra un dato "crudo"
+por un extremo, y sale transformado por el otro, uno por uno.
 - Entrada: un array de N elementos.
-- Salida: un nuevo array de EXACTAMENTE N elementos, transformados.
+- Salida: un nuevo array de EXACTAMENTE N elementos, transformados (el
+  array de salida siempre tiene el mismo tamaño que el de entrada, a
+  diferencia de filter, que puede devolver menos elementos).
+
+Diferencia clave con filter: filter decide "esto se queda o se va"
+(devuelve true/false); map decide "esto se convierte EN QUÉ" (devuelve el
+nuevo valor). Uno filtra cantidad, el otro transforma contenido.
 */
 
 const titulosDelCatalogo = catalogoNetflix.map(
@@ -552,14 +675,32 @@ const duracionesEnHoras = catalogoNetflix.map(
 console.log(duracionesEnHoras);
 // ["2.5", "1.4", "2.9", "1.8", "2.2"]
 
+// Ejemplo aislado: transformar un array de números en sus cuadrados.
+const numerosParaElevar = [1, 2, 3, 4];
+const cuadrados = numerosParaElevar.map((numero) => numero * numero);
+console.log(cuadrados); // [1, 4, 9, 16]: mismo tamaño de array, valores transformados
+
 /*
 3) reduce(): "La Caja de Empaque"
-reduce() es el más potente de todos. Se usa para tomar TODOS los
-elementos de un array y combinarlos en un ÚNICO valor final (un número,
-un string, e incluso un objeto). Requiere dos cosas:
-- Una función con un ACUMULADOR (el resultado parcial hasta el momento) y
-  el VALOR ACTUAL (el elemento en el que vamos parados).
-- Un VALOR INICIAL para el acumulador (el punto de partida).
+¿Qué hace? Es el más potente y, al principio, el más difícil de leer de
+todos. Se usa para tomar TODOS los elementos de un array y combinarlos en
+un ÚNICO valor final: puede ser un número (una suma, un promedio), un
+string (concatenar textos), o incluso un objeto nuevo armado a partir del
+array. Es como una caja de empaque: entran muchas piezas sueltas (los
+elementos del array) y sale UN solo paquete armado con todas ellas adentro.
+
+reduce() necesita dos cosas:
+- Una función callback con DOS parámetros:
+  1) el ACUMULADOR: el resultado parcial que llevamos acumulado hasta el
+     momento (arranca valiendo lo que le pongamos como valor inicial).
+  2) el VALOR ACTUAL: el elemento del array en el que estamos parados en
+     esta vuelta puntual.
+  Esa función debe DEVOLVER el nuevo valor del acumulador, para que la
+  siguiente vuelta lo reciba actualizado.
+- Un VALOR INICIAL para el acumulador (el segundo argumento de reduce,
+  después de la función): el punto de partida antes de empezar a recorrer
+  el array. Para sumar, normalmente es 0; para concatenar texto, "";
+  para armar un array nuevo, [].
 */
 
 const minutosTotales = catalogoNetflix.reduce(
@@ -570,6 +711,13 @@ console.log(`Minutos totales de contenido: ${minutosTotales}`);
 // Proceso: 0 + 148 = 148 -> 148 + 81 = 229 -> 229 + 175 = 404
 //       -> 404 + 105 = 509 -> 509 + 132 = 641
 // Resultado: 641
+
+// Ejemplo aislado, para ver que reduce no es solo para sumar números: acá
+// lo usamos para concatenar strings, arrancando el acumulador en "" (un
+// string vacío) en vez de en 0.
+const letras = ["J", "a", "v", "a", "S", "c", "r", "i", "p", "t"];
+const palabraArmada = letras.reduce((acumulado, letra) => acumulado + letra, "");
+console.log(palabraArmada); // "JavaScript": todas las letras combinadas en un único string
 
 /*
 4) Errores comunes con map, filter y reduce
@@ -623,3 +771,78 @@ console.log("Catálogo ordenado por duración (de más corta a más larga):");
 catalogoOrdenadoPorDuracion.forEach((pelicula) => {
   console.log(`${pelicula.titulo} - ${pelicula.duracionMinutos} min`);
 });
+
+// ==========================================
+// PRE-ENTREGA 6, PASO A PASO: Interactuando con Funciones de Orden Superior
+// ==========================================
+
+/*
+Acá resolvemos la consigna de la "Pre-Entrega 6" siguiendo los pasos
+sugeridos en el enunciado, reutilizando miListaNetflix (el array de
+instancias de PeliculaClase que armamos en el repaso), en vez de crear un
+array nuevo desde cero: exactamente lo que pide la consigna, que los
+objetos "salgan de la Class que definiste en el módulo anterior".
+
+Recordatorio de los Criterios de Aceptación:
+- Array de objetos: partiendo de instancias de una Class (o, como
+  alternativa, un array de objetos literal).
+- Métodos de búsqueda: mínimo DOS métodos de búsqueda (find / filter /
+  some) para interactuar con la información del array.
+- Métodos de transformación: mínimo UN método de transformación (map o
+  reduce) para modificar la información recibida desde el array.
+- Los métodos tienen que ejecutarse según lo que el usuario desee hacer
+  (interacción con prompt), no quedar como snippets sueltos sin usar.
+*/
+
+// Paso 1: Creación de la estructura
+// Ya la tenemos resuelta: miListaNetflix son instancias reales de
+// PeliculaClase, con más de 4 propiedades cada una (titulo, director,
+// duracionMinutos, genero, vista).
+console.log("Catálogo disponible para interactuar:", miListaNetflix);
+
+// Paso 2: Añadir comportamiento
+// Método de búsqueda 1 (find): buscar una película puntual por título.
+function buscarPeliculaPorTitulo(titulo) {
+  return miListaNetflix.find(
+    (pelicula) => pelicula.titulo.toLowerCase() === titulo.toLowerCase()
+  );
+}
+
+// Método de búsqueda 2 (filter): separar vistas de pendientes.
+function filtrarPorEstado(vista) {
+  return miListaNetflix.filter((pelicula) => pelicula.vista === vista);
+}
+
+// Método de transformación (reduce): calcular los minutos de contenido
+// que todavía faltan ver, combinando filter (para quedarnos solo con las
+// pendientes) y reduce (para sumar sus duraciones en un único valor).
+function calcularMinutosPendientes() {
+  return miListaNetflix
+    .filter((pelicula) => !pelicula.vista)
+    .reduce((acumulador, pelicula) => acumulador + pelicula.duracionMinutos, 0);
+}
+
+// Paso 3: Instanciación -> ya resuelta arriba, en miListaNetflix.
+
+// Paso 4: Verificación
+// La consigna pide interacción real mediante prompt. Armamos una función
+// aparte para no ejecutarla sola apenas carga la página (igual que
+// hicimos en la Clase 5 con pedirIMC): se prueba llamándola a mano.
+function interactuarConMiLista() {
+  const tituloBuscado = prompt("¿Qué película querés buscar en tu lista?");
+  const encontrada = buscarPeliculaPorTitulo(tituloBuscado);
+
+  if (encontrada) {
+    const estado = encontrada.vista ? "ya la viste" : "todavía está pendiente";
+    alert(`"${encontrada.titulo}" está en tu lista: ${estado}.`);
+  } else {
+    alert(`No encontramos "${tituloBuscado}" en tu lista.`);
+  }
+}
+// Para probarla en el navegador (usa prompt/alert), llamá a
+// interactuarConMiLista() desde la consola.
+
+// Estas dos sí las podemos verificar directo con console.log, sin prompt:
+console.log("Pendientes de ver:", filtrarPorEstado(false));
+console.log("Ya vistas:", filtrarPorEstado(true));
+console.log(`Minutos pendientes de contenido: ${calcularMinutosPendientes()}`);
