@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clase 06: Funciones de Orden Superior - Coderhouse</title>
+    <title>Clase 07: DOM, Selectores y Eventos - Coderhouse</title>
     <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -494,14 +494,14 @@
         <div></div>
         <div class="transition-layout" style="margin-bottom: 30px;">
             <span class="moment-badge">CODER 4.0 • BIENVENIDA</span>
-            <h1 style="font-size: 50px;">Funciones de Orden Superior en JavaScript</h1>
+            <h1 style="font-size: 48px;">Nodos, Selectores y Eventos: El DOM en JavaScript</h1>
             <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">
-                Clase 06: Abstracción y Closures | Búsqueda: find/filter/some | Transformación: map/reduce
+                Clase 07: Selectores del DOM | Modificar el HTML | addEventListener y Eventos
             </p>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">01 / 22</div>
+            <div class="slide-index">01 / 29</div>
         </div>
     </div>
 
@@ -511,319 +511,417 @@
         <div class="transition-layout">
             <hr>
             <span class="moment-badge">Módulo 01</span>
-            <h2>Funciones como Valores y Abstracción</h2>
-            <p style="font-size: 20px;">Vas a aprender a tratar funciones como valores: guardarlas, pasarlas como parámetro y hasta fabricarlas con otras funciones.</p>
+            <h2>Nodos y Selectores: Encontrar Elementos en el DOM</h2>
+            <p style="font-size: 20px;">Vas a aprender a darle "ojos" a tu código para que pueda encontrar cualquier elemento en la pantalla.</p>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">02 / 22</div>
+            <div class="slide-index">02 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 3: El concepto de Abstracción -->
+    <!-- SLIDE 3: El DOM como árbol -->
     <div class="slide-container" id="slide3">
-        <h2 class="slide-title">El Concepto de Abstracción</h2>
+        <h2 class="slide-title">El DOM: la Representación del Documento</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
                     <span class="moment-badge">Analogía</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Imaginá una máquina de café: para un capuchino solo apretás un botón. No necesitás saber la temperatura del agua ni la presión de la bomba.
+                        Imaginá que tu página HTML es una mansión y JavaScript es un robot que vive en ella. Para pintar una pared de rojo, primero tiene que saber dónde está esa pared.
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-mug-hot"></i> <strong>Abstracción:</strong> ocultar los detalles complejos de la implementación para pensar en QUÉ hace una solución, no en CÓMO lo hace.</li>
-                            <li><i class="fa-solid fa-code"></i> Cuando usás <code>sumar(10, 5)</code>, confiás en el nombre de la función sin pensar en los operadores internos.</li>
-                            <li><i class="fa-solid fa-wrench"></i> Reduce la complejidad (pensamos en piezas chicas) y facilita el mantenimiento: si el "cómo" cambia, el resto del programa sigue usando el mismo "botón".</li>
+                            <li><i class="fa-solid fa-sitemap"></i> El DOM (Document Object Model) es una representación interna de la página en forma de <strong>árbol</strong>.</li>
+                            <li><i class="fa-solid fa-code-branch"></i> El tronco es el documento entero (<code>document</code>); de ahí nacen <code>&lt;head&gt;</code> y <code>&lt;body&gt;</code>; y de <code>&lt;body&gt;</code>, ramas más chicas como <code>&lt;h1&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;div&gt;</code>.</li>
+                            <li><i class="fa-solid fa-eye"></i> Gracias al DOM, JavaScript puede "ver" el HTML como un objeto: acceder a sus propiedades y métodos para cambiar contenido, colores o comportamiento en tiempo real.</li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <div class="image-wrapper">
-                        <img alt="Botones de una máquina de café automática" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1280&auto=format&fit=crop">
+                        <img alt="Estructura de árbol y nodos conectados" src="https://images.unsplash.com/photo-1502430887788-e2358aa6f2a1?q=80&w=1280&auto=format&fit=crop">
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">03 / 22</div>
+            <div class="slide-index">03 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 4: Funciones que retornan funciones -->
+    <!-- SLIDE 4: Nodos vs Elementos -->
     <div class="slide-container" id="slide4">
-        <h2 class="slide-title">Funciones que Retornan Funciones</h2>
+        <h2 class="slide-title">Nodos vs. Elementos: ¿Qué Estamos Buscando?</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>Nodo</h3>
+                    <p>Es el término más amplio. Un comentario en tu código, el texto dentro de un párrafo, o una etiqueta HTML: todos son nodos.</p>
+                </div>
+                <div>
+                    <h3>Elemento</h3>
+                    <p>Es un tipo específico de nodo que corresponde directamente a una etiqueta HTML, como <code>&lt;div&gt;</code>, <code>&lt;a&gt;</code> o <code>&lt;button&gt;</code>.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: Selectores CSS -->
+    <div class="slide-container" id="slide5">
+        <h2 class="slide-title">Selectores CSS: El Mapa de Búsqueda</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-code"></i></div>
+                    <h3>Etiqueta</h3>
+                    <p>Busca por el nombre de la etiqueta. Ejemplo: <code>h1</code>, <code>p</code>, <code>button</code>.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-palette"></i></div>
+                    <h3>Clase</h3>
+                    <p>Busca elementos con un atributo <code>class</code>. Se escribe con un punto inicial. Ejemplo: <code>.btn-principal</code>.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-hashtag"></i></div>
+                    <h3>ID</h3>
+                    <p>Busca un elemento único con un atributo <code>id</code>. Se escribe con un numeral. Ejemplo: <code>#header</code>.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: getElementById -->
+    <div class="slide-container" id="slide6">
+        <h2 class="slide-title">getElementById(): El Tiro de Precisión</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
-                    <span class="moment-badge">Pattern Factory</span>
+                    <span class="moment-badge">Sintaxis Core</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Si una función puede retornar un valor, y las funciones SON valores, entonces una función puede retornar otra función.
+                        <code>document.getElementById()</code> es la forma más directa y rápida de encontrar un elemento.
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-industry"></i> Imaginá que querés crear distintos tipos de multiplicadores.</li>
-                            <li><i class="fa-solid fa-arrows-turn-to-dots"></i> <code>crearMultiplicador</code> es la función "externa"; la que retorna es la función "interna" que hace el trabajo real.</li>
+                            <li><i class="fa-solid fa-id-badge"></i> Funciona como un número de seguridad social: solo debería haber UN elemento con ese ID en toda la página.</li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
-function crearMultiplicador(factor) {
-  <span style="color: #6a737d;">// Función interna: hace el trabajo real</span>
-  return (numero) =&gt; numero * factor
-}
+<span style="color: #6a737d;">&lt;h1 id="titulo-principal"&gt;¡Hola, Mundo!&lt;/h1&gt;</span>
 
-const duplicar = crearMultiplicador(2)
-const triplicar = crearMultiplicador(3)
-
-console.log(duplicar(10))  <span style="color: #6a737d;">// 20</span>
-console.log(triplicar(10)) <span style="color: #6a737d;">// 30</span>
+const titulo = document.getElementById(<span style="color: #032f62;">"titulo-principal"</span>)
+console.log(titulo) <span style="color: #6a737d;">// Muestra el &lt;h1&gt; en la consola</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">04 / 22</div>
+            <div class="slide-index">06 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 5: Closures -->
-    <div class="slide-container" id="slide5">
-        <h2 class="slide-title">¿Cómo es Posible? El Concepto de Closure</h2>
+    <!-- SLIDE 7: querySelector -->
+    <div class="slide-container" id="slide7">
+        <h2 class="slide-title">querySelector(): La Navaja Suiza</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
-                    <span class="moment-badge">La Magia</span>
+                    <span class="moment-badge">El Más Moderno</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        La función interna sigue usando la variable <code>factor</code>, aunque <code>crearMultiplicador</code> ya haya terminado de ejecutarse.
+                        A diferencia de <code>getElementById</code>, acepta CUALQUIER selector CSS válido: "buscame el primer elemento que cumpla esta regla".
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-lock"></i> Un <strong>closure</strong> es cuando una función "recuerda" el entorno donde fue creada, aunque ese entorno ya haya dejado de ejecutarse.</li>
-                            <li><i class="fa-solid fa-briefcase"></i> Por eso cada función fabricada tiene su propia "mochila" con esa variable, sin pisarse entre sí.</li>
+                            <li><i class="fa-solid fa-code-branch"></i> Combinadores: <code>document.querySelector("nav &gt; ul &gt; li &gt; a")</code>.</li>
+                            <li><i class="fa-solid fa-triangle-exclamation"></i> Ojo: devuelve SOLO el primer elemento que coincide, aunque haya 10 que cumplan la condición.</li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <div class="code-block" style="border-left-color: var(--amarillo-solar);">
-<span style="color: #6a737d;">// duplicar "recuerda" factor = 2</span>
-<span style="color: #6a737d;">// triplicar "recuerda" factor = 3</span>
-<span style="color: #6a737d;">// Aunque crearMultiplicador() ya terminó</span>
-<span style="color: #6a737d;">// de ejecutarse hace rato.</span>
+<span style="color: #6a737d;">// Por clase</span>
+const boton = document.querySelector(<span style="color: #032f62;">".btn-cancelar"</span>)
 
-console.log(duplicar(5))  <span style="color: #6a737d;">// 10</span>
-console.log(triplicar(5)) <span style="color: #6a737d;">// 15</span>
+<span style="color: #6a737d;">// Por etiqueta</span>
+const parrafo = document.querySelector(<span style="color: #032f62;">"p"</span>)
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">05 / 22</div>
+            <div class="slide-index">07 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 6: Callbacks -->
-    <div class="slide-container" id="slide6">
-        <h2 class="slide-title">Funciones que Reciben Otras Funciones: Callbacks</h2>
+    <!-- SLIDE 8: getElementsByClassName vs querySelectorAll -->
+    <div class="slide-container" id="slide8">
+        <h2 class="slide-title">Agrupando Elementos: Dos Formas de Buscar Varios</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>getElementsByClassName()</h3>
+                    <p>Agrupa todos los elementos con la misma clase. Funciona como un array, aunque técnicamente su nombre es "colección de elementos HTML".</p>
+                </div>
+                <div>
+                    <h3>querySelectorAll()</h3>
+                    <p>El método más moderno para agrupar: acepta CUALQUIER selector CSS válido (no solo clases). Técnicamente devuelve una "lista de nodos" (NodeList).</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: El valor de null -->
+    <div class="slide-container" id="slide9">
+        <h2 class="slide-title">El Valor de null</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
-                    <span class="moment-badge">Delegación</span>
+                    <span class="moment-badge">Buenas Prácticas</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Así como una función puede retornar otra, también puede recibir una función como parámetro: a esto se lo llama <strong>callback</strong>.
+                        Si buscás un elemento que no existe (ID mal escrito, clase que no está), los métodos de selección te devuelven <code>null</code>.
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-handshake"></i> La función "delegada" recibe otra función para decidir qué hacer más adelante.</li>
-                            <li><i class="fa-solid fa-layer-group"></i> Evita escribir <code>duplicarNumero()</code>, <code>cuadradoNumero()</code>, <code>triplicarNumero()</code>... una sola función genérica alcanza.</li>
+                            <li><i class="fa-solid fa-magnifying-glass"></i> Consejo: siempre que selecciones algo, hacé un <code>console.log</code> para asegurarte de que no obtuviste <code>null</code>.</li>
+                            <li><i class="fa-solid fa-bomb"></i> Si recibís <code>null</code> y después intentás cambiarle algo a ese elemento, tu código va a romperse en el siguiente paso.</li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <div class="code-block" style="border-left-color: var(--rosa-energia);">
-function procesarNumero(numero, accion) {
-  return accion(numero)
-}
+const boton = document.querySelector(<span style="color: #032f62;">"#no-existe"</span>)
+console.log(boton) <span style="color: #6a737d;">// null</span>
 
-const duplicar = (n) =&gt; n * 2
-const cuadrado = (n) =&gt; n * n
-
-console.log(procesarNumero(5, duplicar)) <span style="color: #6a737d;">// 10</span>
-console.log(procesarNumero(5, cuadrado)) <span style="color: #6a737d;">// 25</span>
+boton.textContent = <span style="color: #032f62;">"Hola"</span>
+<span style="color: #6f42c1;">// TypeError: Cannot set properties of null</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">06 / 22</div>
+            <div class="slide-index">09 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 7: División Módulo 02 -->
-    <div class="slide-container" id="slide7">
+    <!-- SLIDE 10: #FindTheBug selectores -->
+    <div class="slide-container" id="slide10">
+        <h2 class="slide-title">Encontrá el Error en los Selectores</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge bug"><i class="fa-solid fa-bug"></i> #FindTheBug</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Este código tiene DOS errores de selección. El HTML tiene <code>id="titulo"</code> e <code>id="listado"</code>. ¿Los encontrás?
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-circle-exclamation"></i> <code>querySelector("titulo")</code> busca la ETIQUETA <code>&lt;titulo&gt;</code> (que no existe): faltaba el numeral, <code>"#titulo"</code>.</li>
+                            <li><i class="fa-solid fa-circle-exclamation"></i> <code>querySelector(".listado")</code> busca por CLASE: como es un <code>id</code>, faltaba el numeral en vez del punto, <code>"#listado"</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+function cargarDOM() {
+  const titulo = document.querySelector(<span style="color: #032f62;">"titulo"</span>)
+  const listado = document.querySelector(<span style="color: #032f62;">".listado"</span>)
+  titulo.innerText = <span style="color: #032f62;">"www.mandafruta.com"</span>
+  <span style="color: #6a737d;">// ...</span>
+}
+<span style="color: #6f42c1;">// ❌ titulo y listado van a ser null</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">10 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 11: Errores comunes Módulo 1 -->
+    <div class="slide-container" id="slide11">
+        <h2 class="slide-title">Errores Comunes y Buenas Prácticas</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>Repetir IDs</h3>
+                    <p>Aunque el navegador a veces lo permita, los IDs deben ser únicos. Si repetís uno, <code>getElementById</code> solo encuentra el primero, y tu HTML deja de ser válido.</p>
+                </div>
+                <div>
+                    <h3>querySelector vs. querySelectorAll</h3>
+                    <p>Si necesitás atrapar TODOS los elementos de una lista (ej: todos los <code>&lt;li&gt;</code>), <code>querySelector</code> no te sirve: solo trae el primero. Para eso existe <code>querySelectorAll</code>.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">11 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 12: División Módulo 02 -->
+    <div class="slide-container" id="slide12">
         <div></div>
         <div class="transition-layout">
             <hr>
             <span class="moment-badge">Módulo 02</span>
-            <h2>Búsqueda Inteligente: find, filter y some</h2>
-            <p style="font-size: 20px;">Métodos de orden superior ya construidos, que ahorran muchísimo trabajo al interactuar con arrays de objetos.</p>
+            <h2>Cambiar Texto y Elementos: La Magia de la Interactividad</h2>
+            <p style="font-size: 20px;">Ya sabés encontrar elementos en el DOM. Ahora vas a aprender a hacer algo con ellos: la esencia del desarrollo Frontend.</p>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">07 / 22</div>
+            <div class="slide-index">12 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 8: forEach() -->
-    <div class="slide-container" id="slide8">
-        <h2 class="slide-title">forEach(): Recorrer sin Escribir un for</h2>
+    <!-- SLIDE 13: textContent -->
+    <div class="slide-container" id="slide13">
+        <h2 class="slide-title">textContent: Cambiar el Texto, de Forma Segura</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
-                    <span class="moment-badge">Punto de Partida</span>
+                    <span class="moment-badge">Simplicidad y Seguridad</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Muy similar al <code>for...of</code>: <code>forEach()</code> ejecuta una función una vez por cada elemento del array.
+                        Cuando querés cambiar las palabras que aparecen dentro de un elemento, la herramienta más segura es <code>textContent</code>.
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-list"></i> Es la forma más moderna y clara de iterar arrays que usar un <code>for</code> tradicional.</li>
-                            <li><i class="fa-solid fa-database"></i> Este va a ser nuestro array de partida para toda la sección.</li>
+                            <li><i class="fa-solid fa-font"></i> Simplicidad: solo maneja texto plano.</li>
+                            <li><i class="fa-solid fa-shield-halved"></i> Seguridad: si intentás insertar etiquetas HTML, las va a mostrar literalmente como texto, en vez de ejecutarlas.</li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
-const productos = [
-  { nombre: "Laptop", precio: 800, categoria: "Electronics" },
-  { nombre: "Teclado", precio: 50, categoria: "Electronics" },
-  { nombre: "Silla Gamer", precio: 200, categoria: "Furniture" },
-  { nombre: "Monitor", precio: 300, categoria: "Electronics" },
-  { nombre: "Escritorio", precio: 150, categoria: "Furniture" }
-]
-
-productos.forEach((producto) =&gt; console.log(producto))
+const titulo = document.querySelector(<span style="color: #032f62;">'h1'</span>)
+titulo.textContent = <span style="color: #032f62;">"¡Hola, mundo dinámico!"</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">08 / 22</div>
+            <div class="slide-index">13 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 9: find() -->
-    <div class="slide-container" id="slide9">
-        <h2 class="slide-title">find(): Buscar UN Elemento</h2>
+    <!-- SLIDE 14: innerHTML -->
+    <div class="slide-container" id="slide14">
+        <h2 class="slide-title">innerHTML: Cambiar Contenido CON Etiquetas</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
-                    <span class="moment-badge">Búsqueda Puntual</span>
+                    <span class="moment-badge">Más Flexible</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        <code>find()</code> devuelve el PRIMER elemento del array que cumple una condición.
+                        Cuando querés cambiar el contenido incluyendo etiquetas HTML (como <code>&lt;strong&gt;</code> o <code>&lt;img&gt;</code>), usás <code>innerHTML</code>.
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-magnifying-glass"></i> Si ningún elemento cumple la condición, devuelve <code>undefined</code>.</li>
-                            <li><i class="fa-solid fa-object-ungroup"></i> Devuelve el objeto en sí, no un array.</li>
+                            <li><i class="fa-solid fa-code"></i> Permite insertar HTML directamente, y sirve para crear estructuras dinámicas: listas, tarjetas, botones.</li>
+                            <li><i class="fa-solid fa-triangle-exclamation"></i> Diferencia clave: a diferencia de <code>textContent</code>, <code>innerHTML</code> SÍ interpreta las etiquetas (cuidado con el riesgo de inyección de código).</li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <div class="code-block" style="border-left-color: var(--amarillo-solar);">
-const resultado = productos.find(
-  (producto) =&gt; producto.nombre === "Monitor"
-)
-
-console.log(resultado)
-<span style="color: #6a737d;">// { nombre: "Monitor", precio: 300, categoria: "Electronics" }</span>
+const titulo = document.querySelector(<span style="color: #032f62;">'h1'</span>)
+titulo.innerHTML = <span style="color: #032f62;">"&lt;strong&gt;¡Hola, mundo dinámico!&lt;/strong&gt;"</span>
+<span style="color: #6a737d;">// El texto aparece en negrita: &lt;strong&gt; sí se interpreta</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">09 / 22</div>
+            <div class="slide-index">14 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 10: filter() -->
-    <div class="slide-container" id="slide10">
-        <h2 class="slide-title">filter(): Quedarte con Varios</h2>
+    <!-- SLIDE 15: createElement -->
+    <div class="slide-container" id="slide15">
+        <h2 class="slide-title">createElement(): Crear Elementos desde Cero</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
-                    <span class="moment-badge">Nuevo Array Filtrado</span>
+                    <span class="moment-badge">Contenido Dinámico</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        <code>filter()</code> crea un NUEVO array con todos los elementos que cumplen una condición.
+                        Cuando querés crear un elemento HTML NUEVO desde JavaScript (un <code>&lt;p&gt;</code>, un <code>&lt;div&gt;</code>, un <code>&lt;button&gt;</code>), usás <code>createElement</code>.
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-filter"></i> A diferencia de <code>find</code>, siempre devuelve un array (puede estar vacío).</li>
-                            <li><i class="fa-solid fa-list-check"></i> Ideal para "quedarte solo con lo que sirve".</li>
+                            <li><i class="fa-solid fa-plus"></i> Permite generar elementos dinámicamente, cuando la página ya está cargada.</li>
+                            <li><i class="fa-solid fa-layer-group"></i> Muy útil para tarjetas, listas o contenido generado automáticamente.</li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <div class="code-block" style="border-left-color: var(--rosa-energia);">
-const resultado = productos.filter(
-  (producto) =&gt; producto.precio &gt;= 300
-)
-
-console.log(resultado)
-<span style="color: #6a737d;">// [{ nombre: "Monitor", precio: 300, ... },</span>
-<span style="color: #6a737d;">//  { nombre: "Laptop", precio: 800, ... }]</span>
+const parrafo = document.createElement(<span style="color: #032f62;">'p'</span>)
+parrafo.textContent = <span style="color: #032f62;">"Este párrafo fue creado con JavaScript"</span>
+document.body.appendChild(parrafo)
+<span style="color: #6a737d;">// se añade el &lt;p&gt; al final del body</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">10 / 22</div>
+            <div class="slide-index">15 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 11: some() -->
-    <div class="slide-container" id="slide11">
-        <h2 class="slide-title">some(): ¿Existe Al Menos Uno?</h2>
+    <!-- SLIDE 16: remove() -->
+    <div class="slide-container" id="slide16">
+        <h2 class="slide-title">remove(): Eliminar Elementos del DOM</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
-                    <span class="moment-badge">Devuelve Booleano</span>
+                    <span class="moment-badge">Interfaces Dinámicas</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        <code>some()</code> comprueba si AL MENOS UN elemento del array cumple una condición.
+                        Cuando querés eliminar un elemento HTML de la página, la herramienta más usada es <code>remove()</code>.
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-toggle-on"></i> Devuelve <code>true</code> o <code>false</code>, nunca el elemento en sí.</li>
-                            <li><i class="fa-solid fa-scale-balanced"></i> <strong>some</strong> responde sí/no; <strong>find</strong> te da el elemento (o <code>undefined</code>).</li>
+                            <li><i class="fa-solid fa-eraser"></i> Simplicidad: elimina el elemento directamente, sin necesidad de acceder al elemento padre.</li>
+                            <li><i class="fa-solid fa-broom"></i> Código más limpio que métodos antiguos como <code>removeChild()</code>.</li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
-const existe = productos.some(
-  (producto) =&gt; producto.nombre === "Laptop"
-)
-
-console.log(existe) <span style="color: #6a737d;">// true</span>
+const titulo = document.querySelector(<span style="color: #032f62;">'h1'</span>)
+titulo.remove() <span style="color: #6a737d;">// Se elimina del DOM</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">11 / 22</div>
+            <div class="slide-index">16 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 12: Break de Coder ("Recreo") -->
-    <div class="slide-container break-slide" id="slide12">
+    <!-- SLIDE 17: Break de Coder ("Recreo") -->
+    <div class="slide-container break-slide" id="slide17">
         <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
             <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
             <h2>Break del Coder</h2>
@@ -831,221 +929,280 @@ console.log(existe) <span style="color: #6a737d;">// true</span>
         </div>
         <div class="slide-footer" style="border-top: 1px solid rgba(248, 242, 232, 0.2);">
             <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span style="color: var(--naranja-horizonte);">HOUSE</span></div>
-            <div class="slide-index" style="color: rgba(248, 242, 232, 0.4);">12 / 22</div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.4);">17 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 13: División Módulo 03 -->
-    <div class="slide-container" id="slide13">
+    <!-- SLIDE 18: División Módulo 03 -->
+    <div class="slide-container" id="slide18">
         <div></div>
         <div class="transition-layout">
             <hr>
             <span class="moment-badge">Módulo 03</span>
-            <h2>Transformando Datos: map y reduce</h2>
-            <p style="font-size: 20px;">Los métodos más potentes para transformar y combinar colecciones completas, de forma limpia y segura.</p>
+            <h2>Interactividad: addEventListener y el Objeto Event</h2>
+            <p style="font-size: 20px;">El navegador es un espía constante. Vas a hacer que tu código reaccione a lo que hace el usuario.</p>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">13 / 22</div>
+            <div class="slide-index">18 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 14: Inmutabilidad -->
-    <div class="slide-container" id="slide14">
-        <h2 class="slide-title">El Concepto de Inmutabilidad</h2>
-        <div class="content-area">
-            <div class="two-column tiled">
-                <div>
-                    <h3>Métodos que Modifican</h3>
-                    <p><code>push</code>, <code>pop</code>, <code>splice</code>... cambian el array original. Si lo consultás después, ya no es el mismo.</p>
-                </div>
-                <div>
-                    <h3>Métodos Inmutables</h3>
-                    <p><code>map</code>, <code>filter</code> y <code>reduce</code> NO cambian tus datos originales: generan un resultado nuevo, basado en ellos. Esto hace tu código mucho más predecible.</p>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">14 / 22</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 15: map() -->
-    <div class="slide-container" id="slide15">
-        <h2 class="slide-title">map(): La Línea de Traducción</h2>
+    <!-- SLIDE 19: ¿Qué es un evento? -->
+    <div class="slide-container" id="slide19">
+        <h2 class="slide-title">¿Qué es un Evento?</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
-                    <span class="moment-badge">Transforma</span>
+                    <span class="moment-badge">Fundamentos</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        <code>map()</code> transforma cada elemento del array en algo nuevo.
+                        Un evento es, simplemente, algo que sucede en el navegador: mover el mouse, presionar una tecla, que la página termine de cargar.
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-right-to-bracket"></i> <strong>Entrada:</strong> un array de N elementos.</li>
-                            <li><i class="fa-solid fa-right-from-bracket"></i> <strong>Salida:</strong> un nuevo array de exactamente N elementos, transformados.</li>
+                            <li><i class="fa-solid fa-computer-mouse"></i> <strong>Mouse:</strong> click, dblclick, mousemove.</li>
+                            <li><i class="fa-solid fa-keyboard"></i> <strong>Teclado:</strong> keydown, keyup.</li>
+                            <li><i class="fa-solid fa-file-signature"></i> <strong>Formulario:</strong> submit, change, focus.</li>
                         </ul>
                     </div>
                 </div>
                 <div>
-                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
-const preciosUSD = [10, 20, 30]
-
-const preciosARS = preciosUSD.map(
-  precio =&gt; precio * 900
-)
-
-<span style="color: #6a737d;">// Resultado: [9000, 18000, 27000]</span>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar); font-size: 14px;">
+<span style="color: #6a737d;">// El "Escuchador" (Event Listener)</span>
+<span style="color: #6a737d;">// Es como poner un guardia de seguridad</span>
+<span style="color: #6a737d;">// junto a un botón, con una orden:</span>
+<span style="color: #6a737d;">// "En cuanto alguien lo presione,</span>
+<span style="color: #6a737d;">//  activá la alarma."</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">15 / 22</div>
+            <div class="slide-index">19 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 16: reduce() -->
-    <div class="slide-container" id="slide16">
-        <h2 class="slide-title">reduce(): La Caja de Empaque</h2>
+    <!-- SLIDE 20: addEventListener anatomía + click -->
+    <div class="slide-container" id="slide20">
+        <h2 class="slide-title">La Anatomía de addEventListener</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
-                    <span class="moment-badge">El Más Potente</span>
+                    <span class="moment-badge">Sintaxis Core</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        <code>reduce()</code> combina todos los elementos del array en un ÚNICO valor.
+                        La forma moderna y recomendada de manejar interactividad.
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-cube"></i> Necesita una función con un <strong>acumulador</strong> (resultado parcial) y el <strong>valor actual</strong>.</li>
-                            <li><i class="fa-solid fa-flag-checkered"></i> Necesita un <strong>valor inicial</strong> para el acumulador.</li>
+                            <li><i class="fa-solid fa-hand-pointer"></i> El evento <code>click</code> ejecuta una acción cuando el usuario hace clic sobre un elemento: uno de los más usados en JavaScript.</li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <div class="code-block" style="border-left-color: var(--rosa-energia);">
-const numeros = [5, 5, 10]
+elemento.addEventListener(<span style="color: #032f62;">'tipoDeEvento'</span>, funcionAejecutar)
 
-const total = numeros.reduce(
-  (acc, num) =&gt; acc + num, 0
-)
-
-<span style="color: #6a737d;">// Proceso: 0+5=5 -&gt; 5+5=10 -&gt; 10+10=20</span>
-<span style="color: #6a737d;">// Resultado: 20</span>
+const boton = document.querySelector(<span style="color: #032f62;">'button'</span>)
+boton.addEventListener(<span style="color: #032f62;">'click'</span>, () =&gt; {
+  console.log(<span style="color: #032f62;">'Hiciste clic'</span>)
+})
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">16 / 22</div>
+            <div class="slide-index">20 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 17: Errores comunes (#FindTheBug) -->
-    <div class="slide-container" id="slide17">
-        <h2 class="slide-title">Errores Comunes: #FindTheBug</h2>
+    <!-- SLIDE 21: Ejemplo real - botón Me Gusta -->
+    <div class="slide-container" id="slide21">
+        <h2 class="slide-title">Ejemplo Real: El Botón de "Me Gusta"</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
-                    <span class="moment-badge bug"><i class="fa-solid fa-bug"></i> #FindTheBug</span>
+                    <span class="moment-badge tip"><i class="fa-solid fa-heart"></i> Sin Paréntesis</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Estos errores son clásicos al usar callbacks con llaves <code>{}</code>. ¿Los encontrás?
+                        Es vital notar que NO escribimos <code>manejarClick()</code>. Pasamos el NOMBRE de la función, sin paréntesis.
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-circle-exclamation"></i> Si usás llaves <code>{}</code> en una función flecha, hay que escribir <code>return</code> explícitamente. Si no, la función devuelve <code>undefined</code>.</li>
-                            <li><i class="fa-solid fa-circle-exclamation"></i> En <code>reduce</code>, omitir el valor inicial puede "funcionar por accidente", pero en arrays de objetos casi siempre rompe: acostumbrate a ponerlo siempre.</li>
+                            <li><i class="fa-solid fa-bolt"></i> <strong>Con paréntesis ():</strong> la función se ejecuta YA, apenas carga la página.</li>
+                            <li><i class="fa-solid fa-clock"></i> <strong>Sin paréntesis:</strong> le das al navegador la "receta" para que la ejecute solo cuando ocurra el clic.</li>
                         </ul>
                     </div>
                 </div>
                 <div>
-                    <div class="code-block" style="border-left-color: var(--rosa-energia); font-size: 12px;">
-<span style="color: #6a737d;">// 1) filter: olvidó el return</span>
-cursos.filter((curso) =&gt; {
-  curso.precio &gt; 20000
-}) <span style="color: #6f42c1;">// ❌ resultado inesperado</span>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte); font-size: 12px;">
+<span style="color: #6a737d;">// 1. Seleccionamos el elemento</span>
+const botonLike = document.querySelector(<span style="color: #032f62;">'#btn-like'</span>)
 
-<span style="color: #6a737d;">// 2) map: olvidó el return</span>
-fahrenheitTemps.map((f) =&gt; {
-  (f - 32) * 5 / 9
-}) <span style="color: #6f42c1;">// ❌ array lleno de undefined</span>
+<span style="color: #6a737d;">// 2. Definimos qué pasará</span>
+function manejarClick() {
+  botonLike.textContent = <span style="color: #032f62;">"¡Te gusta esto!"</span>
+}
 
-<span style="color: #6a737d;">// 3) reduce: sin valor inicial</span>
-productos.reduce((acc, p) =&gt; acc + p.precio)
-<span style="color: #6f42c1;">// ❌ riesgo de NaN, según el primer elemento</span>
+<span style="color: #6a737d;">// 3. Conectamos el evento</span>
+botonLike.addEventListener(<span style="color: #032f62;">'click'</span>, manejarClick)
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">17 / 22</div>
+            <div class="slide-index">21 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 18: Extra: sort() -->
-    <div class="slide-container" id="slide18">
-        <h2 class="slide-title">Extra: sort() para Ordenar un Array</h2>
+    <!-- SLIDE 22: keydown -->
+    <div class="slide-container" id="slide22">
+        <h2 class="slide-title">Evento de Teclado: keydown</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
-                    <span class="moment-badge tip"><i class="fa-solid fa-arrow-up-short-wide"></i> Bonus</span>
+                    <span class="moment-badge">Interacción con Teclado</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        <code>sort()</code> ordena los elementos de un array según el criterio que le pases en una función de comparación.
+                        <code>keydown</code> ejecuta una acción cuando el usuario presiona una tecla: uno de los más usados para detectar escritura.
                     </p>
-                    <div class="bullet-list">
-                        <ul>
-                            <li><i class="fa-solid fa-arrow-down-1-9"></i> <code>(a, b) =&gt; a - b</code> ordena de menor a mayor.</li>
-                            <li><i class="fa-solid fa-arrow-down-9-1"></i> <code>(a, b) =&gt; b - a</code> ordena de mayor a menor.</li>
-                            <li><i class="fa-solid fa-triangle-exclamation"></i> Ojo: a diferencia de map/filter/reduce, <code>sort()</code> SÍ modifica el array original.</li>
-                        </ul>
-                    </div>
                 </div>
                 <div>
                     <div class="code-block" style="border-left-color: var(--amarillo-solar);">
-const numeros = [40, 1, 5, 200]
-
-numeros.sort((a, b) =&gt; a - b)
-
-console.log(numeros) <span style="color: #6a737d;">// [1, 5, 40, 200]</span>
+const input = document.querySelector(<span style="color: #032f62;">'input'</span>)
+input.addEventListener(<span style="color: #032f62;">'keydown'</span>, () =&gt; {
+  console.log(<span style="color: #032f62;">'Tecla presionada'</span>)
+})
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">18 / 22</div>
+            <div class="slide-index">22 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 19: Pre-Entrega 6 -->
-    <div class="slide-container" id="slide19">
-        <h2 class="slide-title">Pre-Entrega 6</h2>
+    <!-- SLIDE 23: El objeto Event -->
+    <div class="slide-container" id="slide23">
+        <h2 class="slide-title">El Objeto Event: El Mensajero con Información</h2>
         <div class="content-area">
-            <div class="slido-box">
-                <span class="moment-badge live"><i class="fa-solid fa-laptop-code"></i> Actividad Integradora</span>
-                <h3>Interactuando con Funciones de Orden Superior</h3>
-                <p>Sumale funciones de orden superior al mismo simulador que venís construyendo: los objetos salen de la Class del Módulo 5.</p>
-                <div class="slido-code" style="font-size: 18px; font-weight: 700; text-align: left; letter-spacing: normal;">
-                    ✓ Array de objetos (instancias de tu Class, o un array literal si no las tenés a mano)<br>
-                    ✓ Mínimo 3 métodos de orden superior del módulo (find, filter, some, map, reduce...)<br>
-                    ✓ Al menos 2 métodos de búsqueda y 1 de transformación<br>
-                    ✓ Interacción con el usuario vía prompt, resultados con console.log
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">event.target / event.key</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Cuando ocurre un evento, el navegador no solo ejecuta tu función: le manda un "regalo", el objeto Event.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-crosshairs"></i> <code>event.target</code> te dice EXACTAMENTE qué elemento recibió el evento.</li>
+                            <li><i class="fa-solid fa-keyboard"></i> <code>event.key</code> te dice el nombre exacto de la tecla presionada.</li>
+                        </ul>
+                    </div>
                 </div>
-                <p style="font-weight: 600; color: var(--naranja-oscuro);">Entregable: repositorio de GitHub público con un archivo HTML y un archivo JS.</p>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia); font-size: 13px;">
+document.addEventListener(<span style="color: #032f62;">'keydown'</span>, function(event) {
+  if (event.key === <span style="color: #032f62;">'ArrowUp'</span>) {
+    console.log(<span style="color: #032f62;">"Moviendo al personaje hacia arriba..."</span>)
+  }
+})
+                    </div>
+                </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">19 / 22</div>
+            <div class="slide-index">23 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 20: Consolidación de Conceptos (Table) -->
-    <div class="slide-container" id="slide20">
+    <!-- SLIDE 24: Errores comunes y confusiones -->
+    <div class="slide-container" id="slide24">
+        <h2 class="slide-title">Errores Comunes y Confusiones</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-hourglass-half"></i></div>
+                    <h3>"No Encuentra mi Elemento"</h3>
+                    <p>Buscar un elemento antes de que la página termine de cargar. Solución: usar el atributo <code>defer</code> en la etiqueta <code>&lt;script&gt;</code>.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-arrows-turn-right"></i></div>
+                    <h3>Evento vs. Manejador</h3>
+                    <p>El evento (ej: click) es la CAUSA; el manejador (handler, la función) es la CONSECUENCIA. No son lo mismo.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-cube"></i></div>
+                    <h3>El DOM es un Objeto</h3>
+                    <p><code>event.target</code> es un objeto: podés acceder a <code>.style</code>, <code>.id</code>, <code>.className</code>, <code>.value</code>. No es una cadena de texto.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">24 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 25: Aplicaciones en el mundo real -->
+    <div class="slide-container" id="slide25">
+        <h2 class="slide-title">Aplicaciones en el Mundo Real</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-key"></i></div>
+                    <h3>Validación de Formularios</h3>
+                    <p>Cuando escribís una contraseña y el sitio avisa al instante "es demasiado corta". Un evento <code>input</code>.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-bars"></i></div>
+                    <h3>Menús Desplegables</h3>
+                    <p>Pasás el mouse sobre un menú y se despliega una lista. Un evento <code>mouseenter</code>.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-scroll"></i></div>
+                    <h3>Scroll Infinito</h3>
+                    <p>Llegás al final de Instagram y carga más contenido: escuchando <code>scroll</code> en <code>window</code>.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-hand"></i></div>
+                    <h3>Drag &amp; Drop</h3>
+                    <p>En Trello, mover tarjetas entre columnas usa eventos como <code>dragstart</code> y <code>drop</code>.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">25 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 26: Pre-Entrega 7 -->
+    <div class="slide-container" id="slide26">
+        <h2 class="slide-title">Pre-Entrega 7</h2>
+        <div class="content-area">
+            <div class="slido-box">
+                <span class="moment-badge live"><i class="fa-solid fa-laptop-code"></i> Actividad Integradora</span>
+                <h3>Interfaz Dinámica con DOM y Eventos</h3>
+                <p>Pasá de prompt/console/alert a una interfaz real: renderizada en pantalla, interactiva, sin recargar la página.</p>
+                <div class="slido-code" style="font-size: 18px; font-weight: 700; text-align: left; letter-spacing: normal;">
+                    ✓ Renderizar en pantalla una colección de objetos, generada dinámicamente desde un array<br>
+                    ✓ Agregar un ítem nuevo con un formulario + botón, sin recargar la página<br>
+                    ✓ Feedback visual de cada acción (mensaje o resaltado)<br>
+                    ✓ Interactuar con cada ítem (Eliminar/Logrado) y/o filtrar con un evento de teclado
+                </div>
+                <p style="font-weight: 600; color: var(--naranja-oscuro);">Entregable: repositorio de GitHub público con index.html, style.css y main.js.</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">26 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 27: Consolidación de Conceptos (Table) -->
+    <div class="slide-container" id="slide27">
         <h2 class="slide-title">Consolidación de Conceptos</h2>
         <div class="content-area">
             <div class="table-layout">
@@ -1061,27 +1218,27 @@ console.log(numeros) <span style="color: #6a737d;">// [1, 5, 40, 200]</span>
                     <tbody>
                         <tr>
                             <td><strong>Módulo 1</strong></td>
-                            <td>Funciones como Valores y Abstracción</td>
-                            <td>Factory functions, closures, callbacks</td>
-                            <td>Tratar funciones como valores: retornarlas y recibirlas como parámetro.</td>
+                            <td>Nodos y Selectores</td>
+                            <td>getElementById, querySelector(All), getElementsByClassName</td>
+                            <td>Encontrar cualquier elemento del DOM con precisión.</td>
                         </tr>
                         <tr>
                             <td><strong>Módulo 2</strong></td>
-                            <td>Búsqueda Inteligente</td>
-                            <td>forEach, find, filter, some</td>
-                            <td>Recorrer y buscar en arrays de objetos sin escribir bucles a mano.</td>
+                            <td>Cambiar Texto y Elementos</td>
+                            <td>textContent, innerHTML, createElement, remove</td>
+                            <td>Modificar la interfaz dinámicamente desde JavaScript.</td>
                         </tr>
                         <tr>
                             <td><strong>Módulo 3</strong></td>
-                            <td>Transformación de Colecciones</td>
-                            <td>map, reduce &amp; sort</td>
-                            <td>Transformar y combinar arrays completos de forma inmutable.</td>
+                            <td>Interactividad</td>
+                            <td>addEventListener &amp; objeto Event</td>
+                            <td>Reaccionar a las acciones del usuario en tiempo real.</td>
                         </tr>
                         <tr>
                             <td><strong>Evaluación</strong></td>
-                            <td>Pre-Entrega 6: Funciones de Orden Superior</td>
+                            <td>Pre-Entrega 7: Interfaz dinámica con DOM y eventos</td>
                             <td>Repositorio de GitHub público</td>
-                            <td>Aplicar funciones de orden superior sobre el simulador propio.</td>
+                            <td>Migrar el simulador de prompts/alerts a una interfaz real con DOM.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1089,12 +1246,12 @@ console.log(numeros) <span style="color: #6a737d;">// [1, 5, 40, 200]</span>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">20 / 22</div>
+            <div class="slide-index">27 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 21: ¿Dudas? ¿Consultas? -->
-    <div class="slide-container" id="slide21">
+    <!-- SLIDE 28: ¿Dudas? ¿Consultas? -->
+    <div class="slide-container" id="slide28">
         <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
             <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
                 <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
@@ -1108,15 +1265,15 @@ console.log(numeros) <span style="color: #6a737d;">// [1, 5, 40, 200]</span>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">21 / 22</div>
+            <div class="slide-index">28 / 29</div>
         </div>
     </div>
 
-    <!-- SLIDE 22: Q&A / Legal Disclaimer -->
-    <div class="slide-container" id="slide22" style="background-color: var(--blanco-lienzo);">
+    <!-- SLIDE 29: Q&A / Legal Disclaimer -->
+    <div class="slide-container" id="slide29" style="background-color: var(--blanco-lienzo);">
         <div class="content-area" style="justify-content: center;">
             <h1 style="color: var(--naranja-oscuro); font-size: 60px; font-weight: 800; letter-spacing: -2px;">¡Muchas gracias!</h1>
-            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 5px;">Clase 06: Funciones de Orden Superior en JavaScript</p>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 5px;">Clase 07: Nodos, Selectores y Eventos en JavaScript</p>
 
             <p class="legal-notice">
                 La información contenida en este documento es altamente sensible y de carácter educativo para los participantes inscriptos en Coderhouse. Queda estrictamente prohibida la reproducción, duplicación o revelación total o parcial del contenido pedagógico sin previa autorización escrita de Coderhouse. Copyright © 2026 Coderhouse. Todos los derechos reservados.
@@ -1124,7 +1281,7 @@ console.log(numeros) <span style="color: #6a737d;">// [1, 5, 40, 200]</span>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">22 / 22</div>
+            <div class="slide-index">29 / 29</div>
         </div>
     </div>
 
