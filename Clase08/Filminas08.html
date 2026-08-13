@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 07: DOM, Selectores y Eventos - Coderhouse</title>
+    <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ==========================================================================
+           CODER 4.0 DESIGN SYSTEM & VARS
+           ========================================================================== */
+        :root {
+            --blanco-lienzo: #F8F2E8;
+            --negro-coder: #171717;
+            --naranja-oscuro: #260700;
+            --naranja-horizonte: #FF632B;
+            --amarillo-solar: #FE872D;
+            --rosa-energia: #FE64A3;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #dcd6cd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+
+        /* Slide Viewer (Absolute 1280x720 No-Scale-Shift) */
+        .presentation-viewport {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--blanco-lienzo);
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            color: var(--negro-coder);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 70px 40px 70px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+            z-index: 1;
+        }
+
+        .slide-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Abstract Brand Accents: Subtly warm gradients connecting to Coder 4.0 */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,99,43,0.06) 0%, rgba(248,242,232,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography & Hierarchy */
+        h1 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background-color: rgba(38, 7, 0, 0.1);
+            margin-left: 15px;
+        }
+
+        p, li {
+            font-size: 17px;
+            line-height: 1.5;
+            color: #3d3430;
+            font-weight: 400;
+        }
+
+        /* Content Area Layout Wrapper */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Grid & Column Definitions */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 45px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Coder 4.0 Split Card layouts */
+        .two-column.tiled > div {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            padding: 35px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .two-column.tiled h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--naranja-horizonte);
+            margin-bottom: 12px;
+        }
+
+        /* Warm Retro Photography Frame */
+        .image-wrapper {
+            border-radius: 16px;
+            height: 340px;
+            overflow: hidden;
+            width: 100%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(38, 7, 0, 0.08);
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Custom 2D Filled Icons & Tiles */
+        .tiled-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .tile {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .tile .icon-box {
+            background-color: rgba(255, 99, 43, 0.1);
+            color: var(--naranja-horizonte);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .tile h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--naranja-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .tile p {
+            font-size: 14px;
+        }
+
+        /* Bullet List styling */
+        .bullet-list ul {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+        }
+
+        .bullet-list li i {
+            position: absolute;
+            left: 0;
+            top: 3px;
+            color: var(--naranja-horizonte);
+            font-size: 16px;
+        }
+
+        /* Footer & Brand Branding Mark */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(38, 7, 0, 0.06);
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        .slide-footer .brand-logo {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--naranja-oscuro);
+            letter-spacing: -0.5px;
+        }
+
+        .slide-footer .brand-logo span {
+            color: var(--naranja-horizonte);
+        }
+
+        .slide-footer .slide-index {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(38, 7, 0, 0.4);
+        }
+
+        /* Slide Type Banners ("Momentos de la Clase") */
+        .moment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .moment-badge.live {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .moment-badge.bug {
+            background-color: var(--rosa-energia);
+        }
+
+        .moment-badge.tip {
+            background-color: var(--amarillo-solar);
+            color: var(--naranja-oscuro);
+        }
+
+        /* Slido Interactive layout */
+        .slido-box {
+            background-color: #ffffff;
+            border: 2px dashed var(--naranja-horizonte);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 99, 43, 0.05);
+        }
+
+        .slido-box h3 {
+            font-size: 26px;
+            color: var(--naranja-oscuro);
+            margin-bottom: 10px;
+        }
+
+        .slido-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--naranja-horizonte);
+            margin: 15px 0;
+            letter-spacing: -1px;
+        }
+
+        /* Transition slide */
+        .transition-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .transition-layout h2 {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .transition-layout hr {
+            width: 80px;
+            height: 5px;
+            background-color: var(--naranja-horizonte);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        /* Clean retro table */
+        .table-layout {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+            width: 100%;
+        }
+
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th, .table-layout td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(38, 7, 0, 0.06);
+            font-size: 14px;
+        }
+
+        .table-layout th {
+            background-color: rgba(38, 7, 0, 0.03);
+            color: var(--naranja-oscuro);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Break Slide Design */
+        .break-slide {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+        }
+
+        .break-slide::before {
+            display: none;
+        }
+
+        .break-slide h2 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--blanco-lienzo);
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .break-slide p {
+            color: rgba(248, 242, 232, 0.75);
+            font-size: 22px;
+        }
+
+        .break-logo {
+            font-size: 80px;
+            color: var(--naranja-horizonte);
+            margin-bottom: 30px;
+        }
+
+        /* Q&A / Legal section */
+        .legal-notice {
+            font-size: 10px;
+            line-height: 1.4;
+            color: rgba(38, 7, 0, 0.4);
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        /* Presentation controls toolbar */
+        .controls-toolbar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(38, 7, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--naranja-horizonte);
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Code Block Container */
+        .code-block {
+            background-color: #ffffff;
+            border-left: 4px solid var(--naranja-horizonte);
+            padding: 15px 20px;
+            font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-viewport">
+
+    <!-- SLIDE 1: Portada General -->
+    <div class="slide-container active" id="slide1">
+        <div></div>
+        <div class="transition-layout" style="margin-bottom: 30px;">
+            <span class="moment-badge">CODER 4.0 • BIENVENIDA</span>
+            <h1 style="font-size: 48px;">Nodos, Selectores y Eventos: El DOM en JavaScript</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">
+                Clase 07: Selectores del DOM | Modificar el HTML | addEventListener y Eventos
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">01 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: División Módulo 01 -->
+    <div class="slide-container" id="slide2">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Módulo 01</span>
+            <h2>Nodos y Selectores: Encontrar Elementos en el DOM</h2>
+            <p style="font-size: 20px;">Vas a aprender a darle "ojos" a tu código para que pueda encontrar cualquier elemento en la pantalla.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">02 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: El DOM como árbol -->
+    <div class="slide-container" id="slide3">
+        <h2 class="slide-title">El DOM: la Representación del Documento</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Analogía</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Imaginá que tu página HTML es una mansión y JavaScript es un robot que vive en ella. Para pintar una pared de rojo, primero tiene que saber dónde está esa pared.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-sitemap"></i> El DOM (Document Object Model) es una representación interna de la página en forma de <strong>árbol</strong>.</li>
+                            <li><i class="fa-solid fa-code-branch"></i> El tronco es el documento entero (<code>document</code>); de ahí nacen <code>&lt;head&gt;</code> y <code>&lt;body&gt;</code>; y de <code>&lt;body&gt;</code>, ramas más chicas como <code>&lt;h1&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;div&gt;</code>.</li>
+                            <li><i class="fa-solid fa-eye"></i> Gracias al DOM, JavaScript puede "ver" el HTML como un objeto: acceder a sus propiedades y métodos para cambiar contenido, colores o comportamiento en tiempo real.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="image-wrapper">
+                        <img alt="Estructura de árbol y nodos conectados" src="https://images.unsplash.com/photo-1502430887788-e2358aa6f2a1?q=80&w=1280&auto=format&fit=crop">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">03 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: Nodos vs Elementos -->
+    <div class="slide-container" id="slide4">
+        <h2 class="slide-title">Nodos vs. Elementos: ¿Qué Estamos Buscando?</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>Nodo</h3>
+                    <p>Es el término más amplio. Un comentario en tu código, el texto dentro de un párrafo, o una etiqueta HTML: todos son nodos.</p>
+                </div>
+                <div>
+                    <h3>Elemento</h3>
+                    <p>Es un tipo específico de nodo que corresponde directamente a una etiqueta HTML, como <code>&lt;div&gt;</code>, <code>&lt;a&gt;</code> o <code>&lt;button&gt;</code>.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: Selectores CSS -->
+    <div class="slide-container" id="slide5">
+        <h2 class="slide-title">Selectores CSS: El Mapa de Búsqueda</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-code"></i></div>
+                    <h3>Etiqueta</h3>
+                    <p>Busca por el nombre de la etiqueta. Ejemplo: <code>h1</code>, <code>p</code>, <code>button</code>.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-palette"></i></div>
+                    <h3>Clase</h3>
+                    <p>Busca elementos con un atributo <code>class</code>. Se escribe con un punto inicial. Ejemplo: <code>.btn-principal</code>.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-hashtag"></i></div>
+                    <h3>ID</h3>
+                    <p>Busca un elemento único con un atributo <code>id</code>. Se escribe con un numeral. Ejemplo: <code>#header</code>.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: getElementById -->
+    <div class="slide-container" id="slide6">
+        <h2 class="slide-title">getElementById(): El Tiro de Precisión</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Sintaxis Core</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        <code>document.getElementById()</code> es la forma más directa y rápida de encontrar un elemento.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-id-badge"></i> Funciona como un número de seguridad social: solo debería haber UN elemento con ese ID en toda la página.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+<span style="color: #6a737d;">&lt;h1 id="titulo-principal"&gt;¡Hola, Mundo!&lt;/h1&gt;</span>
+
+const titulo = document.getElementById(<span style="color: #032f62;">"titulo-principal"</span>)
+console.log(titulo) <span style="color: #6a737d;">// Muestra el &lt;h1&gt; en la consola</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">06 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: querySelector -->
+    <div class="slide-container" id="slide7">
+        <h2 class="slide-title">querySelector(): La Navaja Suiza</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">El Más Moderno</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        A diferencia de <code>getElementById</code>, acepta CUALQUIER selector CSS válido: "buscame el primer elemento que cumpla esta regla".
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-code-branch"></i> Combinadores: <code>document.querySelector("nav &gt; ul &gt; li &gt; a")</code>.</li>
+                            <li><i class="fa-solid fa-triangle-exclamation"></i> Ojo: devuelve SOLO el primer elemento que coincide, aunque haya 10 que cumplan la condición.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+<span style="color: #6a737d;">// Por clase</span>
+const boton = document.querySelector(<span style="color: #032f62;">".btn-cancelar"</span>)
+
+<span style="color: #6a737d;">// Por etiqueta</span>
+const parrafo = document.querySelector(<span style="color: #032f62;">"p"</span>)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: getElementsByClassName vs querySelectorAll -->
+    <div class="slide-container" id="slide8">
+        <h2 class="slide-title">Agrupando Elementos: Dos Formas de Buscar Varios</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>getElementsByClassName()</h3>
+                    <p>Agrupa todos los elementos con la misma clase. Funciona como un array, aunque técnicamente su nombre es "colección de elementos HTML".</p>
+                </div>
+                <div>
+                    <h3>querySelectorAll()</h3>
+                    <p>El método más moderno para agrupar: acepta CUALQUIER selector CSS válido (no solo clases). Técnicamente devuelve una "lista de nodos" (NodeList).</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: El valor de null -->
+    <div class="slide-container" id="slide9">
+        <h2 class="slide-title">El Valor de null</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Buenas Prácticas</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Si buscás un elemento que no existe (ID mal escrito, clase que no está), los métodos de selección te devuelven <code>null</code>.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-magnifying-glass"></i> Consejo: siempre que selecciones algo, hacé un <code>console.log</code> para asegurarte de que no obtuviste <code>null</code>.</li>
+                            <li><i class="fa-solid fa-bomb"></i> Si recibís <code>null</code> y después intentás cambiarle algo a ese elemento, tu código va a romperse en el siguiente paso.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+const boton = document.querySelector(<span style="color: #032f62;">"#no-existe"</span>)
+console.log(boton) <span style="color: #6a737d;">// null</span>
+
+boton.textContent = <span style="color: #032f62;">"Hola"</span>
+<span style="color: #6f42c1;">// TypeError: Cannot set properties of null</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">09 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: #FindTheBug selectores -->
+    <div class="slide-container" id="slide10">
+        <h2 class="slide-title">Encontrá el Error en los Selectores</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge bug"><i class="fa-solid fa-bug"></i> #FindTheBug</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Este código tiene DOS errores de selección. El HTML tiene <code>id="titulo"</code> e <code>id="listado"</code>. ¿Los encontrás?
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-circle-exclamation"></i> <code>querySelector("titulo")</code> busca la ETIQUETA <code>&lt;titulo&gt;</code> (que no existe): faltaba el numeral, <code>"#titulo"</code>.</li>
+                            <li><i class="fa-solid fa-circle-exclamation"></i> <code>querySelector(".listado")</code> busca por CLASE: como es un <code>id</code>, faltaba el numeral en vez del punto, <code>"#listado"</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+function cargarDOM() {
+  const titulo = document.querySelector(<span style="color: #032f62;">"titulo"</span>)
+  const listado = document.querySelector(<span style="color: #032f62;">".listado"</span>)
+  titulo.innerText = <span style="color: #032f62;">"www.mandafruta.com"</span>
+  <span style="color: #6a737d;">// ...</span>
+}
+<span style="color: #6f42c1;">// ❌ titulo y listado van a ser null</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">10 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 11: Errores comunes Módulo 1 -->
+    <div class="slide-container" id="slide11">
+        <h2 class="slide-title">Errores Comunes y Buenas Prácticas</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>Repetir IDs</h3>
+                    <p>Aunque el navegador a veces lo permita, los IDs deben ser únicos. Si repetís uno, <code>getElementById</code> solo encuentra el primero, y tu HTML deja de ser válido.</p>
+                </div>
+                <div>
+                    <h3>querySelector vs. querySelectorAll</h3>
+                    <p>Si necesitás atrapar TODOS los elementos de una lista (ej: todos los <code>&lt;li&gt;</code>), <code>querySelector</code> no te sirve: solo trae el primero. Para eso existe <code>querySelectorAll</code>.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">11 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 12: División Módulo 02 -->
+    <div class="slide-container" id="slide12">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Módulo 02</span>
+            <h2>Cambiar Texto y Elementos: La Magia de la Interactividad</h2>
+            <p style="font-size: 20px;">Ya sabés encontrar elementos en el DOM. Ahora vas a aprender a hacer algo con ellos: la esencia del desarrollo Frontend.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">12 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 13: textContent -->
+    <div class="slide-container" id="slide13">
+        <h2 class="slide-title">textContent: Cambiar el Texto, de Forma Segura</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Simplicidad y Seguridad</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Cuando querés cambiar las palabras que aparecen dentro de un elemento, la herramienta más segura es <code>textContent</code>.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-font"></i> Simplicidad: solo maneja texto plano.</li>
+                            <li><i class="fa-solid fa-shield-halved"></i> Seguridad: si intentás insertar etiquetas HTML, las va a mostrar literalmente como texto, en vez de ejecutarlas.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+const titulo = document.querySelector(<span style="color: #032f62;">'h1'</span>)
+titulo.textContent = <span style="color: #032f62;">"¡Hola, mundo dinámico!"</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">13 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 14: innerHTML -->
+    <div class="slide-container" id="slide14">
+        <h2 class="slide-title">innerHTML: Cambiar Contenido CON Etiquetas</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Más Flexible</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Cuando querés cambiar el contenido incluyendo etiquetas HTML (como <code>&lt;strong&gt;</code> o <code>&lt;img&gt;</code>), usás <code>innerHTML</code>.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-code"></i> Permite insertar HTML directamente, y sirve para crear estructuras dinámicas: listas, tarjetas, botones.</li>
+                            <li><i class="fa-solid fa-triangle-exclamation"></i> Diferencia clave: a diferencia de <code>textContent</code>, <code>innerHTML</code> SÍ interpreta las etiquetas (cuidado con el riesgo de inyección de código).</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+const titulo = document.querySelector(<span style="color: #032f62;">'h1'</span>)
+titulo.innerHTML = <span style="color: #032f62;">"&lt;strong&gt;¡Hola, mundo dinámico!&lt;/strong&gt;"</span>
+<span style="color: #6a737d;">// El texto aparece en negrita: &lt;strong&gt; sí se interpreta</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">14 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 15: createElement -->
+    <div class="slide-container" id="slide15">
+        <h2 class="slide-title">createElement(): Crear Elementos desde Cero</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Contenido Dinámico</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Cuando querés crear un elemento HTML NUEVO desde JavaScript (un <code>&lt;p&gt;</code>, un <code>&lt;div&gt;</code>, un <code>&lt;button&gt;</code>), usás <code>createElement</code>.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-plus"></i> Permite generar elementos dinámicamente, cuando la página ya está cargada.</li>
+                            <li><i class="fa-solid fa-layer-group"></i> Muy útil para tarjetas, listas o contenido generado automáticamente.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+const parrafo = document.createElement(<span style="color: #032f62;">'p'</span>)
+parrafo.textContent = <span style="color: #032f62;">"Este párrafo fue creado con JavaScript"</span>
+document.body.appendChild(parrafo)
+<span style="color: #6a737d;">// se añade el &lt;p&gt; al final del body</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">15 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 16: remove() -->
+    <div class="slide-container" id="slide16">
+        <h2 class="slide-title">remove(): Eliminar Elementos del DOM</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Interfaces Dinámicas</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Cuando querés eliminar un elemento HTML de la página, la herramienta más usada es <code>remove()</code>.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-eraser"></i> Simplicidad: elimina el elemento directamente, sin necesidad de acceder al elemento padre.</li>
+                            <li><i class="fa-solid fa-broom"></i> Código más limpio que métodos antiguos como <code>removeChild()</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+const titulo = document.querySelector(<span style="color: #032f62;">'h1'</span>)
+titulo.remove() <span style="color: #6a737d;">// Se elimina del DOM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">16 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 17: Break de Coder ("Recreo") -->
+    <div class="slide-container break-slide" id="slide17">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
+            <h2>Break del Coder</h2>
+            <p>Andá por un cafecito o mate, ¡y en 10 minutos volvemos!</p>
+        </div>
+        <div class="slide-footer" style="border-top: 1px solid rgba(248, 242, 232, 0.2);">
+            <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span style="color: var(--naranja-horizonte);">HOUSE</span></div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.4);">17 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 18: División Módulo 03 -->
+    <div class="slide-container" id="slide18">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Módulo 03</span>
+            <h2>Interactividad: addEventListener y el Objeto Event</h2>
+            <p style="font-size: 20px;">El navegador es un espía constante. Vas a hacer que tu código reaccione a lo que hace el usuario.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">18 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 19: ¿Qué es un evento? -->
+    <div class="slide-container" id="slide19">
+        <h2 class="slide-title">¿Qué es un Evento?</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Fundamentos</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Un evento es, simplemente, algo que sucede en el navegador: mover el mouse, presionar una tecla, que la página termine de cargar.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-computer-mouse"></i> <strong>Mouse:</strong> click, dblclick, mousemove.</li>
+                            <li><i class="fa-solid fa-keyboard"></i> <strong>Teclado:</strong> keydown, keyup.</li>
+                            <li><i class="fa-solid fa-file-signature"></i> <strong>Formulario:</strong> submit, change, focus.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar); font-size: 14px;">
+<span style="color: #6a737d;">// El "Escuchador" (Event Listener)</span>
+<span style="color: #6a737d;">// Es como poner un guardia de seguridad</span>
+<span style="color: #6a737d;">// junto a un botón, con una orden:</span>
+<span style="color: #6a737d;">// "En cuanto alguien lo presione,</span>
+<span style="color: #6a737d;">//  activá la alarma."</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">19 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 20: addEventListener anatomía + click -->
+    <div class="slide-container" id="slide20">
+        <h2 class="slide-title">La Anatomía de addEventListener</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Sintaxis Core</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        La forma moderna y recomendada de manejar interactividad.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-hand-pointer"></i> El evento <code>click</code> ejecuta una acción cuando el usuario hace clic sobre un elemento: uno de los más usados en JavaScript.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+elemento.addEventListener(<span style="color: #032f62;">'tipoDeEvento'</span>, funcionAejecutar)
+
+const boton = document.querySelector(<span style="color: #032f62;">'button'</span>)
+boton.addEventListener(<span style="color: #032f62;">'click'</span>, () =&gt; {
+  console.log(<span style="color: #032f62;">'Hiciste clic'</span>)
+})
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">20 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 21: Ejemplo real - botón Me Gusta -->
+    <div class="slide-container" id="slide21">
+        <h2 class="slide-title">Ejemplo Real: El Botón de "Me Gusta"</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge tip"><i class="fa-solid fa-heart"></i> Sin Paréntesis</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Es vital notar que NO escribimos <code>manejarClick()</code>. Pasamos el NOMBRE de la función, sin paréntesis.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-bolt"></i> <strong>Con paréntesis ():</strong> la función se ejecuta YA, apenas carga la página.</li>
+                            <li><i class="fa-solid fa-clock"></i> <strong>Sin paréntesis:</strong> le das al navegador la "receta" para que la ejecute solo cuando ocurra el clic.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte); font-size: 12px;">
+<span style="color: #6a737d;">// 1. Seleccionamos el elemento</span>
+const botonLike = document.querySelector(<span style="color: #032f62;">'#btn-like'</span>)
+
+<span style="color: #6a737d;">// 2. Definimos qué pasará</span>
+function manejarClick() {
+  botonLike.textContent = <span style="color: #032f62;">"¡Te gusta esto!"</span>
+}
+
+<span style="color: #6a737d;">// 3. Conectamos el evento</span>
+botonLike.addEventListener(<span style="color: #032f62;">'click'</span>, manejarClick)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">21 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 22: keydown -->
+    <div class="slide-container" id="slide22">
+        <h2 class="slide-title">Evento de Teclado: keydown</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Interacción con Teclado</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        <code>keydown</code> ejecuta una acción cuando el usuario presiona una tecla: uno de los más usados para detectar escritura.
+                    </p>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+const input = document.querySelector(<span style="color: #032f62;">'input'</span>)
+input.addEventListener(<span style="color: #032f62;">'keydown'</span>, () =&gt; {
+  console.log(<span style="color: #032f62;">'Tecla presionada'</span>)
+})
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">22 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 23: El objeto Event -->
+    <div class="slide-container" id="slide23">
+        <h2 class="slide-title">El Objeto Event: El Mensajero con Información</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">event.target / event.key</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Cuando ocurre un evento, el navegador no solo ejecuta tu función: le manda un "regalo", el objeto Event.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-crosshairs"></i> <code>event.target</code> te dice EXACTAMENTE qué elemento recibió el evento.</li>
+                            <li><i class="fa-solid fa-keyboard"></i> <code>event.key</code> te dice el nombre exacto de la tecla presionada.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia); font-size: 13px;">
+document.addEventListener(<span style="color: #032f62;">'keydown'</span>, function(event) {
+  if (event.key === <span style="color: #032f62;">'ArrowUp'</span>) {
+    console.log(<span style="color: #032f62;">"Moviendo al personaje hacia arriba..."</span>)
+  }
+})
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">23 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 24: Errores comunes y confusiones -->
+    <div class="slide-container" id="slide24">
+        <h2 class="slide-title">Errores Comunes y Confusiones</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-hourglass-half"></i></div>
+                    <h3>"No Encuentra mi Elemento"</h3>
+                    <p>Buscar un elemento antes de que la página termine de cargar. Solución: usar el atributo <code>defer</code> en la etiqueta <code>&lt;script&gt;</code>.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-arrows-turn-right"></i></div>
+                    <h3>Evento vs. Manejador</h3>
+                    <p>El evento (ej: click) es la CAUSA; el manejador (handler, la función) es la CONSECUENCIA. No son lo mismo.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-cube"></i></div>
+                    <h3>El DOM es un Objeto</h3>
+                    <p><code>event.target</code> es un objeto: podés acceder a <code>.style</code>, <code>.id</code>, <code>.className</code>, <code>.value</code>. No es una cadena de texto.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">24 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 25: Aplicaciones en el mundo real -->
+    <div class="slide-container" id="slide25">
+        <h2 class="slide-title">Aplicaciones en el Mundo Real</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-key"></i></div>
+                    <h3>Validación de Formularios</h3>
+                    <p>Cuando escribís una contraseña y el sitio avisa al instante "es demasiado corta". Un evento <code>input</code>.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-bars"></i></div>
+                    <h3>Menús Desplegables</h3>
+                    <p>Pasás el mouse sobre un menú y se despliega una lista. Un evento <code>mouseenter</code>.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-scroll"></i></div>
+                    <h3>Scroll Infinito</h3>
+                    <p>Llegás al final de Instagram y carga más contenido: escuchando <code>scroll</code> en <code>window</code>.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-hand"></i></div>
+                    <h3>Drag &amp; Drop</h3>
+                    <p>En Trello, mover tarjetas entre columnas usa eventos como <code>dragstart</code> y <code>drop</code>.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">25 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 26: Pre-Entrega 7 -->
+    <div class="slide-container" id="slide26">
+        <h2 class="slide-title">Pre-Entrega 7</h2>
+        <div class="content-area">
+            <div class="slido-box">
+                <span class="moment-badge live"><i class="fa-solid fa-laptop-code"></i> Actividad Integradora</span>
+                <h3>Interfaz Dinámica con DOM y Eventos</h3>
+                <p>Pasá de prompt/console/alert a una interfaz real: renderizada en pantalla, interactiva, sin recargar la página.</p>
+                <div class="slido-code" style="font-size: 18px; font-weight: 700; text-align: left; letter-spacing: normal;">
+                    ✓ Renderizar en pantalla una colección de objetos, generada dinámicamente desde un array<br>
+                    ✓ Agregar un ítem nuevo con un formulario + botón, sin recargar la página<br>
+                    ✓ Feedback visual de cada acción (mensaje o resaltado)<br>
+                    ✓ Interactuar con cada ítem (Eliminar/Logrado) y/o filtrar con un evento de teclado
+                </div>
+                <p style="font-weight: 600; color: var(--naranja-oscuro);">Entregable: repositorio de GitHub público con index.html, style.css y main.js.</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">26 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 27: Consolidación de Conceptos (Table) -->
+    <div class="slide-container" id="slide27">
+        <h2 class="slide-title">Consolidación de Conceptos</h2>
+        <div class="content-area">
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Módulo</th>
+                            <th>Tema Principal</th>
+                            <th>Herramienta o Técnica Clave</th>
+                            <th>Meta Pedagógica</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Módulo 1</strong></td>
+                            <td>Nodos y Selectores</td>
+                            <td>getElementById, querySelector(All), getElementsByClassName</td>
+                            <td>Encontrar cualquier elemento del DOM con precisión.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Módulo 2</strong></td>
+                            <td>Cambiar Texto y Elementos</td>
+                            <td>textContent, innerHTML, createElement, remove</td>
+                            <td>Modificar la interfaz dinámicamente desde JavaScript.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Módulo 3</strong></td>
+                            <td>Interactividad</td>
+                            <td>addEventListener &amp; objeto Event</td>
+                            <td>Reaccionar a las acciones del usuario en tiempo real.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Evaluación</strong></td>
+                            <td>Pre-Entrega 7: Interfaz dinámica con DOM y eventos</td>
+                            <td>Repositorio de GitHub público</td>
+                            <td>Migrar el simulador de prompts/alerts a una interfaz real con DOM.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">27 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 28: ¿Dudas? ¿Consultas? -->
+    <div class="slide-container" id="slide28">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 90px; color: var(--naranja-horizonte);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 60px; color: var(--rosa-energia);"></i>
+            </div>
+            <h1 style="font-size: 64px;">¿Dudas? ¿Consultas?</h1>
+            <p style="font-size: 22px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">
+                Este es el momento de preguntar todo lo que necesites
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">28 / 29</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 29: Q&A / Legal Disclaimer -->
+    <div class="slide-container" id="slide29" style="background-color: var(--blanco-lienzo);">
+        <div class="content-area" style="justify-content: center;">
+            <h1 style="color: var(--naranja-oscuro); font-size: 60px; font-weight: 800; letter-spacing: -2px;">¡Muchas gracias!</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 5px;">Clase 07: Nodos, Selectores y Eventos en JavaScript</p>
+
+            <p class="legal-notice">
+                La información contenida en este documento es altamente sensible y de carácter educativo para los participantes inscriptos en Coderhouse. Queda estrictamente prohibida la reproducción, duplicación o revelación total o parcial del contenido pedagógico sin previa autorización escrita de Coderhouse. Copyright © 2026 Coderhouse. Todos los derechos reservados.
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">29 / 29</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Presentation navigation controls toolbar -->
+<div class="controls-toolbar">
+    <button class="control-btn" id="prev-slide"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+    <div class="slide-dots" id="slide-dots"></div>
+    <button class="control-btn" id="next-slide">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<script>
+    // Slider Presentation Logic
+    const slides = document.querySelectorAll('.slide-container');
+    const prevBtn = document.getElementById('prev-slide');
+    const nextBtn = document.getElementById('next-slide');
+    const dotsContainer = document.getElementById('slide-dots');
+
+    let currentSlideIndex = 0;
+
+    // Create Navigation Indicators Dynamically
+    slides.forEach((slide, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            goToSlide(idx);
+        });
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateControls() {
+        dots.forEach((dot, idx) => {
+            if (idx === currentSlideIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function goToSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = index;
+        slides[currentSlideIndex].classList.add('active');
+
+        updateControls();
+    }
+
+    // Keyboard Navigation Handlers
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            goToSlide(currentSlideIndex + 1);
+        } else if (e.key === 'ArrowLeft') {
+            goToSlide(currentSlideIndex - 1);
+        }
+    });
+
+    // Button Click Event Listeners
+    prevBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex + 1);
+    });
+</script>
+
+</body>
+</html>
