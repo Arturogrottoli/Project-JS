@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 06: Funciones de Orden Superior - Coderhouse</title>
+    <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ==========================================================================
+           CODER 4.0 DESIGN SYSTEM & VARS
+           ========================================================================== */
+        :root {
+            --blanco-lienzo: #F8F2E8;
+            --negro-coder: #171717;
+            --naranja-oscuro: #260700;
+            --naranja-horizonte: #FF632B;
+            --amarillo-solar: #FE872D;
+            --rosa-energia: #FE64A3;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #dcd6cd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+
+        /* Slide Viewer (Absolute 1280x720 No-Scale-Shift) */
+        .presentation-viewport {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--blanco-lienzo);
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            color: var(--negro-coder);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 70px 40px 70px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+            z-index: 1;
+        }
+
+        .slide-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Abstract Brand Accents: Subtly warm gradients connecting to Coder 4.0 */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,99,43,0.06) 0%, rgba(248,242,232,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography & Hierarchy */
+        h1 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background-color: rgba(38, 7, 0, 0.1);
+            margin-left: 15px;
+        }
+
+        p, li {
+            font-size: 17px;
+            line-height: 1.5;
+            color: #3d3430;
+            font-weight: 400;
+        }
+
+        /* Content Area Layout Wrapper */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Grid & Column Definitions */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 45px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Coder 4.0 Split Card layouts */
+        .two-column.tiled > div {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            padding: 35px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .two-column.tiled h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--naranja-horizonte);
+            margin-bottom: 12px;
+        }
+
+        /* Warm Retro Photography Frame */
+        .image-wrapper {
+            border-radius: 16px;
+            height: 340px;
+            overflow: hidden;
+            width: 100%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(38, 7, 0, 0.08);
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Custom 2D Filled Icons & Tiles */
+        .tiled-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .tile {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .tile .icon-box {
+            background-color: rgba(255, 99, 43, 0.1);
+            color: var(--naranja-horizonte);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .tile h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--naranja-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .tile p {
+            font-size: 14px;
+        }
+
+        /* Bullet List styling */
+        .bullet-list ul {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+        }
+
+        .bullet-list li i {
+            position: absolute;
+            left: 0;
+            top: 3px;
+            color: var(--naranja-horizonte);
+            font-size: 16px;
+        }
+
+        /* Footer & Brand Branding Mark */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(38, 7, 0, 0.06);
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        .slide-footer .brand-logo {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--naranja-oscuro);
+            letter-spacing: -0.5px;
+        }
+
+        .slide-footer .brand-logo span {
+            color: var(--naranja-horizonte);
+        }
+
+        .slide-footer .slide-index {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(38, 7, 0, 0.4);
+        }
+
+        /* Slide Type Banners ("Momentos de la Clase") */
+        .moment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .moment-badge.live {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .moment-badge.bug {
+            background-color: var(--rosa-energia);
+        }
+
+        .moment-badge.tip {
+            background-color: var(--amarillo-solar);
+            color: var(--naranja-oscuro);
+        }
+
+        /* Slido Interactive layout */
+        .slido-box {
+            background-color: #ffffff;
+            border: 2px dashed var(--naranja-horizonte);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 99, 43, 0.05);
+        }
+
+        .slido-box h3 {
+            font-size: 26px;
+            color: var(--naranja-oscuro);
+            margin-bottom: 10px;
+        }
+
+        .slido-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--naranja-horizonte);
+            margin: 15px 0;
+            letter-spacing: -1px;
+        }
+
+        /* Transition slide */
+        .transition-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .transition-layout h2 {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .transition-layout hr {
+            width: 80px;
+            height: 5px;
+            background-color: var(--naranja-horizonte);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        /* Clean retro table */
+        .table-layout {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+            width: 100%;
+        }
+
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th, .table-layout td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(38, 7, 0, 0.06);
+            font-size: 14px;
+        }
+
+        .table-layout th {
+            background-color: rgba(38, 7, 0, 0.03);
+            color: var(--naranja-oscuro);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Break Slide Design */
+        .break-slide {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+        }
+
+        .break-slide::before {
+            display: none;
+        }
+
+        .break-slide h2 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--blanco-lienzo);
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .break-slide p {
+            color: rgba(248, 242, 232, 0.75);
+            font-size: 22px;
+        }
+
+        .break-logo {
+            font-size: 80px;
+            color: var(--naranja-horizonte);
+            margin-bottom: 30px;
+        }
+
+        /* Q&A / Legal section */
+        .legal-notice {
+            font-size: 10px;
+            line-height: 1.4;
+            color: rgba(38, 7, 0, 0.4);
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        /* Presentation controls toolbar */
+        .controls-toolbar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(38, 7, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--naranja-horizonte);
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Code Block Container */
+        .code-block {
+            background-color: #ffffff;
+            border-left: 4px solid var(--naranja-horizonte);
+            padding: 15px 20px;
+            font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-viewport">
+
+    <!-- SLIDE 1: Portada General -->
+    <div class="slide-container active" id="slide1">
+        <div></div>
+        <div class="transition-layout" style="margin-bottom: 30px;">
+            <span class="moment-badge">CODER 4.0 • BIENVENIDA</span>
+            <h1 style="font-size: 50px;">Funciones de Orden Superior en JavaScript</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">
+                Clase 06: Abstracción y Closures | Búsqueda: find/filter/some | Transformación: map/reduce
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">01 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: División Módulo 01 -->
+    <div class="slide-container" id="slide2">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Módulo 01</span>
+            <h2>Funciones como Valores y Abstracción</h2>
+            <p style="font-size: 20px;">Vas a aprender a tratar funciones como valores: guardarlas, pasarlas como parámetro y hasta fabricarlas con otras funciones.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">02 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: El concepto de Abstracción -->
+    <div class="slide-container" id="slide3">
+        <h2 class="slide-title">El Concepto de Abstracción</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Analogía</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Imaginá una máquina de café: para un capuchino solo apretás un botón. No necesitás saber la temperatura del agua ni la presión de la bomba.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-mug-hot"></i> <strong>Abstracción:</strong> ocultar los detalles complejos de la implementación para pensar en QUÉ hace una solución, no en CÓMO lo hace.</li>
+                            <li><i class="fa-solid fa-code"></i> Cuando usás <code>sumar(10, 5)</code>, confiás en el nombre de la función sin pensar en los operadores internos.</li>
+                            <li><i class="fa-solid fa-wrench"></i> Reduce la complejidad (pensamos en piezas chicas) y facilita el mantenimiento: si el "cómo" cambia, el resto del programa sigue usando el mismo "botón".</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="image-wrapper">
+                        <img alt="Botones de una máquina de café automática" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1280&auto=format&fit=crop">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">03 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: Funciones que retornan funciones -->
+    <div class="slide-container" id="slide4">
+        <h2 class="slide-title">Funciones que Retornan Funciones</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Pattern Factory</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Si una función puede retornar un valor, y las funciones SON valores, entonces una función puede retornar otra función.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-industry"></i> Imaginá que querés crear distintos tipos de multiplicadores.</li>
+                            <li><i class="fa-solid fa-arrows-turn-to-dots"></i> <code>crearMultiplicador</code> es la función "externa"; la que retorna es la función "interna" que hace el trabajo real.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+function crearMultiplicador(factor) {
+  <span style="color: #6a737d;">// Función interna: hace el trabajo real</span>
+  return (numero) =&gt; numero * factor
+}
+
+const duplicar = crearMultiplicador(2)
+const triplicar = crearMultiplicador(3)
+
+console.log(duplicar(10))  <span style="color: #6a737d;">// 20</span>
+console.log(triplicar(10)) <span style="color: #6a737d;">// 30</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: Closures -->
+    <div class="slide-container" id="slide5">
+        <h2 class="slide-title">¿Cómo es Posible? El Concepto de Closure</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">La Magia</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        La función interna sigue usando la variable <code>factor</code>, aunque <code>crearMultiplicador</code> ya haya terminado de ejecutarse.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-lock"></i> Un <strong>closure</strong> es cuando una función "recuerda" el entorno donde fue creada, aunque ese entorno ya haya dejado de ejecutarse.</li>
+                            <li><i class="fa-solid fa-briefcase"></i> Por eso cada función fabricada tiene su propia "mochila" con esa variable, sin pisarse entre sí.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+<span style="color: #6a737d;">// duplicar "recuerda" factor = 2</span>
+<span style="color: #6a737d;">// triplicar "recuerda" factor = 3</span>
+<span style="color: #6a737d;">// Aunque crearMultiplicador() ya terminó</span>
+<span style="color: #6a737d;">// de ejecutarse hace rato.</span>
+
+console.log(duplicar(5))  <span style="color: #6a737d;">// 10</span>
+console.log(triplicar(5)) <span style="color: #6a737d;">// 15</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: Callbacks -->
+    <div class="slide-container" id="slide6">
+        <h2 class="slide-title">Funciones que Reciben Otras Funciones: Callbacks</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Delegación</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Así como una función puede retornar otra, también puede recibir una función como parámetro: a esto se lo llama <strong>callback</strong>.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-handshake"></i> La función "delegada" recibe otra función para decidir qué hacer más adelante.</li>
+                            <li><i class="fa-solid fa-layer-group"></i> Evita escribir <code>duplicarNumero()</code>, <code>cuadradoNumero()</code>, <code>triplicarNumero()</code>... una sola función genérica alcanza.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+function procesarNumero(numero, accion) {
+  return accion(numero)
+}
+
+const duplicar = (n) =&gt; n * 2
+const cuadrado = (n) =&gt; n * n
+
+console.log(procesarNumero(5, duplicar)) <span style="color: #6a737d;">// 10</span>
+console.log(procesarNumero(5, cuadrado)) <span style="color: #6a737d;">// 25</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">06 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: División Módulo 02 -->
+    <div class="slide-container" id="slide7">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Módulo 02</span>
+            <h2>Búsqueda Inteligente: find, filter y some</h2>
+            <p style="font-size: 20px;">Métodos de orden superior ya construidos, que ahorran muchísimo trabajo al interactuar con arrays de objetos.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: forEach() -->
+    <div class="slide-container" id="slide8">
+        <h2 class="slide-title">forEach(): Recorrer sin Escribir un for</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Punto de Partida</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Muy similar al <code>for...of</code>: <code>forEach()</code> ejecuta una función una vez por cada elemento del array.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-list"></i> Es la forma más moderna y clara de iterar arrays que usar un <code>for</code> tradicional.</li>
+                            <li><i class="fa-solid fa-database"></i> Este va a ser nuestro array de partida para toda la sección.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+const productos = [
+  { nombre: "Laptop", precio: 800, categoria: "Electronics" },
+  { nombre: "Teclado", precio: 50, categoria: "Electronics" },
+  { nombre: "Silla Gamer", precio: 200, categoria: "Furniture" },
+  { nombre: "Monitor", precio: 300, categoria: "Electronics" },
+  { nombre: "Escritorio", precio: 150, categoria: "Furniture" }
+]
+
+productos.forEach((producto) =&gt; console.log(producto))
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: find() -->
+    <div class="slide-container" id="slide9">
+        <h2 class="slide-title">find(): Buscar UN Elemento</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Búsqueda Puntual</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        <code>find()</code> devuelve el PRIMER elemento del array que cumple una condición.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-magnifying-glass"></i> Si ningún elemento cumple la condición, devuelve <code>undefined</code>.</li>
+                            <li><i class="fa-solid fa-object-ungroup"></i> Devuelve el objeto en sí, no un array.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+const resultado = productos.find(
+  (producto) =&gt; producto.nombre === "Monitor"
+)
+
+console.log(resultado)
+<span style="color: #6a737d;">// { nombre: "Monitor", precio: 300, categoria: "Electronics" }</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">09 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: filter() -->
+    <div class="slide-container" id="slide10">
+        <h2 class="slide-title">filter(): Quedarte con Varios</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Nuevo Array Filtrado</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        <code>filter()</code> crea un NUEVO array con todos los elementos que cumplen una condición.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-filter"></i> A diferencia de <code>find</code>, siempre devuelve un array (puede estar vacío).</li>
+                            <li><i class="fa-solid fa-list-check"></i> Ideal para "quedarte solo con lo que sirve".</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+const resultado = productos.filter(
+  (producto) =&gt; producto.precio &gt;= 300
+)
+
+console.log(resultado)
+<span style="color: #6a737d;">// [{ nombre: "Monitor", precio: 300, ... },</span>
+<span style="color: #6a737d;">//  { nombre: "Laptop", precio: 800, ... }]</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">10 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 11: some() -->
+    <div class="slide-container" id="slide11">
+        <h2 class="slide-title">some(): ¿Existe Al Menos Uno?</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Devuelve Booleano</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        <code>some()</code> comprueba si AL MENOS UN elemento del array cumple una condición.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-toggle-on"></i> Devuelve <code>true</code> o <code>false</code>, nunca el elemento en sí.</li>
+                            <li><i class="fa-solid fa-scale-balanced"></i> <strong>some</strong> responde sí/no; <strong>find</strong> te da el elemento (o <code>undefined</code>).</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+const existe = productos.some(
+  (producto) =&gt; producto.nombre === "Laptop"
+)
+
+console.log(existe) <span style="color: #6a737d;">// true</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">11 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 12: Break de Coder ("Recreo") -->
+    <div class="slide-container break-slide" id="slide12">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
+            <h2>Break del Coder</h2>
+            <p>Andá por un cafecito o mate, ¡y en 10 minutos volvemos!</p>
+        </div>
+        <div class="slide-footer" style="border-top: 1px solid rgba(248, 242, 232, 0.2);">
+            <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span style="color: var(--naranja-horizonte);">HOUSE</span></div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.4);">12 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 13: División Módulo 03 -->
+    <div class="slide-container" id="slide13">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Módulo 03</span>
+            <h2>Transformando Datos: map y reduce</h2>
+            <p style="font-size: 20px;">Los métodos más potentes para transformar y combinar colecciones completas, de forma limpia y segura.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">13 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 14: Inmutabilidad -->
+    <div class="slide-container" id="slide14">
+        <h2 class="slide-title">El Concepto de Inmutabilidad</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>Métodos que Modifican</h3>
+                    <p><code>push</code>, <code>pop</code>, <code>splice</code>... cambian el array original. Si lo consultás después, ya no es el mismo.</p>
+                </div>
+                <div>
+                    <h3>Métodos Inmutables</h3>
+                    <p><code>map</code>, <code>filter</code> y <code>reduce</code> NO cambian tus datos originales: generan un resultado nuevo, basado en ellos. Esto hace tu código mucho más predecible.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">14 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 15: map() -->
+    <div class="slide-container" id="slide15">
+        <h2 class="slide-title">map(): La Línea de Traducción</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Transforma</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        <code>map()</code> transforma cada elemento del array en algo nuevo.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-right-to-bracket"></i> <strong>Entrada:</strong> un array de N elementos.</li>
+                            <li><i class="fa-solid fa-right-from-bracket"></i> <strong>Salida:</strong> un nuevo array de exactamente N elementos, transformados.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+const preciosUSD = [10, 20, 30]
+
+const preciosARS = preciosUSD.map(
+  precio =&gt; precio * 900
+)
+
+<span style="color: #6a737d;">// Resultado: [9000, 18000, 27000]</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">15 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 16: reduce() -->
+    <div class="slide-container" id="slide16">
+        <h2 class="slide-title">reduce(): La Caja de Empaque</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">El Más Potente</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        <code>reduce()</code> combina todos los elementos del array en un ÚNICO valor.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-cube"></i> Necesita una función con un <strong>acumulador</strong> (resultado parcial) y el <strong>valor actual</strong>.</li>
+                            <li><i class="fa-solid fa-flag-checkered"></i> Necesita un <strong>valor inicial</strong> para el acumulador.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+const numeros = [5, 5, 10]
+
+const total = numeros.reduce(
+  (acc, num) =&gt; acc + num, 0
+)
+
+<span style="color: #6a737d;">// Proceso: 0+5=5 -&gt; 5+5=10 -&gt; 10+10=20</span>
+<span style="color: #6a737d;">// Resultado: 20</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">16 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 17: Errores comunes (#FindTheBug) -->
+    <div class="slide-container" id="slide17">
+        <h2 class="slide-title">Errores Comunes: #FindTheBug</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge bug"><i class="fa-solid fa-bug"></i> #FindTheBug</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Estos errores son clásicos al usar callbacks con llaves <code>{}</code>. ¿Los encontrás?
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-circle-exclamation"></i> Si usás llaves <code>{}</code> en una función flecha, hay que escribir <code>return</code> explícitamente. Si no, la función devuelve <code>undefined</code>.</li>
+                            <li><i class="fa-solid fa-circle-exclamation"></i> En <code>reduce</code>, omitir el valor inicial puede "funcionar por accidente", pero en arrays de objetos casi siempre rompe: acostumbrate a ponerlo siempre.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia); font-size: 12px;">
+<span style="color: #6a737d;">// 1) filter: olvidó el return</span>
+cursos.filter((curso) =&gt; {
+  curso.precio &gt; 20000
+}) <span style="color: #6f42c1;">// ❌ resultado inesperado</span>
+
+<span style="color: #6a737d;">// 2) map: olvidó el return</span>
+fahrenheitTemps.map((f) =&gt; {
+  (f - 32) * 5 / 9
+}) <span style="color: #6f42c1;">// ❌ array lleno de undefined</span>
+
+<span style="color: #6a737d;">// 3) reduce: sin valor inicial</span>
+productos.reduce((acc, p) =&gt; acc + p.precio)
+<span style="color: #6f42c1;">// ❌ riesgo de NaN, según el primer elemento</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">17 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 18: Extra: sort() -->
+    <div class="slide-container" id="slide18">
+        <h2 class="slide-title">Extra: sort() para Ordenar un Array</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge tip"><i class="fa-solid fa-arrow-up-short-wide"></i> Bonus</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        <code>sort()</code> ordena los elementos de un array según el criterio que le pases en una función de comparación.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-arrow-down-1-9"></i> <code>(a, b) =&gt; a - b</code> ordena de menor a mayor.</li>
+                            <li><i class="fa-solid fa-arrow-down-9-1"></i> <code>(a, b) =&gt; b - a</code> ordena de mayor a menor.</li>
+                            <li><i class="fa-solid fa-triangle-exclamation"></i> Ojo: a diferencia de map/filter/reduce, <code>sort()</code> SÍ modifica el array original.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+const numeros = [40, 1, 5, 200]
+
+numeros.sort((a, b) =&gt; a - b)
+
+console.log(numeros) <span style="color: #6a737d;">// [1, 5, 40, 200]</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">18 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 19: Pre-Entrega 6 -->
+    <div class="slide-container" id="slide19">
+        <h2 class="slide-title">Pre-Entrega 6</h2>
+        <div class="content-area">
+            <div class="slido-box">
+                <span class="moment-badge live"><i class="fa-solid fa-laptop-code"></i> Actividad Integradora</span>
+                <h3>Interactuando con Funciones de Orden Superior</h3>
+                <p>Sumale funciones de orden superior al mismo simulador que venís construyendo: los objetos salen de la Class del Módulo 5.</p>
+                <div class="slido-code" style="font-size: 18px; font-weight: 700; text-align: left; letter-spacing: normal;">
+                    ✓ Array de objetos (instancias de tu Class, o un array literal si no las tenés a mano)<br>
+                    ✓ Mínimo 3 métodos de orden superior del módulo (find, filter, some, map, reduce...)<br>
+                    ✓ Al menos 2 métodos de búsqueda y 1 de transformación<br>
+                    ✓ Interacción con el usuario vía prompt, resultados con console.log
+                </div>
+                <p style="font-weight: 600; color: var(--naranja-oscuro);">Entregable: repositorio de GitHub público con un archivo HTML y un archivo JS.</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">19 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 20: Consolidación de Conceptos (Table) -->
+    <div class="slide-container" id="slide20">
+        <h2 class="slide-title">Consolidación de Conceptos</h2>
+        <div class="content-area">
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Módulo</th>
+                            <th>Tema Principal</th>
+                            <th>Herramienta o Técnica Clave</th>
+                            <th>Meta Pedagógica</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Módulo 1</strong></td>
+                            <td>Funciones como Valores y Abstracción</td>
+                            <td>Factory functions, closures, callbacks</td>
+                            <td>Tratar funciones como valores: retornarlas y recibirlas como parámetro.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Módulo 2</strong></td>
+                            <td>Búsqueda Inteligente</td>
+                            <td>forEach, find, filter, some</td>
+                            <td>Recorrer y buscar en arrays de objetos sin escribir bucles a mano.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Módulo 3</strong></td>
+                            <td>Transformación de Colecciones</td>
+                            <td>map, reduce &amp; sort</td>
+                            <td>Transformar y combinar arrays completos de forma inmutable.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Evaluación</strong></td>
+                            <td>Pre-Entrega 6: Funciones de Orden Superior</td>
+                            <td>Repositorio de GitHub público</td>
+                            <td>Aplicar funciones de orden superior sobre el simulador propio.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">20 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 21: ¿Dudas? ¿Consultas? -->
+    <div class="slide-container" id="slide21">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 90px; color: var(--naranja-horizonte);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 60px; color: var(--rosa-energia);"></i>
+            </div>
+            <h1 style="font-size: 64px;">¿Dudas? ¿Consultas?</h1>
+            <p style="font-size: 22px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">
+                Este es el momento de preguntar todo lo que necesites
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">21 / 22</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 22: Q&A / Legal Disclaimer -->
+    <div class="slide-container" id="slide22" style="background-color: var(--blanco-lienzo);">
+        <div class="content-area" style="justify-content: center;">
+            <h1 style="color: var(--naranja-oscuro); font-size: 60px; font-weight: 800; letter-spacing: -2px;">¡Muchas gracias!</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 5px;">Clase 06: Funciones de Orden Superior en JavaScript</p>
+
+            <p class="legal-notice">
+                La información contenida en este documento es altamente sensible y de carácter educativo para los participantes inscriptos en Coderhouse. Queda estrictamente prohibida la reproducción, duplicación o revelación total o parcial del contenido pedagógico sin previa autorización escrita de Coderhouse. Copyright © 2026 Coderhouse. Todos los derechos reservados.
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">22 / 22</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Presentation navigation controls toolbar -->
+<div class="controls-toolbar">
+    <button class="control-btn" id="prev-slide"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+    <div class="slide-dots" id="slide-dots"></div>
+    <button class="control-btn" id="next-slide">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<script>
+    // Slider Presentation Logic
+    const slides = document.querySelectorAll('.slide-container');
+    const prevBtn = document.getElementById('prev-slide');
+    const nextBtn = document.getElementById('next-slide');
+    const dotsContainer = document.getElementById('slide-dots');
+
+    let currentSlideIndex = 0;
+
+    // Create Navigation Indicators Dynamically
+    slides.forEach((slide, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            goToSlide(idx);
+        });
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateControls() {
+        dots.forEach((dot, idx) => {
+            if (idx === currentSlideIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function goToSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = index;
+        slides[currentSlideIndex].classList.add('active');
+
+        updateControls();
+    }
+
+    // Keyboard Navigation Handlers
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            goToSlide(currentSlideIndex + 1);
+        } else if (e.key === 'ArrowLeft') {
+            goToSlide(currentSlideIndex - 1);
+        }
+    });
+
+    // Button Click Event Listeners
+    prevBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex + 1);
+    });
+</script>
+
+</body>
+</html>
