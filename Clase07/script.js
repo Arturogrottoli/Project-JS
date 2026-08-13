@@ -411,3 +411,145 @@ Aplicaciones en el Mundo Real
 Hay muchísimos eventos más: lo importante hoy es consolidar la base de
 cómo "escucharlos" para poder generar interactividad real.
 */
+
+// ==========================================
+// PRE-ENTREGA 7, EJEMPLO RESUELTO: Interfaz Dinámica con DOM y Eventos
+// ==========================================
+
+/*
+Acá resolvemos, a modo de ejemplo, la consigna de la "Pre-Entrega 7":
+pasar de prompts/console/alert a una interfaz real, renderizada en
+pantalla, con un formulario que agrega ítems sin recargar la página,
+feedback visual, y al menos una interacción por ítem (eliminar) más un
+evento de teclado (un buscador que filtra la lista).
+
+Recordatorio de los Criterios de Aceptación:
+- Selección precisa: querySelector o getElementById para referenciar
+  elementos.
+- Renderizado dinámico: una función que recorra un array de objetos y
+  genere HTML (con innerHTML y backticks) para mostrarlos en pantalla.
+- Feedback visual: comunicarle al usuario cuándo hizo una acción.
+- Uso de eventos: click y/o teclado para la interacción.
+*/
+
+// Punto de partida: un array de objetos, nuestro "catálogo editable".
+// Podría venir de instancias de una Class (como en la Clase 5); acá
+// usamos un array de objetos literal para simular la base de datos.
+let peliculasPreEntrega = [
+  { id: 1, titulo: "Pulp Fiction", duracionMinutos: 154 },
+  { id: 2, titulo: "Jurassic Park", duracionMinutos: 127 },
+  { id: 3, titulo: "Taxi Driver", duracionMinutos: 114 },
+];
+
+// Paso 1: Selección precisa de todos los elementos que vamos a usar.
+const listaPreEntrega = document.getElementById("lista-preentrega");
+const formAgregar = document.getElementById("form-agregar-pelicula");
+const inputTitulo = document.getElementById("input-titulo-pelicula");
+const inputDuracion = document.getElementById("input-duracion-pelicula");
+const feedback = document.getElementById("feedback-preentrega");
+const buscadorPreEntrega = document.getElementById("campo-texto");
+
+// Paso 2: Renderizado dinámico. Recorremos el array con forEach y, por
+// cada elemento, generamos su HTML con innerHTML + template strings
+// (backticks), tal como pide la consigna. Recibe un parámetro opcional
+// "lista" para poder reutilizar esta misma función tanto para dibujar
+// TODO el catálogo como para dibujar una versión FILTRADA (más abajo, en
+// el buscador).
+function renderizarPeliculas(lista = peliculasPreEntrega) {
+  listaPreEntrega.innerHTML = ""; // limpiamos lo anterior antes de volver a dibujar
+
+  lista.forEach((pelicula) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span>${pelicula.titulo} — ${pelicula.duracionMinutos} min</span>
+      <button data-id="${pelicula.id}">Eliminar</button>
+    `;
+    listaPreEntrega.appendChild(li);
+  });
+}
+
+renderizarPeliculas(); // primer dibujado, apenas carga la página
+
+// Paso 3: Feedback visual. Una función chiquita que muestra un mensaje
+// en pantalla (en un <p>), en vez de usar alert().
+function mostrarFeedback(mensaje) {
+  feedback.textContent = mensaje;
+}
+
+/*
+Paso 4: Agregar un ítem con el formulario, sin recargar la página.
+Por defecto, al enviar un <form> el navegador RECARGA la página (es su
+comportamiento nativo, pensado para mandar los datos a un servidor). Como
+acá queremos manejarlo nosotros con JavaScript, usamos
+event.preventDefault() para cancelar ese comportamiento por defecto.
+*/
+formAgregar.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const tituloIngresado = inputTitulo.value;
+  const duracionIngresada = Number(inputDuracion.value);
+
+  // Ternario, como pide la consigna: validamos que haya un título antes
+  // de agregar, en una sola línea.
+  const hayTitulo = tituloIngresado.trim() !== "" ? true : false;
+
+  if (!hayTitulo) {
+    mostrarFeedback("⚠️ Ingresá un título antes de agregar.");
+    return;
+  }
+
+  const nuevaPelicula = {
+    id: Date.now(), // un id simple y único, basado en la fecha/hora actual
+    titulo: tituloIngresado,
+    duracionMinutos: duracionIngresada || 0, // || por si el campo quedó vacío o inválido
+  };
+
+  // Spread: armamos un array NUEVO a partir del anterior más la nueva
+  // película, en vez de mutar peliculasPreEntrega con push(). Mantiene
+  // la idea de inmutabilidad que ya vimos con map/filter en la Clase 6.
+  peliculasPreEntrega = [...peliculasPreEntrega, nuevaPelicula];
+
+  renderizarPeliculas(); // Paso: actualizamos la vista con el array actualizado
+  mostrarFeedback(`✅ "${nuevaPelicula.titulo}" agregada a la lista.`);
+
+  formAgregar.reset(); // limpiamos los inputs para el próximo ingreso
+});
+
+/*
+Paso 5: Eliminar un ítem.
+En vez de agregar un addEventListener a CADA botón "Eliminar" (habría que
+volver a hacerlo cada vez que renderizamos de nuevo), usamos delegación
+de eventos: escuchamos el click una sola vez en el contenedor <ul>, y
+revisamos qué elemento exacto lo disparó con event.target.
+*/
+listaPreEntrega.addEventListener("click", (event) => {
+  if (event.target.tagName !== "BUTTON") return; // ignoramos clics que no sean sobre un botón
+
+  // Desestructuración: sacamos el "id" guardado en el atributo data-id
+  // del botón (dataset convierte data-id en la propiedad .id).
+  const { id } = event.target.dataset;
+
+  peliculasPreEntrega = peliculasPreEntrega.filter(
+    (pelicula) => pelicula.id !== Number(id)
+  );
+
+  renderizarPeliculas();
+  mostrarFeedback("🗑️ Película eliminada de la lista.");
+});
+
+/*
+Paso 6: Filtrar la lista con un evento de teclado.
+Reutilizamos el mismo buscador (#campo-texto) que ya usamos en la sección
+7.3. Usamos keyup (se dispara DESPUÉS de que la tecla ya se agregó al
+input) para que buscadorPreEntrega.value siempre tenga el texto
+completo y actualizado en el momento de filtrar.
+*/
+buscadorPreEntrega.addEventListener("keyup", () => {
+  const busqueda = buscadorPreEntrega.value.toLowerCase();
+
+  const peliculasFiltradas = peliculasPreEntrega.filter((pelicula) =>
+    pelicula.titulo.toLowerCase().includes(busqueda)
+  );
+
+  renderizarPeliculas(peliculasFiltradas);
+});
