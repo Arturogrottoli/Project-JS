@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 08: Web Storage, Operadores y Desestructuración - Coderhouse</title>
+    <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ==========================================================================
+           CODER 4.0 DESIGN SYSTEM & VARS
+           ========================================================================== */
+        :root {
+            --blanco-lienzo: #F8F2E8;
+            --negro-coder: #171717;
+            --naranja-oscuro: #260700;
+            --naranja-horizonte: #FF632B;
+            --amarillo-solar: #FE872D;
+            --rosa-energia: #FE64A3;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --transition-speed: 0.4s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #dcd6cd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+
+        /* Slide Viewer (Absolute 1280x720 No-Scale-Shift) */
+        .presentation-viewport {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--blanco-lienzo);
+        }
+
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            color: var(--negro-coder);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 70px 40px 70px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) ease-in-out;
+            z-index: 1;
+        }
+
+        .slide-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Abstract Brand Accents: Subtly warm gradients connecting to Coder 4.0 */
+        .slide-container::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255,99,43,0.06) 0%, rgba(248,242,232,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .slide-container > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Typography & Hierarchy */
+        h1 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .slide-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slide-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background-color: rgba(38, 7, 0, 0.1);
+            margin-left: 15px;
+        }
+
+        p, li {
+            font-size: 17px;
+            line-height: 1.5;
+            color: #3d3430;
+            font-weight: 400;
+        }
+
+        /* Content Area Layout Wrapper */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Grid & Column Definitions */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 45px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Coder 4.0 Split Card layouts */
+        .two-column.tiled > div {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            padding: 35px;
+            height: 360px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .two-column.tiled h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--naranja-horizonte);
+            margin-bottom: 12px;
+        }
+
+        /* Warm Retro Photography Frame */
+        .image-wrapper {
+            border-radius: 16px;
+            height: 340px;
+            overflow: hidden;
+            width: 100%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 10px 25px rgba(38, 7, 0, 0.08);
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* Custom 2D Filled Icons & Tiles */
+        .tiled-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            align-items: stretch;
+        }
+
+        .tile {
+            background-color: #ffffff;
+            border-radius: 16px;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+        }
+
+        .tile .icon-box {
+            background-color: rgba(255, 99, 43, 0.1);
+            color: var(--naranja-horizonte);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .tile h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--naranja-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .tile p {
+            font-size: 14px;
+        }
+
+        /* Bullet List styling */
+        .bullet-list ul {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+        }
+
+        .bullet-list li i {
+            position: absolute;
+            left: 0;
+            top: 3px;
+            color: var(--naranja-horizonte);
+            font-size: 16px;
+        }
+
+        /* Footer & Brand Branding Mark */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(38, 7, 0, 0.06);
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        .slide-footer .brand-logo {
+            font-weight: 800;
+            font-size: 16px;
+            color: var(--naranja-oscuro);
+            letter-spacing: -0.5px;
+        }
+
+        .slide-footer .brand-logo span {
+            color: var(--naranja-horizonte);
+        }
+
+        .slide-footer .slide-index {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(38, 7, 0, 0.4);
+        }
+
+        /* Slide Type Banners ("Momentos de la Clase") */
+        .moment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+        }
+
+        .moment-badge.live {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .moment-badge.bug {
+            background-color: var(--rosa-energia);
+        }
+
+        .moment-badge.tip {
+            background-color: var(--amarillo-solar);
+            color: var(--naranja-oscuro);
+        }
+
+        /* Slido Interactive layout */
+        .slido-box {
+            background-color: #ffffff;
+            border: 2px dashed var(--naranja-horizonte);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 99, 43, 0.05);
+        }
+
+        .slido-box h3 {
+            font-size: 26px;
+            color: var(--naranja-oscuro);
+            margin-bottom: 10px;
+        }
+
+        .slido-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--naranja-horizonte);
+            margin: 15px 0;
+            letter-spacing: -1px;
+        }
+
+        /* Transition slide */
+        .transition-layout {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .transition-layout h2 {
+            font-size: 60px;
+            font-weight: 800;
+            color: var(--naranja-oscuro);
+            line-height: 1.1;
+            margin-bottom: 15px;
+            letter-spacing: -2px;
+        }
+
+        .transition-layout hr {
+            width: 80px;
+            height: 5px;
+            background-color: var(--naranja-horizonte);
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        /* Clean retro table */
+        .table-layout {
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 7, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(38, 7, 0, 0.02);
+            width: 100%;
+        }
+
+        .table-layout table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-layout th, .table-layout td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid rgba(38, 7, 0, 0.06);
+            font-size: 14px;
+        }
+
+        .table-layout th {
+            background-color: rgba(38, 7, 0, 0.03);
+            color: var(--naranja-oscuro);
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .table-layout tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Break Slide Design */
+        .break-slide {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+        }
+
+        .break-slide::before {
+            display: none;
+        }
+
+        .break-slide h2 {
+            font-size: 54px;
+            font-weight: 800;
+            color: var(--blanco-lienzo);
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .break-slide p {
+            color: rgba(248, 242, 232, 0.75);
+            font-size: 22px;
+        }
+
+        .break-logo {
+            font-size: 80px;
+            color: var(--naranja-horizonte);
+            margin-bottom: 30px;
+        }
+
+        /* Q&A / Legal section */
+        .legal-notice {
+            font-size: 10px;
+            line-height: 1.4;
+            color: rgba(38, 7, 0, 0.4);
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        /* Presentation controls toolbar */
+        .controls-toolbar {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background-color: var(--naranja-oscuro);
+            color: var(--blanco-lienzo);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .control-btn:hover {
+            background-color: var(--naranja-horizonte);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(38, 7, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--naranja-horizonte);
+            width: 25px;
+            border-radius: 10px;
+        }
+
+        /* Code Block Container */
+        .code-block {
+            background-color: #ffffff;
+            border-left: 4px solid var(--naranja-horizonte);
+            padding: 15px 20px;
+            font-family: monospace;
+            font-size: 13px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-viewport">
+
+    <!-- SLIDE 1: Portada General -->
+    <div class="slide-container active" id="slide1">
+        <div></div>
+        <div class="transition-layout" style="margin-bottom: 30px;">
+            <span class="moment-badge">CODER 4.0 • BIENVENIDA</span>
+            <h1 style="font-size: 46px;">Web Storage, Operadores Modernos y Desestructuración</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">
+                Clase 08: localStorage y sessionStorage | Sugar Syntax | Destructuring
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">01 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: División Módulo 01 -->
+    <div class="slide-container" id="slide2">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Módulo 01</span>
+            <h2>Web Storage: Persistencia Local</h2>
+            <p style="font-size: 20px;">Vas a aprender a darle memoria a tus aplicaciones, para que los datos sobrevivan a un refresh de página.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">02 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: ¿Qué es el Web Storage? -->
+    <div class="slide-container" id="slide3">
+        <h2 class="slide-title">El Web Storage: El Armario del Navegador</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Analogía</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Cada vez que refrescamos el navegador, JavaScript "nace de nuevo": las variables (let/const) vuelven a su estado inicial.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-briefcase"></i> Tu app es como una oficina: las variables son papeles sobre el escritorio, que se limpian cada noche.</li>
+                            <li><i class="fa-solid fa-box-archive"></i> El Web Storage es un armario de etiquetas: guardás cajas con información y las encontrás donde las dejaste.</li>
+                            <li><i class="fa-solid fa-key"></i> Funciona con Clave y Valor (key/value): la clave es la etiqueta, el valor es lo que hay adentro.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="image-wrapper">
+                        <img alt="Armario con cajas organizadas" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1280&auto=format&fit=crop">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">03 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: localStorage vs sessionStorage -->
+    <div class="slide-container" id="slide4">
+        <h2 class="slide-title">localStorage vs. sessionStorage</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>localStorage: Memoria a Largo Plazo</h3>
+                    <p>No tiene fecha de expiración. Sobrevive a refrescar la página, cerrar la pestaña y hasta apagar la computadora. Ideal para: preferencias de tema, nombre de usuario, carrito de compras.</p>
+                </div>
+                <div>
+                    <h3>sessionStorage: Memoria de la Pestaña Actual</h3>
+                    <p>Efímero: solo existe mientras la pestaña esté abierta (sobrevive a un refresh, pero no a cerrarla). Es único por pestaña. Ideal para: datos temporales de un formulario de varios pasos.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: setItem / getItem -->
+    <div class="slide-container" id="slide5">
+        <h2 class="slide-title">Guardar y Recuperar Datos</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">El Set de Herramientas</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Usamos <code>localStorage</code> en los ejemplos, pero funciona exactamente igual para <code>sessionStorage</code>.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-floppy-disk"></i> <code>setItem(key, value)</code>: le decimos el nombre de la "etiqueta" y el "contenido".</li>
+                            <li><i class="fa-solid fa-magnifying-glass"></i> <code>getItem(key)</code>: si la clave no existe, devuelve <code>null</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+localStorage.setItem(<span style="color: #032f62;">'nombreUsuario'</span>, <span style="color: #032f62;">'Ana García'</span>)
+localStorage.setItem(<span style="color: #032f62;">'tema'</span>, <span style="color: #032f62;">'oscuro'</span>)
+
+const nombre = localStorage.getItem(<span style="color: #032f62;">'nombreUsuario'</span>)
+console.log(nombre) <span style="color: #6a737d;">// 'Ana García'</span>
+
+const edad = localStorage.getItem(<span style="color: #032f62;">'edad'</span>)
+console.log(edad) <span style="color: #6a737d;">// null: la clave 'edad' no existe</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: removeItem / clear -->
+    <div class="slide-container" id="slide6">
+        <h2 class="slide-title">Eliminar Datos: removeItem() y clear()</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Limpiar el Armario</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        A veces necesitamos limpiar el armario, ya sea de a una caja o del todo.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-eraser"></i> <code>removeItem(key)</code>: elimina un ítem específico.</li>
+                            <li><i class="fa-solid fa-triangle-exclamation"></i> <code>clear()</code>: borra ABSOLUTAMENTE TODO el almacenamiento del sitio.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+<span style="color: #6a737d;">// Eliminar un item específico</span>
+localStorage.removeItem(<span style="color: #032f62;">'tema'</span>)
+
+<span style="color: #6a737d;">// Borrar ABSOLUTAMENTE TODO el storage del sitio</span>
+localStorage.clear()
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">06 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: El problema de los objetos -->
+    <div class="slide-container" id="slide7">
+        <h2 class="slide-title">El Problema de los Objetos</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge bug"><i class="fa-solid fa-bug"></i> #FindTheBug</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        El Web Storage solo guarda strings. Si intentás guardar un objeto directamente, ocurre algo frustrante.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-circle-exclamation"></i> JavaScript intenta convertir el objeto a texto de forma automática, y el resultado genérico no sirve de nada.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+const usuario = { nombre: <span style="color: #032f62;">'Luis'</span>, puntos: 100 }
+localStorage.setItem(<span style="color: #032f62;">'datosUsuario'</span>, usuario)
+
+console.log(localStorage.getItem(<span style="color: #032f62;">'datosUsuario'</span>))
+<span style="color: #6f42c1;">// "[object Object]" -&gt; ¡los datos se perdieron!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: JSON.stringify() -->
+    <div class="slide-container" id="slide8">
+        <h2 class="slide-title">Serialización con JSON.stringify()</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Objeto → Texto</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        "Serializar" significa convertir un objeto o array en texto plano, para poder enviarlo o guardarlo.
+                    </p>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+const usuario = { nombre: <span style="color: #032f62;">'Luis'</span>, puntos: 100 }
+
+<span style="color: #6a737d;">// Convertimos el objeto en un string de texto</span>
+const usuarioJSON = JSON.stringify(usuario)
+localStorage.setItem(<span style="color: #032f62;">'datosUsuario'</span>, usuarioJSON)
+<span style="color: #6a737d;">// Ahora se guarda: '{"nombre":"Luis","puntos":100}'</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: JSON.parse() -->
+    <div class="slide-container" id="slide9">
+        <h2 class="slide-title">Deserialización con JSON.parse()</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Texto → Objeto</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Cuando recuperamos ese texto, necesitamos convertirlo de nuevo en un objeto real para acceder a sus propiedades.
+                    </p>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+const datosDesdeStorage = localStorage.getItem(<span style="color: #032f62;">'datosUsuario'</span>)
+
+<span style="color: #6a737d;">// Convertimos el texto de vuelta a un objeto real</span>
+const usuarioCargado = JSON.parse(datosDesdeStorage)
+console.log(usuarioCargado.nombre) <span style="color: #6a737d;">// 'Luis'</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">09 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: Aplicaciones reales -->
+    <div class="slide-container" id="slide10">
+        <h2 class="slide-title">Aplicaciones en el Mundo Real</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>Recordar el Tema del Sitio</h3>
+                    <p>Un botón que cambia entre "Modo Claro" y "Modo Oscuro". Sin Web Storage, al refrescar el sitio siempre volvería al modo claro. Con localStorage, guardamos la elección y la aplicamos apenas carga la página.</p>
+                </div>
+                <div>
+                    <h3>Carrito de Compras (E-commerce)</h3>
+                    <p>Las tiendas virtuales usan almacenamiento para que, si cerrás el navegador y volvés mañana, tus productos sigan ahí esperándote.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">10 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 11: Mejores prácticas -->
+    <div class="slide-container" id="slide11">
+        <h2 class="slide-title">Mejores Prácticas y Recomendaciones</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>Límites de Seguridad</h3>
+                    <p>Nunca guardes contraseñas, tarjetas de crédito o información sensible. Cualquier script malicioso puede leer estos datos fácilmente. El Web Storage no es una caja fuerte: es un armario abierto.</p>
+                </div>
+                <div>
+                    <h3>Capacidad Limitada</h3>
+                    <p>Tenés unos 5MB-10MB aproximadamente. Es mucho para texto, pero si intentás guardar imágenes o bases de datos gigantes, el navegador tira un error <code>QuotaExceededError</code>.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">11 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 12: División Módulo 02 -->
+    <div class="slide-container" id="slide12">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Módulo 02</span>
+            <h2>Operadores Modernos: Sugar Syntax</h2>
+            <p style="font-size: 20px;">Atajos que no cambian lo que el código hace, pero lo hacen mucho más fácil de leer y escribir.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">12 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 13: Operador Ternario -->
+    <div class="slide-container" id="slide13">
+        <h2 class="slide-title">Operador Ternario (?): Acceso sin Miedo</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">if...else en una Línea</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Simplifica una estructura condición → caso 1 → caso 2. Consta de tres partes: condición, caso si es true, caso si es false.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-code"></i> <code>condicion ? caso1 : caso2</code></li>
+                            <li><i class="fa-solid fa-check"></i> Ideal para condiciones y casos simples.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia); font-size: 12px;">
+<span style="color: #6a737d;">// Sin ternario</span>
+let temperatura = 31
+if (temperatura &gt; 30) {
+  console.log(<span style="color: #032f62;">"Día caluroso!"</span>)
+} else {
+  console.log(<span style="color: #032f62;">"Día agradable"</span>)
+}
+
+<span style="color: #6a737d;">// Con ternario</span>
+temperatura &gt; 30
+  ? console.log(<span style="color: #032f62;">"Día caluroso!"</span>)
+  : console.log(<span style="color: #032f62;">"Día agradable"</span>)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">13 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 14: Return implícito && / || -->
+    <div class="slide-container" id="slide14">
+        <h2 class="slide-title">Return Implícito: && y ||</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Operadores Lógicos</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        El ternario y los operadores lógicos ofrecen un return implícito: no solo ejecutan la instrucción, la retornan.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-ampersand"></i> Con <code>&amp;&amp;</code>: solo ejecuta lo de la derecha si la condición es true.</li>
+                            <li><i class="fa-solid fa-code-branch"></i> Con <code>||</code>: usa el valor de la derecha si el de la izquierda es "falsy" (ej: null).</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+<span style="color: #6a737d;">// AND: mensaje solo si el carrito está vacío</span>
+carrito.length === 0 &amp;&amp; console.log(<span style="color: #032f62;">"El carrito está vacío!"</span>)
+
+<span style="color: #6a737d;">// OR: valor por defecto si no hay nada guardado</span>
+const carrito = JSON.parse(localStorage.getItem(<span style="color: #032f62;">'carrito'</span>)) || []
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">14 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 15: Spread arrays -->
+    <div class="slide-container" id="slide15">
+        <h2 class="slide-title">Spread (...): Desparramar un Array</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Operador Spread</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        El spread permite "desparramar" un array: en vez de enviarlo entero, envía cada elemento por separado.
+                    </p>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+const nombres = [<span style="color: #032f62;">"Juan"</span>, <span style="color: #032f62;">"Julieta"</span>, <span style="color: #032f62;">"Carlos"</span>]
+
+console.log(nombres)
+<span style="color: #6a737d;">// ["Juan", "Julieta", "Carlos"]: 1 parámetro (el array)</span>
+
+console.log(...nombres)
+<span style="color: #6a737d;">// Juan Julieta Carlos: 3 parámetros individuales</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">15 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 16: Spread objetos -->
+    <div class="slide-container" id="slide16">
+        <h2 class="slide-title">Spread de Objetos: Copiar y Modificar</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">... Dentro de {}</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Nos permite listar todas las propiedades de un objeto y luego modificar o agregar las que queramos.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-triangle-exclamation"></i> No puede haber dos propiedades con el mismo nombre: prevalece la última declarada.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia); font-size: 12px;">
+const usuario1 = { nombre: <span style="color: #032f62;">"Juan"</span>, edad: 24, curso: <span style="color: #032f62;">"Javascript"</span> }
+
+const usuario2 = { ...usuario1 }
+<span style="color: #6a737d;">// { nombre: 'Juan', edad: 24, curso: 'Javascript' }</span>
+
+const usuario3 = { ...usuario1, curso: <span style="color: #032f62;">"ReactJS"</span>, email: <span style="color: #032f62;">"juan@doe.com"</span> }
+<span style="color: #6a737d;">// { nombre: 'Juan', edad: 24, curso: 'ReactJS', email: '...' }</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">16 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 17: Rest Parameters -->
+    <div class="slide-container" id="slide17">
+        <h2 class="slide-title">Rest Parameters: Parámetros Indeterminados</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">...numeros</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        El spread también se usa al declarar una función, para recibir una cantidad indeterminada de parámetros, agrupados en un array.
+                    </p>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+function sumar(...numeros) {
+  return numeros.reduce((acc, n) =&gt; acc + n, 0)
+}
+
+console.log(sumar(4, 2))          <span style="color: #6a737d;">// 6</span>
+console.log(sumar(10, 15, 30, 5)) <span style="color: #6a737d;">// 60</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">17 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 18: Break de Coder ("Recreo") -->
+    <div class="slide-container break-slide" id="slide18">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
+            <h2>Break del Coder</h2>
+            <p>Andá por un cafecito o mate, ¡y en 10 minutos volvemos!</p>
+        </div>
+        <div class="slide-footer" style="border-top: 1px solid rgba(248, 242, 232, 0.2);">
+            <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span style="color: var(--naranja-horizonte);">HOUSE</span></div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.4);">18 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 19: División Módulo 03 -->
+    <div class="slide-container" id="slide19">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Módulo 03</span>
+            <h2>Desestructuración</h2>
+            <p style="font-size: 20px;">Una forma rápida y moderna de extraer valores de arrays u objetos, para un código más limpio y fácil de leer.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">19 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 20: Desestructuración de Arrays -->
+    <div class="slide-container" id="slide20">
+        <h2 class="slide-title">Desestructuración de Arrays</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Por Posición</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Permite guardar elementos de un array en variables individuales, de una sola vez.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-list-ol"></i> Cada variable toma la posición correspondiente del array.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+const frutas = [<span style="color: #032f62;">'manzana'</span>, <span style="color: #032f62;">'banana'</span>, <span style="color: #032f62;">'pera'</span>]
+const [fruta1, fruta2, fruta3] = frutas
+
+console.log(fruta1) <span style="color: #6a737d;">// "manzana"</span>
+console.log(fruta2) <span style="color: #6a737d;">// "banana"</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">20 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 21: Desestructuración de Objetos -->
+    <div class="slide-container" id="slide21">
+        <h2 class="slide-title">Desestructuración de Objetos</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Por Nombre</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Permite declarar variables donde guardar propiedades de un objeto, de forma rápida y directa.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-signature"></i> Los nombres de las variables deben coincidir EXACTAMENTE con los nombres de las propiedades.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+const usuario = { nombre: <span style="color: #032f62;">"John Doe"</span>, edad: 32 }
+const { nombre, edad } = usuario
+
+console.log(nombre) <span style="color: #6a737d;">// "John Doe"</span>
+console.log(edad)   <span style="color: #6a737d;">// 32</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">21 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 22: Desestructuración anidada -->
+    <div class="slide-container" id="slide22">
+        <h2 class="slide-title">Desestructuración Anidada</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Objetos Dentro de Objetos</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Si una propiedad es a su vez un objeto, podemos desestructurar propiedades más internas siguiendo el mismo patrón.
+                    </p>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia); font-size: 12px;">
+const usuario = {
+  nombre: <span style="color: #032f62;">"John Doe"</span>,
+  telefono: { cel: 113334444, trabajo: 113325555 }
+}
+
+const { nombre, telefono: { trabajo } } = usuario
+
+console.log(nombre)  <span style="color: #6a737d;">// "John Doe"</span>
+console.log(trabajo) <span style="color: #6a737d;">// 113325555</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">22 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 23: Alias -->
+    <div class="slide-container" id="slide23">
+        <h2 class="slide-title">Alias: Renombrar al Desestructurar</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">propiedad: nuevoNombre</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        A veces los nombres de las propiedades no son muy descriptivos: podemos desestructurar con un alias, un nombre alternativo.
+                    </p>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte); font-size: 12px;">
+const item = { item_id: 432, product_name: <span style="color: #032f62;">"Some product"</span>, price_per_unit: 5600 }
+
+const {
+  item_id: id,
+  product_name: nombre,
+  price_per_unit: precio
+} = item
+
+console.log(id, nombre, precio) <span style="color: #6a737d;">// 432 'Some product' 5600</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">23 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 24: Desestructuración en parámetros -->
+    <div class="slide-container" id="slide24">
+        <h2 class="slide-title">Desestructuración en Parámetros</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Directo en la Función</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Si una función recibe un objeto por parámetro, se puede desestructurar directamente en la declaración.
+                    </p>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
+const producto = { id: 10, nombre: <span style="color: #032f62;">"Curso Javascript"</span>, precio: 12500 }
+
+const desestructurar = ({ id, nombre }) =&gt; {
+  console.log(id, nombre)
+}
+
+desestructurar(producto) <span style="color: #6a737d;">// 10 Curso Javascript</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">24 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 25: Pre-Entrega 8 -->
+    <div class="slide-container" id="slide25">
+        <h2 class="slide-title">Pre-Entrega 8</h2>
+        <div class="content-area">
+            <div class="slido-box">
+                <span class="moment-badge live"><i class="fa-solid fa-laptop-code"></i> Actividad Integradora</span>
+                <h3>Sincronización de Estado entre DOM y Storage</h3>
+                <p>Lográ que el estado de tu app sea independiente de la sesión actual, usando operadores modernos para manejar datos que podrían no existir aún.</p>
+                <div class="slido-code" style="font-size: 18px; font-weight: 700; text-align: left; letter-spacing: normal;">
+                    ✓ Persistencia: los datos no se pierden al refrescar la página (F5)<br>
+                    ✓ Sincronización en tiempo real: array actualizado → localStorage (JSON.stringify) → re-renderizar<br>
+                    ✓ Operadores avanzados (ternarios, ||, etc) para optimizar la estructura<br>
+                    ✓ Destructuring aplicado sobre al menos un objeto
+                </div>
+                <p style="font-weight: 600; color: var(--naranja-oscuro);">Entregable: repositorio de GitHub público con HTML y JS.</p>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">25 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 26: Consolidación de Conceptos (Table) -->
+    <div class="slide-container" id="slide26">
+        <h2 class="slide-title">Consolidación de Conceptos</h2>
+        <div class="content-area">
+            <div class="table-layout">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Módulo</th>
+                            <th>Tema Principal</th>
+                            <th>Herramienta o Técnica Clave</th>
+                            <th>Meta Pedagógica</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Módulo 1</strong></td>
+                            <td>Web Storage</td>
+                            <td>localStorage, sessionStorage, JSON.stringify/parse</td>
+                            <td>Darle memoria persistente a la aplicación.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Módulo 2</strong></td>
+                            <td>Operadores Modernos</td>
+                            <td>Ternario, &amp;&amp;/||, spread, rest parameters</td>
+                            <td>Escribir código más corto y seguro frente a datos incompletos.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Módulo 3</strong></td>
+                            <td>Desestructuración</td>
+                            <td>Destructuring de arrays/objetos, alias, parámetros</td>
+                            <td>Extraer datos de forma limpia y moderna.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Evaluación</strong></td>
+                            <td>Pre-Entrega 8: Sincronización DOM y Storage</td>
+                            <td>Repositorio de GitHub público</td>
+                            <td>Integrar persistencia real en el simulador.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">26 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 27: ¿Dudas? ¿Consultas? -->
+    <div class="slide-container" id="slide27">
+        <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
+            <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 90px; color: var(--naranja-horizonte);"></i>
+                <i class="fa-solid fa-circle-question" style="font-size: 60px; color: var(--rosa-energia);"></i>
+            </div>
+            <h1 style="font-size: 64px;">¿Dudas? ¿Consultas?</h1>
+            <p style="font-size: 22px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">
+                Este es el momento de preguntar todo lo que necesites
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">27 / 28</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 28: Q&A / Legal Disclaimer -->
+    <div class="slide-container" id="slide28" style="background-color: var(--blanco-lienzo);">
+        <div class="content-area" style="justify-content: center;">
+            <h1 style="color: var(--naranja-oscuro); font-size: 60px; font-weight: 800; letter-spacing: -2px;">¡Muchas gracias!</h1>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 5px;">Clase 08: Web Storage, Operadores y Desestructuración</p>
+
+            <p class="legal-notice">
+                La información contenida en este documento es altamente sensible y de carácter educativo para los participantes inscriptos en Coderhouse. Queda estrictamente prohibida la reproducción, duplicación o revelación total o parcial del contenido pedagógico sin previa autorización escrita de Coderhouse. Copyright © 2026 Coderhouse. Todos los derechos reservados.
+            </p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">28 / 28</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Presentation navigation controls toolbar -->
+<div class="controls-toolbar">
+    <button class="control-btn" id="prev-slide"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+    <div class="slide-dots" id="slide-dots"></div>
+    <button class="control-btn" id="next-slide">Siguiente <i class="fa-solid fa-arrow-right"></i></button>
+</div>
+
+<script>
+    // Slider Presentation Logic
+    const slides = document.querySelectorAll('.slide-container');
+    const prevBtn = document.getElementById('prev-slide');
+    const nextBtn = document.getElementById('next-slide');
+    const dotsContainer = document.getElementById('slide-dots');
+
+    let currentSlideIndex = 0;
+
+    // Create Navigation Indicators Dynamically
+    slides.forEach((slide, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+            goToSlide(idx);
+        });
+        dotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateControls() {
+        dots.forEach((dot, idx) => {
+            if (idx === currentSlideIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function goToSlide(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        slides[currentSlideIndex].classList.remove('active');
+        currentSlideIndex = index;
+        slides[currentSlideIndex].classList.add('active');
+
+        updateControls();
+    }
+
+    // Keyboard Navigation Handlers
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+            goToSlide(currentSlideIndex + 1);
+        } else if (e.key === 'ArrowLeft') {
+            goToSlide(currentSlideIndex - 1);
+        }
+    });
+
+    // Button Click Event Listeners
+    prevBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        goToSlide(currentSlideIndex + 1);
+    });
+</script>
+
+</body>
+</html>
