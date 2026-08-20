@@ -4,20 +4,42 @@
 
 /*
 Antes de arrancar con Web Storage, repasamos con UN ejemplo completo lo
-que vimos en la Clase 7: encontrar elementos con selectores, cambiar su
-contenido, crear elementos nuevos, y reaccionar a eventos del usuario.
-Seguimos con la temática de streaming, con clásicos de Tarantino, Scorsese
-y Spielberg.
+que vimos en la Clase 7: cómo el navegador convierte el HTML en un árbol
+de nodos (el DOM), cómo encontrar elementos de ese árbol con selectores,
+cómo cambiar su contenido (de dos formas distintas), cómo crear y eliminar
+elementos, y cómo reaccionar a eventos del usuario. Seguimos con la
+temática de streaming, con clásicos de Tarantino, Scorsese y Spielberg.
+
+Recordatorio rápido del DOM: cuando el navegador lee tu HTML, no lo ve
+como texto plano, lo transforma en una estructura de objetos organizada
+en forma de árbol (el Document Object Model). Gracias a eso, JavaScript
+puede "ver" cada etiqueta como si fuera un objeto más, leer sus
+propiedades y modificarlas en tiempo real, sin recargar la página. Antes
+de poder cambiar algo en pantalla, primero hay que poder ENCONTRARLO: de
+eso se encargan los selectores.
 */
 
+// 1) Selectores: encontrar elementos que ya existen en el HTML.
+// getElementById es el más directo (pensado para un ÚNICO id en toda la
+// página); querySelector es más versátil porque acepta cualquier
+// selector CSS válido (id, clase o etiqueta), pero ojo: siempre devuelve
+// el PRIMER elemento que coincida, aunque haya varios.
 const tituloApp = document.getElementById("titulo-principal");
 const botonLike = document.getElementById("btn-like");
 const listado = document.querySelector("#listado");
+const fichaDestacada = document.getElementById("ficha-destacada");
 
-// textContent: cambiar el texto de forma segura
+// 2) textContent: la forma más simple y segura de cambiar el TEXTO de un
+// elemento. Si el contenido tuviera etiquetas HTML adentro, textContent
+// las mostraría literalmente como texto en pantalla, en vez de
+// interpretarlas como HTML real.
 tituloApp.textContent = "🍿 Mi Netflix";
 
-// createElement + appendChild: generar un <li> por cada película del array
+// 3) createElement + appendChild: generar un <li> nuevo por cada
+// película del array, y "colgarlo" del <ul> que ya seleccionamos.
+// createElement() por sí solo no alcanza: el elemento se crea "flotando"
+// en memoria, y recién se ve en pantalla cuando lo agregamos al árbol del
+// DOM con appendChild().
 const peliculasDestacadas = ["Pulp Fiction", "Uno de los Nuestros", "Jurassic Park"];
 peliculasDestacadas.forEach((pelicula) => {
   const li = document.createElement("li");
@@ -25,9 +47,31 @@ peliculasDestacadas.forEach((pelicula) => {
   listado.appendChild(li);
 });
 
-// addEventListener: reaccionar a un clic del usuario
+// 4) innerHTML: a diferencia de textContent, SÍ interpreta etiquetas
+// HTML. Sirve para insertar una estructura completa (no solo texto
+// plano), como esta pequeña "ficha" con varias líneas para la película
+// destacada del día. Ojo: justamente porque interpreta HTML real, hay que
+// evitar usarlo con texto que venga directamente de un usuario sin
+// validar (riesgo de inyección de código).
+fichaDestacada.innerHTML = `
+  <h2>Destacada: Taxi Driver</h2>
+  <p>Martin Scorsese · 1976 · 114 min</p>
+`;
+
+// 5) addEventListener: reaccionar a un clic del usuario. Le pasamos el
+// NOMBRE de la función (sin paréntesis), para que el navegador la
+// ejecute recién cuando ocurra el clic, no apenas carga la página.
 botonLike.addEventListener("click", () => {
   botonLike.textContent = "❤️ Te gusta esto";
+});
+
+// 6) remove(): eliminar un elemento del DOM directamente, sin necesidad
+// de acceder primero a su elemento padre. Simulamos que, apenas el
+// usuario le da like a la película principal, "Jurassic Park" (el 3er
+// <li> de la lista de destacadas) ya fue vista y la sacamos de pantalla.
+botonLike.addEventListener("click", () => {
+  const items = listado.querySelectorAll("li");
+  items[2].remove();
 });
 
 // ==========================================
