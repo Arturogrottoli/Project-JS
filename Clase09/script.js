@@ -3,25 +3,79 @@
 // ==========================================
 
 /*
-Antes de arrancar con asincronismo, repasamos rápido lo que vimos en la
-Clase 8: guardar datos con localStorage, simplificar código con
-operadores modernos, y extraer datos con desestructuración. Seguimos con
-la temática de cine: Tarantino, Scorsese y Spielberg.
+Antes de arrancar con asincronismo, repasamos con más detalle lo que
+vimos en la Clase 8: cómo darle memoria persistente a una app con
+localStorage (incluso guardando objetos completos, con la ayuda de
+JSON), cómo simplificar código con operadores modernos (ternario, &&, ||,
+spread y rest), y cómo extraer datos de arrays y objetos con
+desestructuración, en vez de acceder propiedad por propiedad con punto.
+Seguimos con la temática de cine: Tarantino, Scorsese y Spielberg.
 */
 
-// Web Storage: guardamos y recuperamos la película favorita.
+// 1) Web Storage: setItem/getItem guardan y recuperan texto bajo una
+// clave, y sobreviven a un refresh de la página (a diferencia de una
+// variable común, que se reinicia cada vez que el script vuelve a
+// correr desde cero).
 localStorage.setItem("peliculaFavorita", "Pulp Fiction");
 console.log(localStorage.getItem("peliculaFavorita")); // "Pulp Fiction"
 
-// Operadores modernos: ternario para una condición simple...
+// removeItem() borra una clave puntual, sin tocar el resto del storage.
+localStorage.removeItem("temaRepaso");
+console.log(localStorage.getItem("temaRepaso")); // null: ya no existe (o nunca existió)
+
+// 2) JSON.stringify() / JSON.parse(): el Web Storage solo entiende
+// strings, así que para guardar un objeto completo primero lo
+// "serializamos" a texto con stringify(), y al recuperarlo lo
+// "reconstruimos" como objeto real con parse().
+const perfilRepaso = { nombre: "Luis", peliculaFavorita: "Pulp Fiction" };
+localStorage.setItem("perfilRepaso", JSON.stringify(perfilRepaso));
+const perfilRecuperado = JSON.parse(localStorage.getItem("perfilRepaso"));
+console.log(perfilRecuperado.peliculaFavorita); // "Pulp Fiction": ya es un objeto real, no texto plano
+
+// 3) Operadores modernos: el ternario reemplaza un if-else simple en una
+// sola línea (condición ? casoTrue : casoFalse)...
 const duracionRepaso = 195; // minutos de "La Lista de Schindler"
 duracionRepaso > 120 ? console.log("Película larga") : console.log("Película corta");
 
-// ...y || para un valor por defecto, si todavía no hay nada guardado.
+// ...&& ejecuta lo de la derecha SOLO si la condición de la izquierda es
+// true (útil para mensajes condicionales, sin necesidad de un if completo)...
+const carritoRepaso = [];
+carritoRepaso.length === 0 && console.log("El carrito está vacío!");
+
+// ...y || devuelve el valor de la derecha si el de la izquierda es
+// "falsy" (null, undefined, 0, ""), muy usado para tener un valor por
+// defecto la primera vez que se ejecuta la app y todavía no hay nada
+// guardado en localStorage.
 const miListaRepaso = JSON.parse(localStorage.getItem("miListaRepaso")) || [];
 console.log(miListaRepaso); // []
 
-// Desestructuración: sacamos título y director de un objeto, de una sola vez.
+// 4) Spread (...): "desparrama" los elementos de un array como
+// parámetros individuales, en vez de enviarlos como un único array...
+const generosRepaso = ["Drama", "Thriller"];
+console.log(...generosRepaso); // Drama Thriller: 2 parámetros, no un array
+
+// ...y también permite copiar o extender un objeto sin mutar el
+// original (si una propiedad se repite, prevalece la última declarada).
+const peliculaBaseRepaso = { titulo: "Kill Bill", anio: 2003 };
+const peliculaExtendidaRepaso = { ...peliculaBaseRepaso, anio: 2004 };
+console.log(peliculaExtendidaRepaso); // { titulo: 'Kill Bill', anio: 2004 }
+
+// Rest parameters: la misma sintaxis (...), pero usada al declarar una
+// función, agrupa una cantidad indeterminada de argumentos en un array.
+function sumarDuracionesRepaso(...duraciones) {
+  return duraciones.reduce((acumulador, minutos) => acumulador + minutos, 0);
+}
+console.log(sumarDuracionesRepaso(154, 111, 127)); // 392
+
+// 5) Desestructuración: extraer elementos de un array (por posición)...
+const topPeliculasRepaso = ["Pulp Fiction", "Uno de los Nuestros"];
+const [primeraRepaso, segundaRepaso] = topPeliculasRepaso;
+console.log(primeraRepaso, segundaRepaso); // "Pulp Fiction" "Uno de los Nuestros"
+
+// ...o propiedades de un objeto (por nombre), en variables individuales
+// de una sola vez, en vez de acceder con peliculaRepaso.titulo,
+// peliculaRepaso.director, etc. También se le puede dar un alias
+// (":nuevoNombre") a cada propiedad extraída.
 const peliculaRepaso = { titulo: "Taxi Driver", director: "Martin Scorsese", anio: 1976 };
 const { titulo: tituloRepaso, director: directorRepaso } = peliculaRepaso;
 console.log(tituloRepaso, directorRepaso); // "Taxi Driver" "Martin Scorsese"
@@ -138,6 +192,19 @@ setTimeout(() => {
   clearInterval(contadorId); // cancela las próximas repeticiones de setInterval
   console.log("Reproducción pausada");
 }, 3500);
+
+// Extra: clearTimeout(), para cancelar un temporizador ANTES de que
+// llegue a dispararse (el contrapunto de clearInterval, pero para
+// setTimeout). Útil si, por ejemplo, el usuario sale de la pantalla
+// antes de que se cumpla el tiempo de espera.
+const recordatorioId = setTimeout(() => {
+  console.log("Recordatorio: seguís viendo Pulp Fiction");
+}, 5000);
+
+// Si el usuario cierra la película antes de esos 5 segundos, cancelamos
+// el aviso para que no aparezca igual más tarde.
+clearTimeout(recordatorioId);
+console.log("Recordatorio cancelado antes de dispararse");
 
 /*
 Reglas de Oro:
@@ -308,6 +375,37 @@ async function compararConSinAwait() {
   console.log(conAwait); // "Kill Bill": el dato real, ya "abierto"
 }
 compararConSinAwait();
+
+/*
+Async/await en el mundo real: ReactJS
+Este mismo patrón (una función async que hace await de una promesa,
+dentro de un try/catch/finally) es exactamente lo que vas a usar todo el
+tiempo en ReactJS para pedir datos a una API apenas se monta un
+componente (típicamente dentro de un useEffect). La lógica es idéntica a
+la que ya vimos acá: mientras esperamos la respuesta mostramos un estado
+de "Cargando...", y si algo falla, mostramos un error, sin bloquear el
+resto de la interfaz mientras tanto.
+*/
+function simularFetchPerfil() {
+  // Simula una llamada a una API real (como haría fetch), devolviendo
+  // una promesa que se resuelve después de un tiempo de espera.
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ nombre: "Luis", peliculaFavorita: "Pulp Fiction" });
+    }, 1500);
+  });
+}
+
+async function cargarPerfilComponente() {
+  try {
+    console.log("Cargando perfil..."); // en React, acá mostrarías un spinner
+    const perfil = await simularFetchPerfil();
+    console.log(`Perfil cargado: ${perfil.nombre}`); // en React, acá harías setState(perfil)
+  } catch (error) {
+    console.error("No se pudo cargar el perfil:", error); // en React, acá guardarías el error en el estado
+  }
+}
+cargarPerfilComponente();
 
 // ==========================================
 // PRE-ENTREGA 9, EJEMPLO RESUELTO: Asincronismo y Promesas
