@@ -505,253 +505,8 @@
         </div>
     </div>
 
-    <!-- SLIDE 2: División Módulo 01 -->
+    <!-- SLIDE 2: RESUMEN - El camino recorrido (Clases 1 a 10) -->
     <div class="slide-container" id="slide2">
-        <div></div>
-        <div class="transition-layout">
-            <hr>
-            <span class="moment-badge">Módulo 01</span>
-            <h2>Node.js: JavaScript Fuera del Navegador</h2>
-            <p style="font-size: 20px;">Vas a descubrir cómo el mismo lenguaje que usaste para interactuar con el DOM puede correr en tu computadora, crear servidores y automatizar tareas.</p>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">02 / 30</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 3: ¿Qué es Node.js? -->
-    <div class="slide-container" id="slide3">
-        <h2 class="slide-title">Node.js: JavaScript sin Navegador</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge">El Motor Debajo del Capó</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Node.js utiliza el motor V8, el mismo componente ultrarrápido que usa Google Chrome para procesar JavaScript, sacado del navegador.
-                    </p>
-                    <div class="bullet-list">
-                        <ul>
-                            <li><i class="fa-solid fa-clock-rotate-left"></i> Antes de 2009, programar el servidor de una web requería otros lenguajes: PHP, Java o Ruby.</li>
-                            <li><i class="fa-solid fa-code"></i> Node.js permitió usar un solo lenguaje (JavaScript) para todo el proyecto: frontend y backend.</li>
-                            <li><i class="fa-solid fa-microchip"></i> Le añade "superpoderes" para interactuar directamente con el sistema operativo de tu computadora.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <div class="image-wrapper">
-                        <img alt="Servidor y líneas de código" src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1280&auto=format&fit=crop">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">03 / 30</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 4: Navegador vs Node.js -->
-    <div class="slide-container" id="slide4">
-        <h2 class="slide-title">Diferencia Clave entre Entornos</h2>
-        <div class="content-area">
-            <div class="two-column tiled">
-                <div>
-                    <h3>En el Navegador</h3>
-                    <p>Tenés acceso al objeto <code>window</code> y <code>document</code>. Podés cambiar el color de un botón o detectar un scroll. No podés leer archivos del disco duro del usuario, por seguridad.</p>
-                </div>
-                <div>
-                    <h3>En Node.js</h3>
-                    <p>No existe el DOM ni el <code>document</code>, porque no hay una "página" que mostrar. En su lugar, tenés acceso al sistema de archivos (<code>fs</code>), a la red y a procesos de la computadora.</p>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">04 / 30</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 5: Casos de uso -->
-    <div class="slide-container" id="slide5">
-        <h2 class="slide-title">Casos de Uso de Node.js</h2>
-        <div class="content-area">
-            <div class="two-column tiled">
-                <div>
-                    <h3>Servidores Web (Backend)</h3>
-                    <p>Es el uso más famoso. Node.js es excelente para aplicaciones que necesitan manejar muchas conexiones al mismo tiempo, como un chat en tiempo real o una red social. Netflix lo usa para gran parte de su backend.</p>
-                </div>
-                <div>
-                    <h3>Scripts de Automatización</h3>
-                    <p>Imaginá que tenés 1.000 imágenes que necesitás renombrar o cambiar de tamaño. En vez de hacerlo a mano, escribís un pequeño script de JavaScript y lo ejecutás con Node.js para que haga el trabajo pesado en segundos.</p>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">05 / 30</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 6: Errores comunes Node -->
-    <div class="slide-container" id="slide6">
-        <h2 class="slide-title">Errores Comunes y Mejores Prácticas</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge bug"><i class="fa-solid fa-bug"></i> La "Caja Negra"</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Nunca toques la carpeta <code>node_modules</code> directamente: es generada automáticamente por npm y tus cambios desaparecerán.
-                    </p>
-                    <div class="bullet-list">
-                        <ul>
-                            <li><i class="fa-solid fa-circle-exclamation"></i> "Estoy aprendiendo Node" es un error común: Node no es un lenguaje nuevo, es JavaScript con otras APIs disponibles.</li>
-                            <li><i class="fa-solid fa-id-card"></i> <code>package.json</code> es el "documento de identidad" de tu proyecto: leelo siempre, ahí ves librerías y comandos disponibles.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
-<span style="color: #6a737d;">// NUNCA edites archivos dentro de esta carpeta</span>
-node_modules/
-
-<span style="color: #6a737d;">// Este es tu mapa: leelo siempre</span>
-package.json
-  <span style="color: #6a737d;">// dependencias y scripts del proyecto</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">06 / 30</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 7: División Módulo 02 -->
-    <div class="slide-container" id="slide7">
-        <div></div>
-        <div class="transition-layout">
-            <hr>
-            <span class="moment-badge">Módulo 02</span>
-            <h2>Frameworks Modernos: React, Vue y Angular</h2>
-            <p style="font-size: 20px;">Con el DOM, los eventos y el fetch ya dominados, es hora de ver cómo la industria escala esas mismas ideas para aplicaciones grandes.</p>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">07 / 30</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 8: El problema de escalar con JS manual -->
-    <div class="slide-container" id="slide8">
-        <h2 class="slide-title">El Problema de Escalar con JS Manual</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge">Enfoque Imperativo</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Con <code>document.querySelector</code> y manipulación manual, le das al navegador instrucciones paso a paso de cómo cambiar la interfaz.
-                    </p>
-                    <div class="bullet-list">
-                        <ul>
-                            <li><i class="fa-solid fa-arrows-rotate"></i> Sincronización: si un dato aparece en dos lugares, hay que acordarse de actualizar ambos manualmente.</li>
-                            <li><i class="fa-solid fa-magnifying-glass"></i> Complejidad: rastrear qué código cambió qué parte del HTML es una tarea detectivesca.</li>
-                            <li><i class="fa-solid fa-triangle-exclamation"></i> Fragilidad: cambiar una clase en el HTML puede romper los selectores de JS silenciosamente.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <div class="code-block" style="border-left-color: var(--amarillo-solar); font-size: 12px;">
-<span style="color: #6a737d;">// Agregar una tarea a mano, paso a paso</span>
-const li = document.createElement(<span style="color: #032f62;">'li'</span>)
-li.textContent = input.value
-
-lista.appendChild(li)
-
-<span style="color: #6a737d;">// Los frameworks proponen otro camino:</span>
-<span style="color: #6a737d;">// enfoque Declarativo → decís QUÉ ver,</span>
-<span style="color: #6a737d;">// según los datos que tenés</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">08 / 30</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 9: Componentes -->
-    <div class="slide-container" id="slide9">
-        <h2 class="slide-title">Componentes: La Unidad Reutilizable</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge">Como Piezas de LEGO</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        En vez de un único documento HTML gigante, la interfaz se arma con piezas independientes y reutilizables: los componentes.
-                    </p>
-                    <div class="bullet-list">
-                        <ul>
-                            <li><i class="fa-solid fa-cube"></i> Un componente encapsula Estructura (HTML), Lógica (JS) y Estilo (CSS) a la vez.</li>
-                            <li><i class="fa-solid fa-bolt"></i> Cambiás el componente una sola vez, y se actualiza automáticamente donde sea que se use.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <div class="tile" style="height: auto;">
-                        <div class="icon-box"><i class="fa-solid fa-cart-shopping"></i></div>
-                        <h3>Ejemplo: Tarjeta de Producto</h3>
-                        <p>Imagen, título, precio y botón "Comprar". En Vanilla JS copiás y pegás ese HTML muchas veces. En un framework, lo definís una vez y lo invocás pasando distintos datos: nombre, precio, foto.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">09 / 30</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 10: Estado y Reactividad -->
-    <div class="slide-container" id="slide10">
-        <h2 class="slide-title">Estado y Reactividad: El Motor de la Interfaz</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge">Interfaz = Framework(Estado)</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        El Estado son los datos que definen lo que se ve en pantalla: ¿está el modal abierto? ¿qué hay en el carrito?
-                    </p>
-                    <div class="bullet-list">
-                        <ul>
-                            <li><i class="fa-solid fa-rotate"></i> Cuando el Estado cambia, el framework detecta ese cambio y actualiza la interfaz automáticamente.</li>
-                            <li><i class="fa-solid fa-hand"></i> Ya no tocás el DOM directamente: solo actualizás los datos, y el framework hace el trabajo sucio.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
-<span style="color: #6a737d;">// Vanilla JS: hay que tocar el DOM a mano</span>
-contador++
-document.querySelector(<span style="color: #032f62;">'#num'</span>).innerText = contador
-
-<span style="color: #6a737d;">// Framework: solo actualizás el estado</span>
-<span style="color: #6a737d;">// y la interfaz se refresca sola</span>
-setContador(contador + 1)
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">10 / 30</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 11: RESUMEN - El camino recorrido (Clases 1 a 10) -->
-    <div class="slide-container" id="slide11">
         <h2 class="slide-title">Antes de Seguir: Todo lo que Ya Sabés Hacer</h2>
         <div class="content-area">
             <div class="table-layout">
@@ -816,6 +571,251 @@ setContador(contador + 1)
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">02 / 30</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: División Módulo 01 -->
+    <div class="slide-container" id="slide3">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Módulo 01</span>
+            <h2>Node.js: JavaScript Fuera del Navegador</h2>
+            <p style="font-size: 20px;">Vas a descubrir cómo el mismo lenguaje que usaste para interactuar con el DOM puede correr en tu computadora, crear servidores y automatizar tareas.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">03 / 30</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: ¿Qué es Node.js? -->
+    <div class="slide-container" id="slide4">
+        <h2 class="slide-title">Node.js: JavaScript sin Navegador</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">El Motor Debajo del Capó</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Node.js utiliza el motor V8, el mismo componente ultrarrápido que usa Google Chrome para procesar JavaScript, sacado del navegador.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-clock-rotate-left"></i> Antes de 2009, programar el servidor de una web requería otros lenguajes: PHP, Java o Ruby.</li>
+                            <li><i class="fa-solid fa-code"></i> Node.js permitió usar un solo lenguaje (JavaScript) para todo el proyecto: frontend y backend.</li>
+                            <li><i class="fa-solid fa-microchip"></i> Le añade "superpoderes" para interactuar directamente con el sistema operativo de tu computadora.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="image-wrapper">
+                        <img alt="Servidor y líneas de código" src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1280&auto=format&fit=crop">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">04 / 30</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: Navegador vs Node.js -->
+    <div class="slide-container" id="slide5">
+        <h2 class="slide-title">Diferencia Clave entre Entornos</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>En el Navegador</h3>
+                    <p>Tenés acceso al objeto <code>window</code> y <code>document</code>. Podés cambiar el color de un botón o detectar un scroll. No podés leer archivos del disco duro del usuario, por seguridad.</p>
+                </div>
+                <div>
+                    <h3>En Node.js</h3>
+                    <p>No existe el DOM ni el <code>document</code>, porque no hay una "página" que mostrar. En su lugar, tenés acceso al sistema de archivos (<code>fs</code>), a la red y a procesos de la computadora.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 30</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: Casos de uso -->
+    <div class="slide-container" id="slide6">
+        <h2 class="slide-title">Casos de Uso de Node.js</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>Servidores Web (Backend)</h3>
+                    <p>Es el uso más famoso. Node.js es excelente para aplicaciones que necesitan manejar muchas conexiones al mismo tiempo, como un chat en tiempo real o una red social. Netflix lo usa para gran parte de su backend.</p>
+                </div>
+                <div>
+                    <h3>Scripts de Automatización</h3>
+                    <p>Imaginá que tenés 1.000 imágenes que necesitás renombrar o cambiar de tamaño. En vez de hacerlo a mano, escribís un pequeño script de JavaScript y lo ejecutás con Node.js para que haga el trabajo pesado en segundos.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">06 / 30</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 7: Errores comunes Node -->
+    <div class="slide-container" id="slide7">
+        <h2 class="slide-title">Errores Comunes y Mejores Prácticas</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge bug"><i class="fa-solid fa-bug"></i> La "Caja Negra"</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Nunca toques la carpeta <code>node_modules</code> directamente: es generada automáticamente por npm y tus cambios desaparecerán.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-circle-exclamation"></i> "Estoy aprendiendo Node" es un error común: Node no es un lenguaje nuevo, es JavaScript con otras APIs disponibles.</li>
+                            <li><i class="fa-solid fa-id-card"></i> <code>package.json</code> es el "documento de identidad" de tu proyecto: leelo siempre, ahí ves librerías y comandos disponibles.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
+<span style="color: #6a737d;">// NUNCA edites archivos dentro de esta carpeta</span>
+node_modules/
+
+<span style="color: #6a737d;">// Este es tu mapa: leelo siempre</span>
+package.json
+  <span style="color: #6a737d;">// dependencias y scripts del proyecto</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 30</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: División Módulo 02 -->
+    <div class="slide-container" id="slide8">
+        <div></div>
+        <div class="transition-layout">
+            <hr>
+            <span class="moment-badge">Módulo 02</span>
+            <h2>Frameworks Modernos: React, Vue y Angular</h2>
+            <p style="font-size: 20px;">Con el DOM, los eventos y el fetch ya dominados, es hora de ver cómo la industria escala esas mismas ideas para aplicaciones grandes.</p>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 30</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: El problema de escalar con JS manual -->
+    <div class="slide-container" id="slide9">
+        <h2 class="slide-title">El Problema de Escalar con JS Manual</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Enfoque Imperativo</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Con <code>document.querySelector</code> y manipulación manual, le das al navegador instrucciones paso a paso de cómo cambiar la interfaz.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-arrows-rotate"></i> Sincronización: si un dato aparece en dos lugares, hay que acordarse de actualizar ambos manualmente.</li>
+                            <li><i class="fa-solid fa-magnifying-glass"></i> Complejidad: rastrear qué código cambió qué parte del HTML es una tarea detectivesca.</li>
+                            <li><i class="fa-solid fa-triangle-exclamation"></i> Fragilidad: cambiar una clase en el HTML puede romper los selectores de JS silenciosamente.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar); font-size: 12px;">
+<span style="color: #6a737d;">// Agregar una tarea a mano, paso a paso</span>
+const li = document.createElement(<span style="color: #032f62;">'li'</span>)
+li.textContent = input.value
+
+lista.appendChild(li)
+
+<span style="color: #6a737d;">// Los frameworks proponen otro camino:</span>
+<span style="color: #6a737d;">// enfoque Declarativo → decís QUÉ ver,</span>
+<span style="color: #6a737d;">// según los datos que tenés</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">09 / 30</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: Componentes -->
+    <div class="slide-container" id="slide10">
+        <h2 class="slide-title">Componentes: La Unidad Reutilizable</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Como Piezas de LEGO</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        En vez de un único documento HTML gigante, la interfaz se arma con piezas independientes y reutilizables: los componentes.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-cube"></i> Un componente encapsula Estructura (HTML), Lógica (JS) y Estilo (CSS) a la vez.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Cambiás el componente una sola vez, y se actualiza automáticamente donde sea que se use.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="tile" style="height: auto;">
+                        <div class="icon-box"><i class="fa-solid fa-cart-shopping"></i></div>
+                        <h3>Ejemplo: Tarjeta de Producto</h3>
+                        <p>Imagen, título, precio y botón "Comprar". En Vanilla JS copiás y pegás ese HTML muchas veces. En un framework, lo definís una vez y lo invocás pasando distintos datos: nombre, precio, foto.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">10 / 30</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 11: Estado y Reactividad -->
+    <div class="slide-container" id="slide11">
+        <h2 class="slide-title">Estado y Reactividad: El Motor de la Interfaz</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Interfaz = Framework(Estado)</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        El Estado son los datos que definen lo que se ve en pantalla: ¿está el modal abierto? ¿qué hay en el carrito?
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-rotate"></i> Cuando el Estado cambia, el framework detecta ese cambio y actualiza la interfaz automáticamente.</li>
+                            <li><i class="fa-solid fa-hand"></i> Ya no tocás el DOM directamente: solo actualizás los datos, y el framework hace el trabajo sucio.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
+<span style="color: #6a737d;">// Vanilla JS: hay que tocar el DOM a mano</span>
+contador++
+document.querySelector(<span style="color: #032f62;">'#num'</span>).innerText = contador
+
+<span style="color: #6a737d;">// Framework: solo actualizás el estado</span>
+<span style="color: #6a737d;">// y la interfaz se refresca sola</span>
+setContador(contador + 1)
+                    </div>
+                </div>
             </div>
         </div>
         <div class="slide-footer">
