@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clase 08: Web Storage, Operadores y Desestructuración - Coderhouse</title>
+    <title>Clase 10: Fetch API y Librerías Externas - Coderhouse</title>
     <!-- Coder 4.0 Core Typography: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -494,14 +494,14 @@
         <div></div>
         <div class="transition-layout" style="margin-bottom: 30px;">
             <span class="moment-badge">CODER 4.0 • BIENVENIDA</span>
-            <h1 style="font-size: 46px;">Web Storage, Operadores Modernos y Desestructuración</h1>
+            <h1 style="font-size: 46px;">Fetch API y Librerías Externas en JavaScript</h1>
             <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 10px;">
-                Clase 08: localStorage y sessionStorage | Sugar Syntax | Destructuring
+                Clase 10: fetch() y Response | JSON | SweetAlert2 y Toastify
             </p>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">01 / 28</div>
+            <div class="slide-index">01 / 25</div>
         </div>
     </div>
 
@@ -511,456 +511,306 @@
         <div class="transition-layout">
             <hr>
             <span class="moment-badge">Módulo 01</span>
-            <h2>Web Storage: Persistencia Local</h2>
-            <p style="font-size: 20px;">Vas a aprender a darle memoria a tus aplicaciones, para que los datos sobrevivan a un refresh de página.</p>
+            <h2>Fetch API: Pidiendo Datos a un Servidor</h2>
+            <p style="font-size: 20px;">Vas a aprender a conectar tu JavaScript con el mundo exterior, pidiendo información real a un servidor.</p>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">02 / 28</div>
+            <div class="slide-index">02 / 25</div>
         </div>
     </div>
 
-    <!-- SLIDE 3: ¿Qué es el Web Storage? -->
+    <!-- SLIDE 3: Analogía del restaurante -->
     <div class="slide-container" id="slide3">
-        <h2 class="slide-title">El Web Storage: El Armario del Navegador</h2>
+        <h2 class="slide-title">El Restaurante: La Anatomía de una Petición</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
                     <span class="moment-badge">Analogía</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Cada vez que refrescamos el navegador, JavaScript "nace de nuevo": las variables (let/const) vuelven a su estado inicial.
+                        Imaginá que estás en un restaurante. Vos sos el cliente (el navegador), el mozo es la Fetch API, y la cocina es el servidor donde vive la base de datos.
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-briefcase"></i> Tu app es como una oficina: las variables son papeles sobre el escritorio, que se limpian cada noche.</li>
-                            <li><i class="fa-solid fa-box-archive"></i> El Web Storage es un armario de etiquetas: guardás cajas con información y las encontrás donde las dejaste.</li>
-                            <li><i class="fa-solid fa-key"></i> Funciona con Clave y Valor (key/value): la clave es la etiqueta, el valor es lo que hay adentro.</li>
+                            <li><i class="fa-solid fa-bell-concierge"></i> No vas directamente a la cocina: le hacés el pedido al mozo (una petición HTTP), y esperás.</li>
+                            <li><i class="fa-solid fa-utensils"></i> El mozo vuelve con una bandeja TAPADA: eso es el objeto <code>Response</code>, todavía no es "la comida".</li>
+                            <li><i class="fa-solid fa-box-open"></i> "Destapar y servir" el plato es, en JavaScript, extraer los datos con <code>.json()</code>.</li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <div class="image-wrapper">
-                        <img alt="Armario con cajas organizadas" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1280&auto=format&fit=crop">
+                        <img alt="Mozo llevando una bandeja tapada en un restaurante" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=1280&auto=format&fit=crop">
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">03 / 28</div>
+            <div class="slide-index">03 / 25</div>
         </div>
     </div>
 
-    <!-- SLIDE 4: localStorage vs sessionStorage -->
+    <!-- SLIDE 4: ¿Qué es fetch? -->
     <div class="slide-container" id="slide4">
-        <h2 class="slide-title">localStorage vs. sessionStorage</h2>
-        <div class="content-area">
-            <div class="two-column tiled">
-                <div>
-                    <h3>localStorage: Memoria a Largo Plazo</h3>
-                    <p>No tiene fecha de expiración. Sobrevive a refrescar la página, cerrar la pestaña y hasta apagar la computadora. Ideal para: preferencias de tema, nombre de usuario, carrito de compras.</p>
-                </div>
-                <div>
-                    <h3>sessionStorage: Memoria de la Pestaña Actual</h3>
-                    <p>Efímero: solo existe mientras la pestaña esté abierta (sobrevive a un refresh, pero no a cerrarla). Es único por pestaña. Ideal para: datos temporales de un formulario de varios pasos.</p>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">04 / 28</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 5: setItem / getItem -->
-    <div class="slide-container" id="slide5">
-        <h2 class="slide-title">Guardar y Recuperar Datos</h2>
+        <h2 class="slide-title">¿Qué es fetch()?</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
-                    <span class="moment-badge">El Set de Herramientas</span>
+                    <span class="moment-badge">De XMLHttpRequest a Fetch</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Usamos <code>localStorage</code> en los ejemplos, pero funciona exactamente igual para <code>sessionStorage</code>.
+                        Históricamente, pedir datos a un servidor desde JavaScript era complejo y tedioso, con una tecnología llamada XMLHttpRequest.
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-floppy-disk"></i> <code>setItem(key, value)</code>: le decimos el nombre de la "etiqueta" y el "contenido".</li>
-                            <li><i class="fa-solid fa-magnifying-glass"></i> <code>getItem(key)</code>: si la clave no existe, devuelve <code>null</code>.</li>
+                            <li><i class="fa-solid fa-bolt"></i> Los navegadores modernos introdujeron Fetch API: más sencilla, limpia y basada en Promesas.</li>
+                            <li><i class="fa-solid fa-globe"></i> <code>fetch()</code> pide información a una URL externa, de forma asíncrona.</li>
+                            <li><i class="fa-solid fa-arrow-right"></i> El código no se detiene mientras espera la respuesta: sigue, y nos avisa cuando la info llegó.</li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
-localStorage.setItem(<span style="color: #032f62;">'nombreUsuario'</span>, <span style="color: #032f62;">'Ana García'</span>)
-localStorage.setItem(<span style="color: #032f62;">'tema'</span>, <span style="color: #032f62;">'oscuro'</span>)
-
-const nombre = localStorage.getItem(<span style="color: #032f62;">'nombreUsuario'</span>)
-console.log(nombre) <span style="color: #6a737d;">// 'Ana García'</span>
-
-const edad = localStorage.getItem(<span style="color: #032f62;">'edad'</span>)
-console.log(edad) <span style="color: #6a737d;">// null: la clave 'edad' no existe</span>
+<span style="color: #6a737d;">// Anatomía básica de un fetch</span>
+fetch(<span style="color: #032f62;">"https://jsonplaceholder.typicode.com/users"</span>)
+  .then(response =&gt; {
+    <span style="color: #6a737d;">// Acá llega la "bandeja" (el objeto Response)</span>
+    console.log(response)
+  })
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">05 / 28</div>
+            <div class="slide-index">04 / 25</div>
         </div>
     </div>
 
-    <!-- SLIDE 6: removeItem / clear -->
+    <!-- SLIDE 5: El objeto Response -->
+    <div class="slide-container" id="slide5">
+        <h2 class="slide-title">El Objeto Response: La "Bandeja" de Entrada</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Antes de Leer los Datos</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Si imprimís ese response en consola, no vas a ver la lista de usuarios de inmediato: vas a ver un objeto "contenedor".
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-circle-check"></i> <code>response.ok</code>: true/false. La forma más rápida de saber si la petición fue exitosa (200 a 299).</li>
+                            <li><i class="fa-solid fa-hashtag"></i> <code>response.status</code>: el código numérico (200 éxito, 404 no encontrado, 500 error del servidor).</li>
+                            <li><i class="fa-solid fa-list"></i> <code>response.headers</code>: información adicional, como el tipo de contenido recibido.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar); font-size: 12px;">
+fetch(<span style="color: #032f62;">"https://jsonplaceholder.typicode.com/users"</span>)
+  .then(response =&gt; console.log(response))
+
+<span style="color: #6a737d;">// Response { ok: true, status: 200, headers: ... }</span>
+<span style="color: #6a737d;">// El cuerpo de los datos todavía no está "servido"</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 25</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: Lectura de JSON con response.json() -->
     <div class="slide-container" id="slide6">
-        <h2 class="slide-title">Eliminar Datos: removeItem() y clear()</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge">Limpiar el Armario</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        A veces necesitamos limpiar el armario, ya sea de a una caja o del todo.
-                    </p>
-                    <div class="bullet-list">
-                        <ul>
-                            <li><i class="fa-solid fa-eraser"></i> <code>removeItem(key)</code>: elimina un ítem específico.</li>
-                            <li><i class="fa-solid fa-triangle-exclamation"></i> <code>clear()</code>: borra ABSOLUTAMENTE TODO el almacenamiento del sitio.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
-<span style="color: #6a737d;">// Eliminar un item específico</span>
-localStorage.removeItem(<span style="color: #032f62;">'tema'</span>)
-
-<span style="color: #6a737d;">// Borrar ABSOLUTAMENTE TODO el storage del sitio</span>
-localStorage.clear()
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">06 / 28</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 7: El problema de los objetos -->
-    <div class="slide-container" id="slide7">
-        <h2 class="slide-title">El Problema de los Objetos</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge bug"><i class="fa-solid fa-bug"></i> #FindTheBug</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        El Web Storage solo guarda strings. Si intentás guardar un objeto directamente, ocurre algo frustrante.
-                    </p>
-                    <div class="bullet-list">
-                        <ul>
-                            <li><i class="fa-solid fa-circle-exclamation"></i> JavaScript intenta convertir el objeto a texto de forma automática, y el resultado genérico no sirve de nada.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <div class="code-block" style="border-left-color: var(--rosa-energia);">
-const usuario = { nombre: <span style="color: #032f62;">'Luis'</span>, puntos: 100 }
-localStorage.setItem(<span style="color: #032f62;">'datosUsuario'</span>, usuario)
-
-console.log(localStorage.getItem(<span style="color: #032f62;">'datosUsuario'</span>))
-<span style="color: #6f42c1;">// "[object Object]" -&gt; ¡los datos se perdieron!</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">07 / 28</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 8: JSON.stringify() -->
-    <div class="slide-container" id="slide8">
-        <h2 class="slide-title">Serialización con JSON.stringify()</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge">Objeto → Texto</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        "Serializar" significa convertir un objeto o array en texto plano, para poder enviarlo o guardarlo.
-                    </p>
-                </div>
-                <div>
-                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
-const usuario = { nombre: <span style="color: #032f62;">'Luis'</span>, puntos: 100 }
-
-<span style="color: #6a737d;">// Convertimos el objeto en un string de texto</span>
-const usuarioJSON = JSON.stringify(usuario)
-localStorage.setItem(<span style="color: #032f62;">'datosUsuario'</span>, usuarioJSON)
-<span style="color: #6a737d;">// Ahora se guarda: '{"nombre":"Luis","puntos":100}'</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">08 / 28</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 9: JSON.parse() -->
-    <div class="slide-container" id="slide9">
-        <h2 class="slide-title">Deserialización con JSON.parse()</h2>
+        <h2 class="slide-title">Leyendo JSON con response.json()</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
                     <span class="moment-badge">Texto → Objeto</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Cuando recuperamos ese texto, necesitamos convertirlo de nuevo en un objeto real para acceder a sus propiedades.
+                        La mayoría de las APIs modernas envían la información en formato JSON: aunque se parece a un objeto de JS, en realidad es una cadena de texto larga con formato específico.
                     </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-code"></i> Para poder usar <code>forEach</code>, <code>filter</code> o acceder a propiedades, hay que convertir ese texto con <code>.json()</code>.</li>
+                            <li><i class="fa-solid fa-triangle-exclamation"></i> Punto crucial: <code>.json()</code> TAMBIÉN devuelve una Promesa. Hace falta un segundo <code>.then()</code> (o un segundo <code>await</code>).</li>
+                        </ul>
+                    </div>
                 </div>
                 <div>
-                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
-const datosDesdeStorage = localStorage.getItem(<span style="color: #032f62;">'datosUsuario'</span>)
-
-<span style="color: #6a737d;">// Convertimos el texto de vuelta a un objeto real</span>
-const usuarioCargado = JSON.parse(datosDesdeStorage)
-console.log(usuarioCargado.nombre) <span style="color: #6a737d;">// 'Luis'</span>
+                    <div class="image-wrapper">
+                        <img alt="Documento con código JSON en pantalla" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1280&auto=format&fit=crop">
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">09 / 28</div>
+            <div class="slide-index">06 / 25</div>
         </div>
     </div>
 
-    <!-- SLIDE 10: Aplicaciones reales -->
+    <!-- SLIDE 7: Ejemplo con encadenamiento de promesas -->
+    <div class="slide-container" id="slide7">
+        <h2 class="slide-title">Ejemplo con Encadenamiento de Promesas</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">.then().then()</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Encadenamos dos <code>.then()</code>: el primero convierte la Response en JSON, el segundo ya trabaja con los datos reales.
+                    </p>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia); font-size: 12px;">
+fetch(<span style="color: #032f62;">"https://jsonplaceholder.typicode.com/users"</span>)
+  .then(response =&gt; response.json())
+  <span style="color: #6a737d;">// Paso 1: convertir la Response a JSON</span>
+  .then(data =&gt; {
+    <span style="color: #6a737d;">// Paso 2: usar los datos</span>
+    console.log(data) <span style="color: #6a737d;">// acá sí, el array de usuarios</span>
+  })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">07 / 25</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 8: response.ok -->
+    <div class="slide-container" id="slide8">
+        <h2 class="slide-title">Verificación de Éxito con response.ok</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge bug"><i class="fa-solid fa-bug"></i> #FindTheBug</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        ¿Qué pasa si escribís mal la URL o el servidor está caído? fetch() tiene un comportamiento particular.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-wifi"></i> fetch() solo se "rechaza" (va al <code>.catch</code>) si hay un error DE RED (te quedaste sin internet).</li>
+                            <li><i class="fa-solid fa-circle-exclamation"></i> Si el servidor responde 404, fetch() lo trata como una respuesta VÁLIDA: no dispara el error solo.</li>
+                            <li><i class="fa-solid fa-shield"></i> Por eso hay que verificar <code>response.ok</code> nosotros mismos, antes de procesar los datos.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="image-wrapper">
+                        <img alt="Señal de wifi débil o desconectada" src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1280&auto=format&fit=crop">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">08 / 25</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 9: fetch + async/await -->
+    <div class="slide-container" id="slide9">
+        <h2 class="slide-title">El Flujo Profesional: fetch() + Async/Await</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">La Sintaxis Recomendada</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Es la sintaxis más moderna y recomendada, por su legibilidad: se lee de forma secuencial, como el resto del código.
+                    </p>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte); font-size: 11px;">
+async function obtenerUsuarios() {
+  try {
+    const response = await fetch(<span style="color: #032f62;">"https://jsonplaceholder.typicode.com/users"</span>)
+
+    <span style="color: #6a737d;">// Verificamos si la respuesta fue exitosa</span>
+    if (!response.ok) {
+      throw new Error(`Error en la petición: ${response.status}`)
+    }
+
+    const data = await response.json()
+    console.log(<span style="color: #032f62;">"Datos recibidos:"</span>, data)
+  } catch (error) {
+    console.error(<span style="color: #032f62;">"Hubo un problema:"</span>, error.message)
+  }
+}
+obtenerUsuarios()
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">09 / 25</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 10: Simulación desde JSON local -->
     <div class="slide-container" id="slide10">
-        <h2 class="slide-title">Aplicaciones en el Mundo Real</h2>
+        <h2 class="slide-title">Simulación desde un Archivo JSON Local</h2>
         <div class="content-area">
             <div class="two-column tiled">
                 <div>
-                    <h3>Recordar el Tema del Sitio</h3>
-                    <p>Un botón que cambia entre "Modo Claro" y "Modo Oscuro". Sin Web Storage, al refrescar el sitio siempre volvería al modo claro. Con localStorage, guardamos la elección y la aplicamos apenas carga la página.</p>
+                    <h3>Misma Lógica, Otra Fuente</h3>
+                    <p>Este proceso se puede replicar simulando una base de datos local: en vez de la URL de una API, le pasamos a <code>fetch()</code> la ruta de un archivo <code>.json</code> propio.</p>
                 </div>
                 <div>
-                    <h3>Carrito de Compras (E-commerce)</h3>
-                    <p>Las tiendas virtuales usan almacenamiento para que, si cerrás el navegador y volvés mañana, tus productos sigan ahí esperándote.</p>
+                    <h3>Ideal para Proyectos Personales</h3>
+                    <p>Es un método muy útil para armar proyectos sin tener que crear una API propia con datos simulados: <code>fetch("./data.json")</code> funciona igual que contra un servidor real.</p>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">10 / 28</div>
+            <div class="slide-index">10 / 25</div>
         </div>
     </div>
 
-    <!-- SLIDE 11: Mejores prácticas -->
+    <!-- SLIDE 11: Errores comunes en Fetch -->
     <div class="slide-container" id="slide11">
-        <h2 class="slide-title">Mejores Prácticas y Recomendaciones</h2>
-        <div class="content-area">
-            <div class="two-column tiled">
-                <div>
-                    <h3>Límites de Seguridad</h3>
-                    <p>Nunca guardes contraseñas, tarjetas de crédito o información sensible. Cualquier script malicioso puede leer estos datos fácilmente. El Web Storage no es una caja fuerte: es un armario abierto.</p>
-                </div>
-                <div>
-                    <h3>Capacidad Limitada</h3>
-                    <p>Tenés unos 5MB-10MB aproximadamente. Es mucho para texto, pero si intentás guardar imágenes o bases de datos gigantes, el navegador tira un error <code>QuotaExceededError</code>.</p>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">11 / 28</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 12: División Módulo 02 -->
-    <div class="slide-container" id="slide12">
-        <div></div>
-        <div class="transition-layout">
-            <hr>
-            <span class="moment-badge">Módulo 02</span>
-            <h2>Operadores Modernos: Sugar Syntax</h2>
-            <p style="font-size: 20px;">Atajos que no cambian lo que el código hace, pero lo hacen mucho más fácil de leer y escribir.</p>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">12 / 28</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 13: Operador Ternario -->
-    <div class="slide-container" id="slide13">
-        <h2 class="slide-title">Operador Ternario (?): Acceso sin Miedo</h2>
+        <h2 class="slide-title">Errores Comunes y Mejores Prácticas</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
-                    <span class="moment-badge">if...else en una Línea</span>
+                    <span class="moment-badge bug"><i class="fa-solid fa-bug"></i> #FindTheBug</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Simplifica una estructura condición → caso 1 → caso 2. Consta de tres partes: condición, caso si es true, caso si es false.
+                        Olvidar el <code>await</code> en <code>response.json()</code> es, por lejos, el error más común de esta unidad.
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-code"></i> <code>condicion ? caso1 : caso2</code></li>
-                            <li><i class="fa-solid fa-check"></i> Ideal para condiciones y casos simples.</li>
+                            <li><i class="fa-solid fa-circle-exclamation"></i> Sin el segundo await, "data" es una Promesa pendiente, no los datos.</li>
+                            <li><i class="fa-solid fa-code-compare"></i> El JSON que viaja por internet es puro texto: no podés ejecutar funciones ni usar <code>undefined</code> ahí adentro.</li>
                         </ul>
                     </div>
                 </div>
                 <div>
                     <div class="code-block" style="border-left-color: var(--rosa-energia); font-size: 12px;">
-<span style="color: #6a737d;">// Sin ternario</span>
-let temperatura = 31
-if (temperatura &gt; 30) {
-  console.log(<span style="color: #032f62;">"Día caluroso!"</span>)
-} else {
-  console.log(<span style="color: #032f62;">"Día agradable"</span>)
-}
+<span style="color: #6a737d;">// ❌ Error: falta el await en response.json()</span>
+const response = await fetch(url)
+const data = response.json()
+<span style="color: #6f42c1;">// data es una Promesa pendiente, no los datos</span>
 
-<span style="color: #6a737d;">// Con ternario</span>
-temperatura &gt; 30
-  ? console.log(<span style="color: #032f62;">"Día caluroso!"</span>)
-  : console.log(<span style="color: #032f62;">"Día agradable"</span>)
+<span style="color: #6a737d;">// ✅ Correcto</span>
+const data = await response.json()
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">13 / 28</div>
+            <div class="slide-index">11 / 25</div>
         </div>
     </div>
 
-    <!-- SLIDE 14: Return implícito && / || -->
-    <div class="slide-container" id="slide14">
-        <h2 class="slide-title">Return Implícito: && y ||</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge">Operadores Lógicos</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        El ternario y los operadores lógicos ofrecen un return implícito: no solo ejecutan la instrucción, la retornan.
-                    </p>
-                    <div class="bullet-list">
-                        <ul>
-                            <li><i class="fa-solid fa-ampersand"></i> Con <code>&amp;&amp;</code>: solo ejecuta lo de la derecha si la condición es true.</li>
-                            <li><i class="fa-solid fa-code-branch"></i> Con <code>||</code>: usa el valor de la derecha si el de la izquierda es "falsy" (ej: null).</li>
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
-<span style="color: #6a737d;">// AND: mensaje solo si el carrito está vacío</span>
-carrito.length === 0 &amp;&amp; console.log(<span style="color: #032f62;">"El carrito está vacío!"</span>)
-
-<span style="color: #6a737d;">// OR: valor por defecto si no hay nada guardado</span>
-const carrito = JSON.parse(localStorage.getItem(<span style="color: #032f62;">'carrito'</span>)) || []
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">14 / 28</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 15: Spread arrays -->
-    <div class="slide-container" id="slide15">
-        <h2 class="slide-title">Spread (...): Desparramar un Array</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge">Operador Spread</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        El spread permite "desparramar" un array: en vez de enviarlo entero, envía cada elemento por separado.
-                    </p>
-                </div>
-                <div>
-                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
-const nombres = [<span style="color: #032f62;">"Juan"</span>, <span style="color: #032f62;">"Julieta"</span>, <span style="color: #032f62;">"Carlos"</span>]
-
-console.log(nombres)
-<span style="color: #6a737d;">// ["Juan", "Julieta", "Carlos"]: 1 parámetro (el array)</span>
-
-console.log(...nombres)
-<span style="color: #6a737d;">// Juan Julieta Carlos: 3 parámetros individuales</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">15 / 28</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 16: Spread objetos -->
-    <div class="slide-container" id="slide16">
-        <h2 class="slide-title">Spread de Objetos: Copiar y Modificar</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge">... Dentro de {}</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Nos permite listar todas las propiedades de un objeto y luego modificar o agregar las que queramos.
-                    </p>
-                    <div class="bullet-list">
-                        <ul>
-                            <li><i class="fa-solid fa-triangle-exclamation"></i> No puede haber dos propiedades con el mismo nombre: prevalece la última declarada.</li>
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <div class="code-block" style="border-left-color: var(--rosa-energia); font-size: 12px;">
-const usuario1 = { nombre: <span style="color: #032f62;">"Juan"</span>, edad: 24, curso: <span style="color: #032f62;">"Javascript"</span> }
-
-const usuario2 = { ...usuario1 }
-<span style="color: #6a737d;">// { nombre: 'Juan', edad: 24, curso: 'Javascript' }</span>
-
-const usuario3 = { ...usuario1, curso: <span style="color: #032f62;">"ReactJS"</span>, email: <span style="color: #032f62;">"juan@doe.com"</span> }
-<span style="color: #6a737d;">// { nombre: 'Juan', edad: 24, curso: 'ReactJS', email: '...' }</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">16 / 28</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 17: Rest Parameters -->
-    <div class="slide-container" id="slide17">
-        <h2 class="slide-title">Rest Parameters: Parámetros Indeterminados</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge">...numeros</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        El spread también se usa al declarar una función, para recibir una cantidad indeterminada de parámetros, agrupados en un array.
-                    </p>
-                </div>
-                <div>
-                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
-function sumar(...numeros) {
-  return numeros.reduce((acc, n) =&gt; acc + n, 0)
-}
-
-console.log(sumar(4, 2))          <span style="color: #6a737d;">// 6</span>
-console.log(sumar(10, 15, 30, 5)) <span style="color: #6a737d;">// 60</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">17 / 28</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 18: Break de Coder ("Recreo") -->
-    <div class="slide-container break-slide" id="slide18">
+    <!-- SLIDE 12: Break de Coder ("Recreo") -->
+    <div class="slide-container break-slide" id="slide12">
         <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
             <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
             <h2>Break del Coder</h2>
@@ -968,210 +818,295 @@ console.log(sumar(10, 15, 30, 5)) <span style="color: #6a737d;">// 60</span>
         </div>
         <div class="slide-footer" style="border-top: 1px solid rgba(248, 242, 232, 0.2);">
             <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span style="color: var(--naranja-horizonte);">HOUSE</span></div>
-            <div class="slide-index" style="color: rgba(248, 242, 232, 0.4);">18 / 28</div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.4);">12 / 25</div>
         </div>
     </div>
 
-    <!-- SLIDE 19: División Módulo 03 -->
-    <div class="slide-container" id="slide19">
+    <!-- SLIDE 13: División Módulo 02 -->
+    <div class="slide-container" id="slide13">
         <div></div>
         <div class="transition-layout">
             <hr>
-            <span class="moment-badge">Módulo 03</span>
-            <h2>Desestructuración</h2>
-            <p style="font-size: 20px;">Una forma rápida y moderna de extraer valores de arrays u objetos, para un código más limpio y fácil de leer.</p>
+            <span class="moment-badge">Módulo 02</span>
+            <h2>Librerías Externas para Mejorar la UX</h2>
+            <p style="font-size: 20px;">Vas a reemplazar los cuadros nativos y aburridos del navegador por notificaciones elegantes y profesionales.</p>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">19 / 28</div>
+            <div class="slide-index">13 / 25</div>
         </div>
     </div>
 
-    <!-- SLIDE 20: Desestructuración de Arrays -->
+    <!-- SLIDE 14: ¿Qué es una librería externa? -->
+    <div class="slide-container" id="slide14">
+        <h2 class="slide-title">¿Qué es una Librería Externa?</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Un Paquete de Soluciones</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Imaginá que estás construyendo una tienda online: el usuario hace clic en "Eliminar producto" del carrito.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-square-poll-horizontal"></i> Opción 1: <code>confirm()</code> nativo, ese cuadro gris que parece un error del sistema.</li>
+                            <li><i class="fa-solid fa-palette"></i> Opción 2: un cuadro elegante, con iconos, colores de marca y animaciones suaves.</li>
+                            <li><i class="fa-solid fa-box"></i> Una librería es código ya escrito por otros desarrolladores, listo para importar y resolver ese problema común.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="image-wrapper">
+                        <img alt="Piezas de un rompecabezas encajando" src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1280&auto=format&fit=crop">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">14 / 25</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 15: Ventajas de usar librerías -->
+    <div class="slide-container" id="slide15">
+        <h2 class="slide-title">Ventajas de Usar Librerías</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-clock"></i></div>
+                    <h3>Ahorro de Tiempo</h3>
+                    <p>Lo que te tomaría días programar (estética cross-browser, animaciones), lo resolvés en minutos.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-swatchbook"></i></div>
+                    <h3>Consistencia</h3>
+                    <p>Ofrecés una experiencia visual uniforme, en vez de improvisar estilos distintos en cada pantalla.</p>
+                </div>
+                <div class="tile">
+                    <div class="icon-box"><i class="fa-solid fa-people-group"></i></div>
+                    <h3>Pruebas de la Comunidad</h3>
+                    <p>Las usan millones de personas: sus errores ya fueron detectados y corregidos por otros antes que vos.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">15 / 25</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 16: CDN vs npm -->
+    <div class="slide-container" id="slide16">
+        <h2 class="slide-title">Cómo Integrar Librerías: CDN vs. npm</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>A. Vía CDN</h3>
+                    <p>Agregás una etiqueta <code>&lt;script&gt;</code> en tu HTML que apunta a un servidor donde vive el código de la librería. <strong>Pros:</strong> configuración instantánea. <strong>Contras:</strong> dependés de tener internet mientras desarrollás.</p>
+                </div>
+                <div>
+                    <h3>B. Vía npm</h3>
+                    <p>Usás la terminal para descargar el código a tu carpeta local: <code>npm install sweetalert2</code>. <strong>Pros:</strong> el código vive en tu proyecto, más seguro y profesional. <strong>Contras:</strong> requiere algo más de configuración inicial.</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">16 / 25</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 17: SweetAlert2 -->
+    <div class="slide-container" id="slide17">
+        <h2 class="slide-title">SweetAlert2: Transformando las Alertas</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Adiós, alert()</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        <code>window.alert()</code> cumple su función, pero tiene un gran problema: detiene la ejecución de TODO el navegador.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-wand-magic-sparkles"></i> SweetAlert2 reemplaza esos mensajes con modales elegantes que no bloquean el hilo principal.</li>
+                            <li><i class="fa-solid fa-brush"></i> Totalmente personalizables: título, texto, ícono y color del botón.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--amarillo-solar); font-size: 12px;">
+<span style="color: #6a737d;">// Swal es el objeto global que da la librería</span>
+Swal.fire({
+  title: <span style="color: #032f62;">'¡Éxito!'</span>,
+  text: <span style="color: #032f62;">'El usuario se ha registrado correctamente'</span>,
+  icon: <span style="color: #032f62;">'success'</span>,
+  confirmButtonText: <span style="color: #032f62;">'Genial'</span>
+})
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">17 / 25</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 18: Promesas en SweetAlert2 -->
+    <div class="slide-container" id="slide18">
+        <h2 class="slide-title">El Poder de las Promesas en SweetAlert2</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">.then(result =&gt; ...)</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Como vimos en la unidad de Asincronismo, SweetAlert2 usa Promesas: nos permite esperar a que el usuario tome una decisión.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-square-check"></i> <code>result.isConfirmed</code> es <code>true</code> solo si el usuario hizo clic en confirmar.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--rosa-energia); font-size: 11px;">
+Swal.fire({
+  title: <span style="color: #032f62;">'¿Estás seguro?'</span>,
+  text: <span style="color: #032f62;">"¡No podrás revertir esto!"</span>,
+  icon: <span style="color: #032f62;">'warning'</span>,
+  showCancelButton: true,
+  confirmButtonText: <span style="color: #032f62;">'Sí, borrar'</span>
+}).then((result) =&gt; {
+  if (result.isConfirmed) {
+    Swal.fire(<span style="color: #032f62;">'¡Borrado!'</span>, <span style="color: #032f62;">'Tu archivo fue eliminado.'</span>, <span style="color: #032f62;">'success'</span>)
+  }
+})
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">18 / 25</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 19: Toastify -->
+    <div class="slide-container" id="slide19">
+        <h2 class="slide-title">Toastify: Notificaciones No Intrusivas</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">Una Nota Adhesiva</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        A veces no queremos interrumpir al usuario con un cuadro en medio de la pantalla: solo avisarle algo chico, que desaparece solo.
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-note-sticky"></i> Un Toast aparece en una esquina, da la información, y se va solo después de unos segundos.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte); font-size: 11px;">
+Toastify({
+  text: <span style="color: #032f62;">"Producto añadido al carrito"</span>,
+  duration: 3000,
+  close: true,
+  gravity: <span style="color: #032f62;">"top"</span>,
+  position: <span style="color: #032f62;">"right"</span>,
+  style: {
+    background: <span style="color: #032f62;">"linear-gradient(to right, #00b09b, #96c93d)"</span>
+  }
+}).showToast()
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">19 / 25</div>
+        </div>
+    </div>
+
+    <!-- SLIDE 20: SweetAlert2 vs Toastify -->
     <div class="slide-container" id="slide20">
-        <h2 class="slide-title">Desestructuración de Arrays</h2>
+        <h2 class="slide-title">SweetAlert2 vs. Toastify: ¿Cuándo Usar Cada Una?</h2>
         <div class="content-area">
-            <div class="two-column">
+            <div class="two-column tiled">
                 <div>
-                    <span class="moment-badge">Por Posición</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Permite guardar elementos de un array en variables individuales, de una sola vez.
-                    </p>
-                    <div class="bullet-list">
-                        <ul>
-                            <li><i class="fa-solid fa-list-ol"></i> Cada variable toma la posición correspondiente del array.</li>
-                        </ul>
-                    </div>
+                    <h3>SweetAlert2: Decisiones Críticas</h3>
+                    <p>Usalo cuando necesitás que el usuario CONFIRME algo antes de seguir: borrar un registro, confirmar una compra, cerrar sesión.</p>
                 </div>
                 <div>
-                    <div class="code-block" style="border-left-color: var(--naranja-horizonte);">
-const frutas = [<span style="color: #032f62;">'manzana'</span>, <span style="color: #032f62;">'banana'</span>, <span style="color: #032f62;">'pera'</span>]
-const [fruta1, fruta2, fruta3] = frutas
-
-console.log(fruta1) <span style="color: #6a737d;">// "manzana"</span>
-console.log(fruta2) <span style="color: #6a737d;">// "banana"</span>
-                    </div>
+                    <h3>Toastify: Confirmaciones Informativas</h3>
+                    <p>Usalo para avisos que no necesitan ninguna acción del usuario: "se guardó", "se agregó al carrito", "conexión perdida".</p>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">20 / 28</div>
+            <div class="slide-index">20 / 25</div>
         </div>
     </div>
 
-    <!-- SLIDE 21: Desestructuración de Objetos -->
+    <!-- SLIDE 21: Errores comunes con librerías -->
     <div class="slide-container" id="slide21">
-        <h2 class="slide-title">Desestructuración de Objetos</h2>
+        <h2 class="slide-title">Errores Comunes y Mejores Prácticas</h2>
         <div class="content-area">
             <div class="two-column">
                 <div>
-                    <span class="moment-badge">Por Nombre</span>
+                    <span class="moment-badge bug"><i class="fa-solid fa-bug"></i> La "Libreritis"</span>
                     <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Permite declarar variables donde guardar propiedades de un objeto, de forma rápida y directa.
+                        Muchos desarrolladores se emocionan e instalan 20 librerías para un proyecto pequeño: la app carga muy lento.
                     </p>
                     <div class="bullet-list">
                         <ul>
-                            <li><i class="fa-solid fa-signature"></i> Los nombres de las variables deben coincidir EXACTAMENTE con los nombres de las propiedades.</li>
+                            <li><i class="fa-solid fa-scale-balanced"></i> Regla de oro: antes de instalar, preguntate "¿puedo resolver esto con 5 líneas de JS puro?".</li>
+                            <li><i class="fa-solid fa-file-code"></i> Olvidar el CSS: si instalás la librería pero ves un texto feo, seguro olvidaste importar su <code>.css</code>.</li>
+                            <li><i class="fa-solid fa-book"></i> No leer la documentación: no intentes adivinar el nombre de una propiedad, andá a la página oficial.</li>
                         </ul>
                     </div>
                 </div>
                 <div>
-                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
-const usuario = { nombre: <span style="color: #032f62;">"John Doe"</span>, edad: 32 }
-const { nombre, edad } = usuario
-
-console.log(nombre) <span style="color: #6a737d;">// "John Doe"</span>
-console.log(edad)   <span style="color: #6a737d;">// 32</span>
+                    <div class="image-wrapper">
+                        <img alt="Muchos cables enredados entre sí" src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1280&auto=format&fit=crop">
                     </div>
                 </div>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">21 / 28</div>
+            <div class="slide-index">21 / 25</div>
         </div>
     </div>
 
-    <!-- SLIDE 22: Desestructuración anidada -->
+    <!-- SLIDE 22: Pre-Entrega 10 -->
     <div class="slide-container" id="slide22">
-        <h2 class="slide-title">Desestructuración Anidada</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge">Objetos Dentro de Objetos</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Si una propiedad es a su vez un objeto, podemos desestructurar propiedades más internas siguiendo el mismo patrón.
-                    </p>
-                </div>
-                <div>
-                    <div class="code-block" style="border-left-color: var(--rosa-energia); font-size: 12px;">
-const usuario = {
-  nombre: <span style="color: #032f62;">"John Doe"</span>,
-  telefono: { cel: 113334444, trabajo: 113325555 }
-}
-
-const { nombre, telefono: { trabajo } } = usuario
-
-console.log(nombre)  <span style="color: #6a737d;">// "John Doe"</span>
-console.log(trabajo) <span style="color: #6a737d;">// 113325555</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">22 / 28</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 23: Alias -->
-    <div class="slide-container" id="slide23">
-        <h2 class="slide-title">Alias: Renombrar al Desestructurar</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge">propiedad: nuevoNombre</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        A veces los nombres de las propiedades no son muy descriptivos: podemos desestructurar con un alias, un nombre alternativo.
-                    </p>
-                </div>
-                <div>
-                    <div class="code-block" style="border-left-color: var(--naranja-horizonte); font-size: 12px;">
-const item = { item_id: 432, product_name: <span style="color: #032f62;">"Some product"</span>, price_per_unit: 5600 }
-
-const {
-  item_id: id,
-  product_name: nombre,
-  price_per_unit: precio
-} = item
-
-console.log(id, nombre, precio) <span style="color: #6a737d;">// 432 'Some product' 5600</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">23 / 28</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 24: Desestructuración en parámetros -->
-    <div class="slide-container" id="slide24">
-        <h2 class="slide-title">Desestructuración en Parámetros</h2>
-        <div class="content-area">
-            <div class="two-column">
-                <div>
-                    <span class="moment-badge">Directo en la Función</span>
-                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
-                        Si una función recibe un objeto por parámetro, se puede desestructurar directamente en la declaración.
-                    </p>
-                </div>
-                <div>
-                    <div class="code-block" style="border-left-color: var(--amarillo-solar);">
-const producto = { id: 10, nombre: <span style="color: #032f62;">"Curso Javascript"</span>, precio: 12500 }
-
-const desestructurar = ({ id, nombre }) =&gt; {
-  console.log(id, nombre)
-}
-
-desestructurar(producto) <span style="color: #6a737d;">// 10 Curso Javascript</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="slide-footer">
-            <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">24 / 28</div>
-        </div>
-    </div>
-
-    <!-- SLIDE 25: Pre-Entrega 8 -->
-    <div class="slide-container" id="slide25">
-        <h2 class="slide-title">Pre-Entrega 8</h2>
+        <h2 class="slide-title">Pre-Entrega 10</h2>
         <div class="content-area">
             <div class="slido-box">
                 <span class="moment-badge live"><i class="fa-solid fa-laptop-code"></i> Actividad Integradora</span>
-                <h3>Sincronización de Estado entre DOM y Storage</h3>
-                <p>Lográ que el estado de tu app sea independiente de la sesión actual, usando operadores modernos para manejar datos que podrían no existir aún.</p>
-                <div class="slido-code" style="font-size: 18px; font-weight: 700; text-align: left; letter-spacing: normal;">
-                    ✓ Persistencia: los datos no se pierden al refrescar la página (F5)<br>
-                    ✓ Sincronización en tiempo real: array actualizado → localStorage (JSON.stringify) → re-renderizar<br>
-                    ✓ Operadores avanzados (ternarios, ||, etc) para optimizar la estructura<br>
-                    ✓ Destructuring aplicado sobre al menos un objeto
+                <h3>APIs, Peticiones y Librerías</h3>
+                <p>Integrá fetch hacia una API y/o archivo JSON local, y sumá al menos una librería (SweetAlert2 o Toastify) para comunicarte con el usuario.</p>
+                <div class="slido-code" style="font-size: 17px; font-weight: 700; text-align: left; letter-spacing: normal;">
+                    ✓ Solicitar datos: al cargar la página, traer info desde la api y/o el JSON local<br>
+                    ✓ Feedback visual: mientras cargan los datos, o si algo falla, el usuario debe saberlo (async/await)<br>
+                    ✓ Integrar una librería (Toastify o SweetAlert2) en vez de los alerts nativos<br>
+                    ✓ Renderizar en el DOM: los datos recibidos deben verse como elementos HTML prolijos
                 </div>
-                <p style="font-weight: 600; color: var(--naranja-oscuro);">Entregable: repositorio de GitHub público con HTML y JS.</p>
+                <p style="font-weight: 600; color: var(--naranja-oscuro);">Sin API propia: sirven Fake Store API, JSONPlaceholder o PokeAPI. Entregable: repositorio de GitHub público con HTML y JS.</p>
             </div>
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">25 / 28</div>
+            <div class="slide-index">22 / 25</div>
         </div>
     </div>
 
-    <!-- SLIDE 26: Consolidación de Conceptos (Table) -->
-    <div class="slide-container" id="slide26">
+    <!-- SLIDE 23: Consolidación de Conceptos (Table) -->
+    <div class="slide-container" id="slide23">
         <h2 class="slide-title">Consolidación de Conceptos</h2>
         <div class="content-area">
             <div class="table-layout">
@@ -1187,27 +1122,21 @@ desestructurar(producto) <span style="color: #6a737d;">// 10 Curso Javascript</s
                     <tbody>
                         <tr>
                             <td><strong>Módulo 1</strong></td>
-                            <td>Web Storage</td>
-                            <td>localStorage, sessionStorage, JSON.stringify/parse</td>
-                            <td>Darle memoria persistente a la aplicación.</td>
+                            <td>Fetch API</td>
+                            <td>fetch, response.ok, response.json(), async/await</td>
+                            <td>Conectar el JavaScript del navegador con un servidor real.</td>
                         </tr>
                         <tr>
                             <td><strong>Módulo 2</strong></td>
-                            <td>Operadores Modernos</td>
-                            <td>Ternario, &amp;&amp;/||, spread, rest parameters</td>
-                            <td>Escribir código más corto y seguro frente a datos incompletos.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Módulo 3</strong></td>
-                            <td>Desestructuración</td>
-                            <td>Destructuring de arrays/objetos, alias, parámetros</td>
-                            <td>Extraer datos de forma limpia y moderna.</td>
+                            <td>Librerías Externas</td>
+                            <td>CDN vs npm, SweetAlert2, Toastify</td>
+                            <td>Reemplazar alert/confirm nativos por una UX profesional.</td>
                         </tr>
                         <tr>
                             <td><strong>Evaluación</strong></td>
-                            <td>Pre-Entrega 8: Sincronización DOM y Storage</td>
+                            <td>Pre-Entrega 10: APIs, Peticiones y Librerías</td>
                             <td>Repositorio de GitHub público</td>
-                            <td>Integrar persistencia real en el simulador.</td>
+                            <td>Integrar fetch y una librería externa en el simulador.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1215,12 +1144,12 @@ desestructurar(producto) <span style="color: #6a737d;">// 10 Curso Javascript</s
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">26 / 28</div>
+            <div class="slide-index">23 / 25</div>
         </div>
     </div>
 
-    <!-- SLIDE 27: ¿Dudas? ¿Consultas? -->
-    <div class="slide-container" id="slide27">
+    <!-- SLIDE 24: ¿Dudas? ¿Consultas? -->
+    <div class="slide-container" id="slide24">
         <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
             <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
                 <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
@@ -1234,15 +1163,15 @@ desestructurar(producto) <span style="color: #6a737d;">// 10 Curso Javascript</s
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">27 / 28</div>
+            <div class="slide-index">24 / 25</div>
         </div>
     </div>
 
-    <!-- SLIDE 28: Q&A / Legal Disclaimer -->
-    <div class="slide-container" id="slide28" style="background-color: var(--blanco-lienzo);">
+    <!-- SLIDE 25: Q&A / Legal Disclaimer -->
+    <div class="slide-container" id="slide25" style="background-color: var(--blanco-lienzo);">
         <div class="content-area" style="justify-content: center;">
             <h1 style="color: var(--naranja-oscuro); font-size: 60px; font-weight: 800; letter-spacing: -2px;">¡Muchas gracias!</h1>
-            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 5px;">Clase 08: Web Storage, Operadores y Desestructuración</p>
+            <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 5px;">Clase 10: Fetch API y Librerías Externas</p>
 
             <p class="legal-notice">
                 La información contenida en este documento es altamente sensible y de carácter educativo para los participantes inscriptos en Coderhouse. Queda estrictamente prohibida la reproducción, duplicación o revelación total o parcial del contenido pedagógico sin previa autorización escrita de Coderhouse. Copyright © 2026 Coderhouse. Todos los derechos reservados.
@@ -1250,7 +1179,7 @@ desestructurar(producto) <span style="color: #6a737d;">// 10 Curso Javascript</s
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">28 / 28</div>
+            <div class="slide-index">25 / 25</div>
         </div>
     </div>
 
