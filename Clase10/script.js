@@ -310,12 +310,17 @@ bloquean el hilo principal.
 */
 
 // Alerta simple de éxito, con el objeto global "Swal" que nos da la librería.
-Swal.fire({
-  title: "¡Éxito!",
-  text: "El usuario se ha registrado correctamente",
-  icon: "success",
-  confirmButtonText: "Genial",
-});
+// La disparamos con un botón (en vez de ejecutarla directo), para poder
+// mostrarla en el momento exacto de la explicación, en una clase en vivo.
+function mostrarSwalExito() {
+  Swal.fire({
+    title: "¡Éxito!",
+    text: "El usuario se ha registrado correctamente",
+    icon: "success",
+    confirmButtonText: "Genial",
+  });
+}
+document.getElementById("btn-demo-swal-exito").addEventListener("click", mostrarSwalExito);
 // 🧠 Dato extra: Swal.fire() también acepta una forma corta, sin objeto
 // de configuración: Swal.fire("Título", "texto", "icono"). Es útil para
 // casos simples como este, y hace exactamente lo mismo por dentro.
@@ -327,20 +332,23 @@ Como vimos en la Clase 9, SweetAlert2 usa promesas: esto nos permite
 "esperar" a que el usuario tome una decisión, con .then(), antes de
 seguir ejecutando código.
 */
-Swal.fire({
-  title: "¿Estás seguro?",
-  text: "¡No vas a poder revertir esto!",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonColor: "#3085d6",
-  cancelButtonColor: "#d33",
-  confirmButtonText: "Sí, borrar",
-}).then((result) => {
-  // result.isConfirmed es true solo si el usuario confirmó la acción.
-  if (result.isConfirmed) {
-    Swal.fire("¡Borrado!", "La película fue eliminada de tu lista.", "success");
-  }
-});
+function mostrarSwalConfirmar() {
+  Swal.fire({
+    title: "¿Estás seguro?",
+    text: "¡No vas a poder revertir esto!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sí, borrar",
+  }).then((result) => {
+    // result.isConfirmed es true solo si el usuario confirmó la acción.
+    if (result.isConfirmed) {
+      Swal.fire("¡Borrado!", "La película fue eliminada de tu lista.", "success");
+    }
+  });
+}
+document.getElementById("btn-demo-swal-confirmar").addEventListener("click", mostrarSwalConfirmar);
 // 🧠 Dato extra: SweetAlert2 también puede reemplazar prompt(), pidiendo
 // un dato al usuario con la opción input: "text" en la configuración —
 // lo que haya escrito llega en result.value dentro del mismo .then().
@@ -353,14 +361,17 @@ pantalla: solo avisarle algo chico, como "se agregó a favoritos", que
 desaparece solo después de unos segundos. Para eso están los Toasts (como
 una nota adhesiva en una esquina de la pantalla).
 */
-Toastify({
-  text: "Pikachu agregado a favoritos",
-  duration: 3000, // 3 segundos
-  close: true,
-  gravity: "top", // "top" o "bottom"
-  position: "right", // "left", "center" o "right"
-  style: { background: "linear-gradient(to right, #00b09b, #96c93d)" },
-}).showToast();
+function mostrarToastFavoritos() {
+  Toastify({
+    text: "Pikachu agregado a favoritos",
+    duration: 3000, // 3 segundos
+    close: true,
+    gravity: "top", // "top" o "bottom"
+    position: "right", // "left", "center" o "right"
+    style: { background: "linear-gradient(to right, #00b09b, #96c93d)" },
+  }).showToast();
+}
+document.getElementById("btn-demo-toast").addEventListener("click", mostrarToastFavoritos);
 // 🧠 Dato extra: si el toast contiene información importante, agregá
 // stopOnFocus: true (viene activado por defecto) para que no se cierre
 // mientras el usuario tiene el mouse encima — le da tiempo a terminar
