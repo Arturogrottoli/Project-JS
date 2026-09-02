@@ -1,30 +1,4 @@
 // ==========================================
-// 📄 QUÉ TIENE QUE TENER EL index.html PARA QUE ESTO FUNCIONE
-// ==========================================
-/*
-Este script no funciona solo: espera que el index.html de esta carpeta
-ya tenga preparado lo siguiente (repasá index.html si algo no anda).
-
-1) Las librerías cargadas ANTES de script.js, en el <head>:
-   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-   <link rel="stylesheet" href=".../toastify.min.css">
-   <script src=".../toastify.min.js"></script>
-   Sin esto, "Swal" y "Toastify" son undefined y el script tira error
-   apenas intenta usarlos.
-
-2) Estos elementos, con estos IDs exactos, en el <body>:
-   - <button id="btn-demo-swal-exito">      (Filmina 17)
-   - <button id="btn-demo-swal-confirmar">  (Filmina 18)
-   - <button id="btn-demo-toast">           (Filmina 19)
-   - <p id="estado-carga"></p>              (Pre-Entrega 10)
-   - <ul id="lista-personajes"></ul>        (Pre-Entrega 10)
-   - <button id="btn-recargar-personajes">  (Pre-Entrega 10)
-
-Vas a ver un recordatorio puntual de cada uno, en el comentario más
-cercano a donde se usa por primera vez en el código.
-*/
-
-// ==========================================
 // REPASO CLASE 9: Asincronismo, Promesas y Async/Await
 // ==========================================
 
@@ -266,6 +240,16 @@ debuggear un fetch que "no anda" sin adivinar a ciegas.
 // ==========================================
 // 🎞️ Filmina 13: "Librerías Externas para Mejorar la UX"
 // (división de módulo — solo título y bajada, sin código)
+//
+// 📄 A PARTIR DE ACÁ hace falta importar las librerías en el index.html,
+// ANTES de la etiqueta <script src="script.js">, en el <head>:
+//   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+//   <link rel="stylesheet" href=".../toastify.min.css">
+//   <script src=".../toastify.min.js"></script>
+// Recién cuando esas líneas están en el HTML aparecen los objetos
+// globales "Swal" y "Toastify" que usamos de acá en adelante. Si las
+// llamadas de más abajo tiran "Swal is not defined" o "Toastify is not
+// defined", es señal de que falta este paso en el index.html.
 
 // 🎞️ Filmina 14: "¿Qué es una Librería Externa?"
 /*
@@ -335,10 +319,6 @@ SweetAlert2 reemplaza esos mensajes con modales elegantes que no
 bloquean el hilo principal.
 */
 
-// 📄 index.html necesita, ANTES que este script.js, el <script> de
-// SweetAlert2 en el <head> (así existe el objeto global "Swal"); si no
-// está, esta línea rompe con "Swal is not defined".
-//
 // Alerta simple de éxito, con el objeto global "Swal" que nos da la librería.
 // La disparamos con un botón (en vez de ejecutarla directo), para poder
 // mostrarla en el momento exacto de la explicación, en una clase en vivo.
@@ -395,9 +375,6 @@ pantalla: solo avisarle algo chico, como "se agregó a favoritos", que
 desaparece solo después de unos segundos. Para eso están los Toasts (como
 una nota adhesiva en una esquina de la pantalla).
 */
-// 📄 index.html necesita, ANTES que este script.js, el <link> del CSS y
-// el <script> de Toastify en el <head> (así existe el objeto global
-// "Toastify"); sin el <link> del CSS, el toast aparece pero sin estilos.
 function mostrarToastFavoritos() {
   Toastify({
     text: "Pikachu agregado a favoritos",
