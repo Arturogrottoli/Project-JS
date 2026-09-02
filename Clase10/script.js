@@ -1,4 +1,30 @@
 // ==========================================
+// 📄 QUÉ TIENE QUE TENER EL index.html PARA QUE ESTO FUNCIONE
+// ==========================================
+/*
+Este script no funciona solo: espera que el index.html de esta carpeta
+ya tenga preparado lo siguiente (repasá index.html si algo no anda).
+
+1) Las librerías cargadas ANTES de script.js, en el <head>:
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <link rel="stylesheet" href=".../toastify.min.css">
+   <script src=".../toastify.min.js"></script>
+   Sin esto, "Swal" y "Toastify" son undefined y el script tira error
+   apenas intenta usarlos.
+
+2) Estos elementos, con estos IDs exactos, en el <body>:
+   - <button id="btn-demo-swal-exito">      (Filmina 17)
+   - <button id="btn-demo-swal-confirmar">  (Filmina 18)
+   - <button id="btn-demo-toast">           (Filmina 19)
+   - <p id="estado-carga"></p>              (Pre-Entrega 10)
+   - <ul id="lista-personajes"></ul>        (Pre-Entrega 10)
+   - <button id="btn-recargar-personajes">  (Pre-Entrega 10)
+
+Vas a ver un recordatorio puntual de cada uno, en el comentario más
+cercano a donde se usa por primera vez en el código.
+*/
+
+// ==========================================
 // REPASO CLASE 9: Asincronismo, Promesas y Async/Await
 // ==========================================
 
@@ -309,6 +335,10 @@ SweetAlert2 reemplaza esos mensajes con modales elegantes que no
 bloquean el hilo principal.
 */
 
+// 📄 index.html necesita, ANTES que este script.js, el <script> de
+// SweetAlert2 en el <head> (así existe el objeto global "Swal"); si no
+// está, esta línea rompe con "Swal is not defined".
+//
 // Alerta simple de éxito, con el objeto global "Swal" que nos da la librería.
 // La disparamos con un botón (en vez de ejecutarla directo), para poder
 // mostrarla en el momento exacto de la explicación, en una clase en vivo.
@@ -320,6 +350,9 @@ function mostrarSwalExito() {
     confirmButtonText: "Genial",
   });
 }
+// 📄 index.html necesita: <button id="btn-demo-swal-exito">...</button>
+// Si el id no existe (o está mal escrito), getElementById devuelve null
+// y ".addEventListener" de la línea de abajo tira TypeError.
 document.getElementById("btn-demo-swal-exito").addEventListener("click", mostrarSwalExito);
 // 🧠 Dato extra: Swal.fire() también acepta una forma corta, sin objeto
 // de configuración: Swal.fire("Título", "texto", "icono"). Es útil para
@@ -348,6 +381,7 @@ function mostrarSwalConfirmar() {
     }
   });
 }
+// 📄 index.html necesita: <button id="btn-demo-swal-confirmar">...</button>
 document.getElementById("btn-demo-swal-confirmar").addEventListener("click", mostrarSwalConfirmar);
 // 🧠 Dato extra: SweetAlert2 también puede reemplazar prompt(), pidiendo
 // un dato al usuario con la opción input: "text" en la configuración —
@@ -361,6 +395,9 @@ pantalla: solo avisarle algo chico, como "se agregó a favoritos", que
 desaparece solo después de unos segundos. Para eso están los Toasts (como
 una nota adhesiva en una esquina de la pantalla).
 */
+// 📄 index.html necesita, ANTES que este script.js, el <link> del CSS y
+// el <script> de Toastify en el <head> (así existe el objeto global
+// "Toastify"); sin el <link> del CSS, el toast aparece pero sin estilos.
 function mostrarToastFavoritos() {
   Toastify({
     text: "Pikachu agregado a favoritos",
@@ -371,6 +408,7 @@ function mostrarToastFavoritos() {
     style: { background: "linear-gradient(to right, #00b09b, #96c93d)" },
   }).showToast();
 }
+// 📄 index.html necesita: <button id="btn-demo-toast">...</button>
 document.getElementById("btn-demo-toast").addEventListener("click", mostrarToastFavoritos);
 // 🧠 Dato extra: si el toast contiene información importante, agregá
 // stopOnFocus: true (viene activado por defecto) para que no se cierre
@@ -430,6 +468,12 @@ Recordatorio de los Criterios de Aceptación:
 - Manipulación del DOM: los datos de la API se renderizan dinámicamente.
 */
 
+// 📄 index.html necesita estos tres elementos para que la Pre-Entrega
+// funcione (si falta alguno, la variable correspondiente queda en null
+// y rompe apenas se intente usar, por ejemplo estadoCarga.textContent):
+//   <p id="estado-carga"></p>
+//   <ul id="lista-personajes"></ul>
+//   <button id="btn-recargar-personajes">Recargar personajes</button>
 const estadoCarga = document.getElementById("estado-carga");
 const listaPersonajes = document.getElementById("lista-personajes");
 const botonRecargar = document.getElementById("btn-recargar-personajes");
