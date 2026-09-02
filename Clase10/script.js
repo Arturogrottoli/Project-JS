@@ -93,6 +93,7 @@ necesidad de un segundo .json()).
 // Anatomía básica de un fetch, con .then(): pedimos un pokémon a la
 // PokéAPI, y lo primero que recibimos es el objeto Response (la
 // "bandeja tapada"), no todavía los datos.
+
 fetch("https://pokeapi.co/api/v2/pokemon/pikachu")
   .then((response) => {
     console.log(response); // objeto Response: status, ok, headers... no el pokémon todavía
@@ -193,6 +194,7 @@ obtenerPersonaje(1); // Rick Sanchez
 // Ejemplo del error deliberado: pedimos un personaje que no existe, para
 // ver cómo response.ok === false dispara nuestro throw manual, sin
 // necesidad de que la conexión a internet falle.
+console.log("👇 Ahora pedimos a propósito un personaje que NO existe, para ver el manejo de errores en acción (el 404 en rojo de acá abajo es esperado, no es un bug):");
 obtenerPersonaje(99999);
 // 🧠 Dato extra: si necesitás pedir varios recursos A LA VEZ (por
 // ejemplo, un personaje Y su ubicación), podés combinar await con
