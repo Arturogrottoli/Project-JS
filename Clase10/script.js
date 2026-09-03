@@ -259,6 +259,126 @@ hasta la respuesta cruda del servidor. Es la mejor herramienta para
 debuggear un fetch que "no anda" sin adivinar a ciegas.
 */
 
+// 🎁 EXTRA (no está en las filminas): cartas con las 2 APIs, antes de
+// pasar a Librerías Externas.
+/*
+Cierre práctico del módulo 10.1: para cada una de las dos APIs que
+venimos usando, pedimos los primeros 10 elementos y armamos una "carta"
+por cada uno (foto + nombre + un par de características), combinando
+TODO lo que vimos hasta acá: fetch, async/await, response.ok,
+createElement/innerHTML para el renderizado, y Promise.all() (el "dato
+extra" de la Filmina 10) para pedir varios recursos a la vez en vez de
+uno por uno.
+*/
+
+// 📄 index.html necesita: <button id="btn-mostrar-pokemon">,
+// <div id="cartas-pokemon">, <button id="btn-mostrar-personajes"> y
+// <div id="cartas-personajes">.
+const contenedorCartasPokemon = document.getElementById("cartas-pokemon");
+const botonMostrarPokemon = document.getElementById("btn-mostrar-pokemon");
+
+async function mostrarCartasPokemon() {
+  try {
+    contenedorCartasPokemon.innerHTML = "Cargando pokémon...";
+
+    // Los primeros 10 Pokémon tienen los ids del 1 al 10. En vez de
+    // pedirlos uno por uno (uno esperando al anterior), lanzamos los 10
+    // fetch EN PARALELO con Promise.all: arranca las 10 peticiones casi
+    // al mismo tiempo, y espera a que TODAS terminen.
+    const idsDelUnoAlDiez = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+    // 🔀 Alternativa: 10 pokémon AL AZAR en vez de siempre los mismos 10.
+    // Para probarla, comentá la línea de arriba y descomentá estas:
+    //
+    // function generarIdsAleatorios(cantidad, maximo) {
+    //   const ids = new Set(); // un Set no permite ids repetidos
+    //   while (ids.size < cantidad) {
+    //     ids.add(Math.floor(Math.random() * maximo) + 1); // entre 1 y "maximo"
+    //   }
+    //   return [...ids]; // convertimos el Set de vuelta a un array
+    // }
+    // const idsDelUnoAlDiez = generarIdsAleatorios(10, 151); // 10 ids únicos, 1ra generación
+
+    const respuestas = await Promise.all(
+      idsDelUnoAlDiez.map((id) => fetch(`https://pokeapi.co/api/v2/pokemon/${id}`))
+    );
+
+    // Cada fetch nos dio un objeto Response (la "bandeja tapada"): hay
+    // que convertir CADA UNO a JSON, así que volvemos a usar Promise.all
+    // para esperar los 10 .json() a la vez.
+    const pokemones = await Promise.all(respuestas.map((response) => response.json()));
+
+    contenedorCartasPokemon.innerHTML = ""; // limpiamos el "Cargando..."
+
+    pokemones.forEach((pokemon) => {
+      // Desestructuramos (Clase 8) solo lo que necesitamos para la carta.
+      const { name, sprites, types } = pokemon;
+      const tiposTexto = types.map((t) => t.type.name).join(", ");
+
+      const carta = document.createElement("div");
+      carta.className = "carta";
+      carta.innerHTML = `
+        <img src="${sprites.front_default}" alt="${name}" width="80">
+        <h3>${name}</h3>
+        <p>Tipo: ${tiposTexto}</p>
+      `;
+      contenedorCartasPokemon.appendChild(carta);
+    });
+  } catch (error) {
+    contenedorCartasPokemon.innerHTML = `⚠️ No se pudieron cargar los pokémon: ${error.message}`;
+  }
+}
+botonMostrarPokemon.addEventListener("click", mostrarCartasPokemon);
+
+const contenedorCartasPersonajes = document.getElementById("cartas-personajes");
+const botonMostrarPersonajes = document.getElementById("btn-mostrar-personajes");
+
+async function mostrarCartasPersonajes() {
+  try {
+    contenedorCartasPersonajes.innerHTML = "Cargando personajes...";
+
+    // Acá alcanza con UN fetch: el endpoint de lista ya nos devuelve
+    // varios personajes juntos (20 por página), a diferencia de la
+    // PokéAPI, donde cada Pokémon vive en su propio endpoint individual.
+    const response = await fetch("https://rickandmortyapi.com/api/character?page=1");
+
+    if (!response.ok) {
+      throw new Error(`No se pudo conectar a la API (status ${response.status})`);
+    }
+
+    const data = await response.json();
+
+    // 10 personajes AL AZAR (no siempre los mismos), "revolviendo" el
+    // array con sort() + Math.random() y quedándonos con los primeros 10.
+    const primerosDiez = [...data.results]
+      .sort(() => Math.random() - 0.5) // "revuelve" el array (shuffle)
+      .slice(0, 10);
+
+    // 🔀 Alternativa: si preferís siempre los primeros 10 de la página
+    // (sin azar), comentá las 3 líneas de arriba y descomentá esta:
+    //
+    // const primerosDiez = data.results.slice(0, 10);
+
+    contenedorCartasPersonajes.innerHTML = "";
+
+    primerosDiez.forEach((personaje) => {
+      const { name, image, species, status } = personaje;
+
+      const carta = document.createElement("div");
+      carta.className = "carta";
+      carta.innerHTML = `
+        <img src="${image}" alt="${name}" width="80">
+        <h3>${name}</h3>
+        <p>${species} · ${status}</p>
+      `;
+      contenedorCartasPersonajes.appendChild(carta);
+    });
+  } catch (error) {
+    contenedorCartasPersonajes.innerHTML = `⚠️ No se pudieron cargar los personajes: ${error.message}`;
+  }
+}
+botonMostrarPersonajes.addEventListener("click", mostrarCartasPersonajes);
+
 // 🎞️ Filmina 13: "Break del Coder" (☕ pausa de 10 minutos, sin código)
 
 // ==========================================

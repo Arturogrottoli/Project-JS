@@ -8,9 +8,29 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css">
   <script src="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.js"></script>
+
+  <!-- Bordecito para que las "cartas" generadas por script.js (10.1)
+       se vean como cards, en vez de texto e imagen sueltos. -->
+  <style>
+    .carta {
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 5px;
+    }
+  </style>
 </head>
 <body>
   <h1>Mi Netflix</h1>
+
+  <!-- Cartas de ejemplo (cierre del módulo 10.1, antes de Librerías):
+       10 elementos de cada API, con foto, nombre y características. -->
+  <button id="btn-mostrar-pokemon">Mostrar 10 Pokémon</button>
+  <div id="cartas-pokemon"></div>
+
+  <button id="btn-mostrar-personajes">Mostrar 10 Personajes</button>
+  <div id="cartas-personajes"></div>
 
   <!-- Botones de demo para SweetAlert2 y Toastify (10.2): cada uno
        dispara un ejemplo distinto al hacer clic, en vez de que los 3
