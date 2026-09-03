@@ -90,6 +90,30 @@ nativo: hace básicamente lo mismo, pero con algunas comodidades extra
 necesidad de un segundo .json()).
 */
 
+// 🎞️ Filmina 05: "APIs Públicas: Con Qué Vamos a Practicar Hoy"
+/*
+¿Qué es una API pública?
+Un servidor que expone datos listos para consumir, a través de URLs
+documentadas llamadas "endpoints". No hace falta programar tu propio
+backend: alcanza con conocer la URL base y sus endpoints. Las APIs de
+práctica suelen ser gratuitas y no piden autenticación (API key) para
+hacer GET, y su documentación te dice qué endpoints existen y qué forma
+tiene el JSON que devuelven.
+
+Las dos que usamos hoy:
+- PokéAPI (https://pokeapi.co): toda la data de los juegos Pokémon
+  (estadísticas, movimientos, tipos, imágenes). Endpoint que usamos:
+  /api/v2/pokemon/{nombre o id}.
+- Rick and Morty API (https://rickandmortyapi.com): personajes,
+  ubicaciones y episodios de la serie. Endpoint que usamos:
+  /api/character/{id} y /api/character (la lista completa, paginada).
+
+🧠 Dato extra: ambas tienen su documentación pública con TODOS los
+endpoints disponibles (no solo los que usamos en esta clase). Vale la
+pena explorarlas para tu propio proyecto: quizás encuentres un endpoint
+que se adapte mejor a la temática de tu simulador.
+*/
+
 // Anatomía básica de un fetch, con .then(): pedimos un pokémon a la
 // PokéAPI, y lo primero que recibimos es el objeto Response (la
 // "bandeja tapada"), no todavía los datos.
@@ -99,7 +123,7 @@ fetch("https://pokeapi.co/api/v2/pokemon/pikachu")
     console.log(response); // objeto Response: status, ok, headers... no el pokémon todavía
   });
 
-// 🎞️ Filmina 05: "El Objeto Response: La 'Bandeja' de Entrada"
+// 🎞️ Filmina 06: "El Objeto Response: La 'Bandeja' de Entrada"
 /*
 2) El objeto Response: la "bandeja" de entrada
 Cuando el servidor contesta, JavaScript nos entrega un objeto Response,
@@ -118,7 +142,7 @@ header Access-Control-Allow-Origin). No lo resolvemos hoy, pero conviene
 reconocer el mensaje para no perder horas pensando que rompiste algo.
 */
 
-// 🎞️ Filmina 06: "Leyendo JSON con response.json()"
+// 🎞️ Filmina 07: "Leyendo JSON con response.json()"
 /*
 3) Leer JSON con response.json()
 La mayoría de las APIs modernas envían la información en formato JSON
@@ -138,7 +162,7 @@ la API que estás consumiendo.
 
 // Encadenando promesas: primero convertimos la Response a JSON, después
 // usamos los datos ya utilizables.
-// 🎞️ Filmina 07: "Ejemplo con Encadenamiento de Promesas"
+// 🎞️ Filmina 08: "Ejemplo con Encadenamiento de Promesas"
 fetch("https://pokeapi.co/api/v2/pokemon/pikachu")
   .then((response) => response.json()) // Paso 1: Response -> objeto JS
   .then((data) => {
@@ -149,7 +173,7 @@ fetch("https://pokeapi.co/api/v2/pokemon/pikachu")
 // .catch() al final para atrapar errores de CUALQUIER eslabón de la
 // cadena — no hace falta poner un .catch() después de cada .then().
 
-// 🎞️ Filmina 08: "Verificación de Éxito con response.ok"
+// 🎞️ Filmina 09: "Verificación de Éxito con response.ok"
 /*
 4) response.ok: verificar el éxito antes de usar los datos
 ¿Qué pasa si la URL está mal escrita o el servidor está caído? fetch()
@@ -166,7 +190,7 @@ una de las razones por las que mucha gente la prefiere: te ahorra el "if
 (!response.ok)" manual que hacemos acá abajo.
 */
 
-// 🎞️ Filmina 09: "El Flujo Profesional: fetch() + Async/Await"
+// 🎞️ Filmina 10: "El Flujo Profesional: fetch() + Async/Await"
 /*
 5) El flujo profesional: fetch + async/await
 Esta es la sintaxis más moderna y recomendada, porque se lee de forma
@@ -201,7 +225,7 @@ obtenerPersonaje(99999);
 // Promise.all([fetch(url1), fetch(url2)]) para lanzar ambas peticiones
 // en paralelo, en vez de esperar una y recién después empezar la otra.
 
-// 🎞️ Filmina 10: "Simulación desde un Archivo JSON Local"
+// 🎞️ Filmina 11: "Simulación desde un Archivo JSON Local"
 /*
 6) Simulación desde un archivo JSON local
 Este mismo proceso se puede replicar simulando una base de datos local:
@@ -216,7 +240,7 @@ extensión "Live Server" de VS Code, o "npx serve") — el mismo problema
 que a veces aparece "de la nada" en la Pre-Entrega.
 */
 
-// 🎞️ Filmina 11: "Errores Comunes y Mejores Prácticas" (Fetch)
+// 🎞️ Filmina 12: "Errores Comunes y Mejores Prácticas" (Fetch)
 /*
 7) Errores comunes
 ❌ Olvidar el await en response.json():
@@ -235,12 +259,12 @@ hasta la respuesta cruda del servidor. Es la mejor herramienta para
 debuggear un fetch que "no anda" sin adivinar a ciegas.
 */
 
-// 🎞️ Filmina 12: "Break del Coder" (☕ pausa de 10 minutos, sin código)
+// 🎞️ Filmina 13: "Break del Coder" (☕ pausa de 10 minutos, sin código)
 
 // ==========================================
 // 10.2 LIBRERÍAS EXTERNAS: SweetAlert2 Y Toastify
 // ==========================================
-// 🎞️ Filmina 13: "Librerías Externas para Mejorar la UX"
+// 🎞️ Filmina 14: "Librerías Externas para Mejorar la UX"
 // (división de módulo — solo título y bajada, sin código)
 //
 // 📄 A PARTIR DE ACÁ hace falta importar las librerías en el index.html,
@@ -253,7 +277,7 @@ debuggear un fetch que "no anda" sin adivinar a ciegas.
 // llamadas de más abajo tiran "Swal is not defined" o "Toastify is not
 // defined", es señal de que falta este paso en el index.html.
 
-// 🎞️ Filmina 14: "¿Qué es una Librería Externa?"
+// 🎞️ Filmina 15: "¿Qué es una Librería Externa?"
 /*
 Imaginá que estás construyendo una tienda online y el usuario hace clic
 en "Eliminar producto" del carrito. Tenés dos caminos: usar el confirm()
@@ -277,7 +301,7 @@ de un sitio random), y evitar acumular librerías de fuentes que no
 conocés.
 */
 
-// 🎞️ Filmina 15: "Ventajas de Usar Librerías"
+// 🎞️ Filmina 16: "Ventajas de Usar Librerías"
 /*
 ¿Por qué no programar todo nosotros mismos? A medida que avanzás como
 desarrollador, ciertos problemas se repiten constantemente (notificaciones,
@@ -295,7 +319,7 @@ vale la pena si la librería realmente resuelve algo que te haría perder
 mucho más tiempo programándolo a mano.
 */
 
-// 🎞️ Filmina 16: "Cómo Integrar Librerías: CDN vs. npm"
+// 🎞️ Filmina 17: "Cómo Integrar Librerías: CDN vs. npm"
 /*
 2) Cómo se integran: CDN vs. npm
 - CDN (Content Delivery Network): agregás una etiqueta <script> en tu
@@ -312,7 +336,7 @@ primero. Por eso en este curso usamos la vía CDN: es la opción más
 simple para empezar, sin herramientas adicionales que instalar.
 */
 
-// 🎞️ Filmina 17: "SweetAlert2: Transformando las Alertas"
+// 🎞️ Filmina 18: "SweetAlert2: Transformando las Alertas"
 /*
 3) SweetAlert2: reemplazando alert() y confirm()
 window.alert() cumple su función, pero tiene un problema grave: bloquea
@@ -340,7 +364,7 @@ document.getElementById("btn-demo-swal-exito").addEventListener("click", mostrar
 // de configuración: Swal.fire("Título", "texto", "icono"). Es útil para
 // casos simples como este, y hace exactamente lo mismo por dentro.
 
-// 🎞️ Filmina 18: "El Poder de las Promesas en SweetAlert2"
+// 🎞️ Filmina 19: "El Poder de las Promesas en SweetAlert2"
 /*
 El poder de las Promesas en SweetAlert2
 Como vimos en la Clase 9, SweetAlert2 usa promesas: esto nos permite
@@ -369,7 +393,7 @@ document.getElementById("btn-demo-swal-confirmar").addEventListener("click", mos
 // un dato al usuario con la opción input: "text" en la configuración —
 // lo que haya escrito llega en result.value dentro del mismo .then().
 
-// 🎞️ Filmina 19: "Toastify: Notificaciones No Intrusivas"
+// 🎞️ Filmina 20: "Toastify: Notificaciones No Intrusivas"
 /*
 4) Toastify: notificaciones no intrusivas
 A veces no queremos interrumpir al usuario con un cuadro en medio de la
@@ -394,7 +418,7 @@ document.getElementById("btn-demo-toast").addEventListener("click", mostrarToast
 // mientras el usuario tiene el mouse encima — le da tiempo a terminar
 // de leerlo antes de que desaparezca solo.
 
-// 🎞️ Filmina 20: "SweetAlert2 vs. Toastify: ¿Cuándo Usar Cada Una?"
+// 🎞️ Filmina 21: "SweetAlert2 vs. Toastify: ¿Cuándo Usar Cada Una?"
 /*
 Diferencia clave: usá SweetAlert2 para decisiones críticas (borrar,
 confirmar), y Toastify para confirmaciones informativas que no necesitan
@@ -406,7 +430,7 @@ Pre-Entrega 10 de esta clase, más abajo, usamos Toastify tanto para el
 mensaje de éxito como para el de error al cargar los personajes.
 */
 
-// 🎞️ Filmina 21: "Errores Comunes y Mejores Prácticas" (Librerías)
+// 🎞️ Filmina 22: "Errores Comunes y Mejores Prácticas" (Librerías)
 /*
 5) Errores comunes y mejores prácticas
 - La "libreritis": instalar 20 librerías para un proyecto chico hace que
@@ -428,7 +452,7 @@ resolviendo.
 // ==========================================
 // PRE-ENTREGA 10, EJEMPLO RESUELTO: APIs, Peticiones y Librerías
 // ==========================================
-// 🎞️ Filmina 22: "Pre-Entrega 10"
+// 🎞️ Filmina 23: "Pre-Entrega 10"
 
 /*
 Acá resolvemos, a modo de ejemplo, la consigna de la "Pre-Entrega 10":
@@ -526,6 +550,6 @@ cargarPersonajes(); // primera carga, apenas se ejecuta el script
 // usuario (por ejemplo, si la primera vez falló por un corte de conexión).
 botonRecargar.addEventListener("click", cargarPersonajes);
 
-// 🎞️ Filminas 23-25: "Consolidación de Conceptos" / "¿Dudas?" / "¡Gracias!"
+// 🎞️ Filminas 24-26: "Consolidación de Conceptos" / "¿Dudas?" / "¡Gracias!"
 // Con el código ya recorrido, volvé a las filminas para cerrar la clase
 // con la tabla resumen de los 2 módulos y el cierre.

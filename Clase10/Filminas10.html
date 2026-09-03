@@ -501,7 +501,7 @@
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">01 / 25</div>
+            <div class="slide-index">01 / 26</div>
         </div>
     </div>
 
@@ -516,7 +516,7 @@
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">02 / 25</div>
+            <div class="slide-index">02 / 26</div>
         </div>
     </div>
 
@@ -547,7 +547,7 @@
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">03 / 25</div>
+            <div class="slide-index">03 / 26</div>
         </div>
     </div>
 
@@ -583,12 +583,50 @@ fetch(<span style="color: #032f62;">"https://jsonplaceholder.typicode.com/users"
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">04 / 25</div>
+            <div class="slide-index">04 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 5: El objeto Response -->
+    
+    <!-- SLIDE 5: APIs Públicas de Ejemplo -->
     <div class="slide-container" id="slide5">
+        <h2 class="slide-title">APIs Públicas: Con Qué Vamos a Practicar Hoy</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <span class="moment-badge">¿Qué es una API?</span>
+                    <p style="margin-bottom: 15px; font-weight: 600; font-size: 19px; color: var(--naranja-oscuro);">
+                        Una API (Application Programming Interface) pública es un servidor que expone datos listos para consumir, a través de URLs documentadas llamadas "endpoints".
+                    </p>
+                    <div class="bullet-list">
+                        <ul>
+                            <li><i class="fa-solid fa-server"></i> No hace falta programar tu propio backend: alcanza con conocer la URL base y sus endpoints.</li>
+                            <li><i class="fa-solid fa-key"></i> Las APIs de práctica suelen ser gratuitas y no piden autenticación (API key) para hacer GET.</li>
+                            <li><i class="fa-solid fa-book"></i> Su documentación te dice qué endpoints existen y qué forma tiene el JSON que devuelven.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div class="code-block" style="border-left-color: var(--naranja-horizonte); font-size: 12px;">
+<span style="color: #6a737d;">// PokéAPI: toda la data de los juegos Pokémon</span>
+fetch(<span style="color: #032f62;">"https://pokeapi.co/api/v2/pokemon/pikachu"</span>)
+
+<span style="color: #6a737d;">// Rick and Morty API: personajes, lugares y episodios</span>
+fetch(<span style="color: #032f62;">"https://rickandmortyapi.com/api/character/1"</span>)
+
+<span style="color: #6a737d;">// Las dos son públicas, gratuitas y sin autenticación:</span>
+<span style="color: #6a737d;">// ideales para practicar fetch() sin crear un backend propio.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">
+            <div class="brand-logo">CODER<span>HOUSE</span></div>
+            <div class="slide-index">05 / 26</div>
+        </div>
+    </div>
+<!-- SLIDE 6: El objeto Response -->
+    <div class="slide-container" id="slide6">
         <h2 class="slide-title">El Objeto Response: La "Bandeja" de Entrada</h2>
         <div class="content-area">
             <div class="two-column">
@@ -618,12 +656,12 @@ fetch(<span style="color: #032f62;">"https://jsonplaceholder.typicode.com/users"
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">05 / 25</div>
+            <div class="slide-index">06 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 6: Lectura de JSON con response.json() -->
-    <div class="slide-container" id="slide6">
+    <!-- SLIDE 7: Lectura de JSON con response.json() -->
+    <div class="slide-container" id="slide7">
         <h2 class="slide-title">Leyendo JSON con response.json()</h2>
         <div class="content-area">
             <div class="two-column">
@@ -648,12 +686,12 @@ fetch(<span style="color: #032f62;">"https://jsonplaceholder.typicode.com/users"
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">06 / 25</div>
+            <div class="slide-index">07 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 7: Ejemplo con encadenamiento de promesas -->
-    <div class="slide-container" id="slide7">
+    <!-- SLIDE 8: Ejemplo con encadenamiento de promesas -->
+    <div class="slide-container" id="slide8">
         <h2 class="slide-title">Ejemplo con Encadenamiento de Promesas</h2>
         <div class="content-area">
             <div class="two-column">
@@ -678,12 +716,12 @@ fetch(<span style="color: #032f62;">"https://jsonplaceholder.typicode.com/users"
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">07 / 25</div>
+            <div class="slide-index">08 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 8: response.ok -->
-    <div class="slide-container" id="slide8">
+    <!-- SLIDE 9: response.ok -->
+    <div class="slide-container" id="slide9">
         <h2 class="slide-title">Verificación de Éxito con response.ok</h2>
         <div class="content-area">
             <div class="two-column">
@@ -709,12 +747,12 @@ fetch(<span style="color: #032f62;">"https://jsonplaceholder.typicode.com/users"
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">08 / 25</div>
+            <div class="slide-index">09 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 9: fetch + async/await -->
-    <div class="slide-container" id="slide9">
+    <!-- SLIDE 10: fetch + async/await -->
+    <div class="slide-container" id="slide10">
         <h2 class="slide-title">El Flujo Profesional: fetch() + Async/Await</h2>
         <div class="content-area">
             <div class="two-column">
@@ -748,12 +786,12 @@ obtenerUsuarios()
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">09 / 25</div>
+            <div class="slide-index">10 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 10: Simulación desde JSON local -->
-    <div class="slide-container" id="slide10">
+    <!-- SLIDE 11: Simulación desde JSON local -->
+    <div class="slide-container" id="slide11">
         <h2 class="slide-title">Simulación desde un Archivo JSON Local</h2>
         <div class="content-area">
             <div class="two-column tiled">
@@ -769,12 +807,12 @@ obtenerUsuarios()
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">10 / 25</div>
+            <div class="slide-index">11 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 11: Errores comunes en Fetch -->
-    <div class="slide-container" id="slide11">
+    <!-- SLIDE 12: Errores comunes en Fetch -->
+    <div class="slide-container" id="slide12">
         <h2 class="slide-title">Errores Comunes y Mejores Prácticas</h2>
         <div class="content-area">
             <div class="two-column">
@@ -805,12 +843,12 @@ const data = await response.json()
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">11 / 25</div>
+            <div class="slide-index">12 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 12: Break de Coder ("Recreo") -->
-    <div class="slide-container break-slide" id="slide12">
+    <!-- SLIDE 13: Break de Coder ("Recreo") -->
+    <div class="slide-container break-slide" id="slide13">
         <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
             <div class="break-logo"><i class="fa-solid fa-mug-hot"></i></div>
             <h2>Break del Coder</h2>
@@ -818,12 +856,12 @@ const data = await response.json()
         </div>
         <div class="slide-footer" style="border-top: 1px solid rgba(248, 242, 232, 0.2);">
             <div class="brand-logo" style="color: var(--blanco-lienzo);">CODER<span style="color: var(--naranja-horizonte);">HOUSE</span></div>
-            <div class="slide-index" style="color: rgba(248, 242, 232, 0.4);">12 / 25</div>
+            <div class="slide-index" style="color: rgba(248, 242, 232, 0.4);">13 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 13: División Módulo 02 -->
-    <div class="slide-container" id="slide13">
+    <!-- SLIDE 14: División Módulo 02 -->
+    <div class="slide-container" id="slide14">
         <div></div>
         <div class="transition-layout">
             <hr>
@@ -833,12 +871,12 @@ const data = await response.json()
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">13 / 25</div>
+            <div class="slide-index">14 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 14: ¿Qué es una librería externa? -->
-    <div class="slide-container" id="slide14">
+    <!-- SLIDE 15: ¿Qué es una librería externa? -->
+    <div class="slide-container" id="slide15">
         <h2 class="slide-title">¿Qué es una Librería Externa?</h2>
         <div class="content-area">
             <div class="two-column">
@@ -864,12 +902,12 @@ const data = await response.json()
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">14 / 25</div>
+            <div class="slide-index">15 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 15: Ventajas de usar librerías -->
-    <div class="slide-container" id="slide15">
+    <!-- SLIDE 16: Ventajas de usar librerías -->
+    <div class="slide-container" id="slide16">
         <h2 class="slide-title">Ventajas de Usar Librerías</h2>
         <div class="content-area">
             <div class="tiled-content">
@@ -892,12 +930,12 @@ const data = await response.json()
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">15 / 25</div>
+            <div class="slide-index">16 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 16: CDN vs npm -->
-    <div class="slide-container" id="slide16">
+    <!-- SLIDE 17: CDN vs npm -->
+    <div class="slide-container" id="slide17">
         <h2 class="slide-title">Cómo Integrar Librerías: CDN vs. npm</h2>
         <div class="content-area">
             <div class="two-column tiled">
@@ -913,12 +951,12 @@ const data = await response.json()
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">16 / 25</div>
+            <div class="slide-index">17 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 17: SweetAlert2 -->
-    <div class="slide-container" id="slide17">
+    <!-- SLIDE 18: SweetAlert2 -->
+    <div class="slide-container" id="slide18">
         <h2 class="slide-title">SweetAlert2: Transformando las Alertas</h2>
         <div class="content-area">
             <div class="two-column">
@@ -949,12 +987,12 @@ Swal.fire({
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">17 / 25</div>
+            <div class="slide-index">18 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 18: Promesas en SweetAlert2 -->
-    <div class="slide-container" id="slide18">
+    <!-- SLIDE 19: Promesas en SweetAlert2 -->
+    <div class="slide-container" id="slide19">
         <h2 class="slide-title">El Poder de las Promesas en SweetAlert2</h2>
         <div class="content-area">
             <div class="two-column">
@@ -988,12 +1026,12 @@ Swal.fire({
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">18 / 25</div>
+            <div class="slide-index">19 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 19: Toastify -->
-    <div class="slide-container" id="slide19">
+    <!-- SLIDE 20: Toastify -->
+    <div class="slide-container" id="slide20">
         <h2 class="slide-title">Toastify: Notificaciones No Intrusivas</h2>
         <div class="content-area">
             <div class="two-column">
@@ -1026,12 +1064,12 @@ Toastify({
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">19 / 25</div>
+            <div class="slide-index">20 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 20: SweetAlert2 vs Toastify -->
-    <div class="slide-container" id="slide20">
+    <!-- SLIDE 21: SweetAlert2 vs Toastify -->
+    <div class="slide-container" id="slide21">
         <h2 class="slide-title">SweetAlert2 vs. Toastify: ¿Cuándo Usar Cada Una?</h2>
         <div class="content-area">
             <div class="two-column tiled">
@@ -1047,12 +1085,12 @@ Toastify({
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">20 / 25</div>
+            <div class="slide-index">21 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 21: Errores comunes con librerías -->
-    <div class="slide-container" id="slide21">
+    <!-- SLIDE 22: Errores comunes con librerías -->
+    <div class="slide-container" id="slide22">
         <h2 class="slide-title">Errores Comunes y Mejores Prácticas</h2>
         <div class="content-area">
             <div class="two-column">
@@ -1078,12 +1116,12 @@ Toastify({
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">21 / 25</div>
+            <div class="slide-index">22 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 22: Pre-Entrega 10 -->
-    <div class="slide-container" id="slide22">
+    <!-- SLIDE 23: Pre-Entrega 10 -->
+    <div class="slide-container" id="slide23">
         <h2 class="slide-title">Pre-Entrega 10</h2>
         <div class="content-area">
             <div class="slido-box">
@@ -1101,12 +1139,12 @@ Toastify({
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">22 / 25</div>
+            <div class="slide-index">23 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 23: Consolidación de Conceptos (Table) -->
-    <div class="slide-container" id="slide23">
+    <!-- SLIDE 24: Consolidación de Conceptos (Table) -->
+    <div class="slide-container" id="slide24">
         <h2 class="slide-title">Consolidación de Conceptos</h2>
         <div class="content-area">
             <div class="table-layout">
@@ -1144,12 +1182,12 @@ Toastify({
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">23 / 25</div>
+            <div class="slide-index">24 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 24: ¿Dudas? ¿Consultas? -->
-    <div class="slide-container" id="slide24">
+    <!-- SLIDE 25: ¿Dudas? ¿Consultas? -->
+    <div class="slide-container" id="slide25">
         <div class="content-area" style="align-items: center; justify-content: center; text-align: center;">
             <div style="display: flex; gap: 25px; align-items: flex-end; justify-content: center; margin-bottom: 20px;">
                 <i class="fa-solid fa-circle-question" style="font-size: 50px; color: var(--amarillo-solar);"></i>
@@ -1163,12 +1201,12 @@ Toastify({
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">24 / 25</div>
+            <div class="slide-index">25 / 26</div>
         </div>
     </div>
 
-    <!-- SLIDE 25: Q&A / Legal Disclaimer -->
-    <div class="slide-container" id="slide25" style="background-color: var(--blanco-lienzo);">
+    <!-- SLIDE 26: Q&A / Legal Disclaimer -->
+    <div class="slide-container" id="slide26" style="background-color: var(--blanco-lienzo);">
         <div class="content-area" style="justify-content: center;">
             <h1 style="color: var(--naranja-oscuro); font-size: 60px; font-weight: 800; letter-spacing: -2px;">¡Muchas gracias!</h1>
             <p style="font-size: 20px; color: var(--naranja-horizonte); font-weight: 600; margin-top: 5px;">Clase 10: Fetch API y Librerías Externas</p>
@@ -1179,7 +1217,7 @@ Toastify({
         </div>
         <div class="slide-footer">
             <div class="brand-logo">CODER<span>HOUSE</span></div>
-            <div class="slide-index">25 / 25</div>
+            <div class="slide-index">26 / 26</div>
         </div>
     </div>
 
