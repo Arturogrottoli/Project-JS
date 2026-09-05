@@ -93,4 +93,23 @@ body {
   aside h2 {
     padding-left: 20px;
   }
-  
+
+  #btnVaciarLista {
+    margin: 0 20px 10px 20px;
+    padding: 8px 14px;
+    background: #444;
+    border: none;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  #btnVaciarLista:hover {
+    background: #e50914;
+  }
+
+  .empty-message {
+    padding: 0 20px 20px 20px;
+    color: #bbb;
+    font-size: 14px;
+  }
