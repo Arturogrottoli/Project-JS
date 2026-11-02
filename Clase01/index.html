@@ -1,188 +1,194 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clase de Variables y Git/GitHub</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        .section-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            margin: 20px 0;
-        }
-        
-        .section-btn {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            text-align: left;
-        }
-        
-        .section-btn:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
-        }
-        
-        .section-btn.success {
-            background-color: #27ae60;
-        }
-        
-        .section-btn.warning {
-            background-color: #f39c12;
-        }
-        
-        .section-btn.error {
-            background-color: #e74c3c;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clase 01 - Introducción a JavaScript</title>
+
+  <!-- Los estilos van acá mismo para que la clase tenga solo 2 archivos: index.html y script.js -->
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+      color: #2c3e50;
+      line-height: 1.6;
+    }
+    header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    section {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    h2 { border-bottom: 2px solid #3498db; padding-bottom: 5px; }
+    pre {
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    code { font-family: Consolas, monospace; }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      margin: 5px 5px 5px 0;
+    }
+    button:hover { background-color: #2980b9; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #ecf0f1; }
+    .nota {
+      background-color: #fff8e1;
+      border-left: 4px solid #f39c12;
+      padding: 10px 15px;
+    }
+    #salida {
+      background-color: #1e1e1e;
+      color: #2ecc71;
+      font-family: Consolas, monospace;
+      padding: 15px;
+      border-radius: 6px;
+      min-height: 60px;
+      white-space: pre-wrap;
+    }
+  </style>
+
+  <!-- ======================================================
+       FORMA 2: JavaScript dentro de una etiqueta <script>
+       ====================================================== -->
+  <script>
+    console.log("👋 Hola desde la FORMA 2: un <script> escrito dentro del index.html");
+  </script>
 </head>
 <body>
-    <header>
-        <h1>🔧 Clase: Variables y Git/GitHub - Versión Paso a Paso</h1>
-        <p>Versión interactiva para enseñar en vivo. Ejecuta cada sección cuando la necesites.</p>
-    </header>
+  <header>
+    <h1>Clase 01: Introducción a JavaScript</h1>
+    <p>Cómo conectar JS con HTML · Variables y tipos de datos · Git y GitHub</p>
+  </header>
 
-    <div class="controls">
-        <button onclick="abrirConsola()">🔍 Cómo Abrir Consola</button>
-        <button onclick="limpiarConsola()" class="clear-btn">🧹 Limpiar Consola</button>
-        <button onclick="ejecutarTodo()" style="background-color: #27ae60;">🚀 Ejecutar Todo</button>
-        <button onclick="ejecutarTeoria()" style="background-color: #9b59b6;">📖 Ejecutar Teoría</button>
-        <button onclick="ejecutarEjercicios()" style="background-color: #e67e22;">🎯 Ejecutar Ejercicios</button>
-    </div>
+  <p class="nota">💡 Abrí la consola del navegador con <strong>F12</strong> (o clic derecho → Inspeccionar → pestaña <em>Console</em>) para ver todo lo que imprime <code>console.log()</code>.</p>
 
-    <div class="container">
-        <div class="instructions">
-            <h2>📋 Instrucciones para la Clase</h2>
-            <ul>
-                <li><strong>1.</strong> Presiona cada botón cuando llegues a esa sección</li>
-                <li><strong>2.</strong> Los ejemplos se ejecutarán automáticamente</li>
-                <li><strong>3.</strong> Los resultados aparecerán en la consola visual</li>
-                <li><strong>4.</strong> Puedes repetir secciones cuantas veces quieras</li>
-            </ul>
-            
-            <h3>🎯 Orden recomendado:</h3>
-            <ol>
-                <li>¿Qué es una variable?</li>
-                <li>Declaración con LET</li>
-                <li>Declaración con CONST</li>
-                <li>Declaración con VAR</li>
-                <li>Tipos de datos</li>
-                <li>Arrays y Objetos</li>
-                <li>Ejercicios prácticos</li>
-                <li>Manejo de errores</li>
-                <li>Diferencias VAR vs LET</li>
-                <li>Git y GitHub</li>
-            </ol>
-        </div>
+  <!-- ====================================================== -->
+  <section>
+    <h2>1. Tres formas de usar JavaScript en un HTML</h2>
 
-        <div class="console-output" id="consoleOutput">
-            <div class="info">🚀 Consola iniciada...</div>
-            <div class="info">📚 Clase de Variables - Versión Paso a Paso</div>
-            <div class="info">💡 Usa los botones para ejecutar cada sección</div>
-        </div>
-    </div>
+    <h3>Forma 1: Adentro de una etiqueta (inline)</h3>
+    <p>El código JS se escribe directamente en un atributo de una etiqueta HTML, por ejemplo <code>onclick</code>. Sirve para cosas muy chiquitas, pero mezcla HTML con JS y se vuelve difícil de mantener.</p>
+    <pre><code>&lt;button onclick="alert('Hola desde la forma 1')"&gt;Probar&lt;/button&gt;</code></pre>
+    <button onclick="alert('👋 Hola desde la FORMA 1: código inline en el botón')">Probar forma 1</button>
 
-    <div class="section-buttons">
-        <button class="section-btn" onclick="explicarVariables()">
-            📚 1. ¿Qué es una variable?
-        </button>
-        <button class="section-btn" onclick="explicarLet()">
-            🔄 2. Declaración con LET
-        </button>
-        <button class="section-btn" onclick="explicarConst()">
-            🔒 3. Declaración con CONST
-        </button>
-        <button class="section-btn" onclick="explicarVar()">
-            ⚠️ 4. Declaración con VAR
-        </button>
-        <button class="section-btn" onclick="explicarTiposDatos()">
-            📊 5. Tipos de datos
-        </button>
-        <button class="section-btn" onclick="explicarArraysObjetos()">
-            📦 6. Arrays y Objetos
-        </button>
-        <button class="section-btn success" onclick="ejerciciosPracticos()">
-            🎯 7. Ejercicios prácticos
-        </button>
-        <button class="section-btn error" onclick="manejoErrores()">
-            ❌ 8. Manejo de errores
-        </button>
-        <button class="section-btn warning" onclick="diferenciasVarLet()">
-            ⚖️ 9. VAR vs LET
-        </button>
-        <button class="section-btn" onclick="explicarGit()">
-            📝 10. Git y GitHub
-        </button>
-    </div>
+    <h3>Forma 2: Con la etiqueta &lt;script&gt; dentro del HTML</h3>
+    <p>Escribimos el código entre <code>&lt;script&gt;</code> y <code>&lt;/script&gt;</code> en el mismo archivo HTML. Está todo junto, pero si el archivo crece se vuelve largo y no podemos reutilizar el código en otras páginas.</p>
+    <pre><code>&lt;script&gt;
+  console.log("Hola desde la forma 2");
+&lt;/script&gt;</code></pre>
+    <p>👉 Este archivo tiene uno en el <code>&lt;head&gt;</code>: mirá el mensaje en la consola.</p>
 
-    <div class="container">
-        <div class="instructions">
-            <h2>📖 TEORÍA DETALLADA</h2>
-            <p>Explicaciones más profundas sobre los conceptos de variables:</p>
-        </div>
-    </div>
+    <h3>Forma 3: En otro archivo (script.js) ✅ la recomendada</h3>
+    <p>El código vive en un archivo aparte y lo vinculamos con el atributo <code>src</code>. Se pone al final del <code>&lt;body&gt;</code> para que el HTML ya esté cargado cuando se ejecute el JS.</p>
+    <pre><code>&lt;script src="script.js"&gt;&lt;/script&gt;</code></pre>
+    <button onclick="saludarDesdeArchivo()">Probar forma 3</button>
 
-    <div class="section-buttons">
-        <button class="section-btn" style="background-color: #9b59b6;" onclick="teoriaConceptosFundamentales()">
-            📖 Teoría 1: Conceptos fundamentales
-        </button>
-        <button class="section-btn" style="background-color: #9b59b6;" onclick="teoriaDiferenciasDeclaraciones()">
-            📖 Teoría 2: Diferencias let/const/var
-        </button>
-        <button class="section-btn" style="background-color: #9b59b6;" onclick="teoriaTiposDatos()">
-            📖 Teoría 3: Tipos de datos
-        </button>
-        <button class="section-btn" style="background-color: #9b59b6;" onclick="teoriaHoisting()">
-            📖 Teoría 4: Hoisting y TDZ
-        </button>
-    </div>
+    <table>
+      <tr><th>Forma</th><th>Ventaja</th><th>Desventaja</th></tr>
+      <tr><td>1. Inline</td><td>Rápido para probar</td><td>Mezcla HTML y JS, desordenado</td></tr>
+      <tr><td>2. &lt;script&gt; interno</td><td>Todo en un archivo</td><td>No se reutiliza, archivo largo</td></tr>
+      <tr><td>3. Archivo externo</td><td>Ordenado y reutilizable</td><td>Un archivo más (¡no es problema!)</td></tr>
+    </table>
+  </section>
 
-    <div class="container">
-        <div class="instructions">
-            <h2>🎯 EJERCICIOS CON RESOLUCIÓN</h2>
-            <p>Ejercicios prácticos con explicaciones paso a paso:</p>
-        </div>
-    </div>
+  <!-- ====================================================== -->
+  <section>
+    <h2>2. Variables: let, const y var</h2>
+    <p>Una <strong>variable</strong> es una "caja" con nombre donde guardamos un dato para usarlo después.</p>
+    <pre><code>let edad = 25;          // puede cambiar
+const nombre = "Ana";   // NO puede cambiar
+var ciudad = "Rosario"; // forma vieja, evitarla</code></pre>
+    <table>
+      <tr><th>Palabra</th><th>¿Se puede reasignar?</th><th>¿Cuándo usarla?</th></tr>
+      <tr><td><code>let</code></td><td>Sí</td><td>Cuando el valor va a cambiar (contadores, totales)</td></tr>
+      <tr><td><code>const</code></td><td>No</td><td>Por defecto, para todo lo que no cambia</td></tr>
+      <tr><td><code>var</code></td><td>Sí</td><td>Nunca en código nuevo (tiene comportamientos raros)</td></tr>
+    </table>
+    <p><strong>Reglas para nombres:</strong> empiezan con letra, <code>_</code> o <code>$</code>; no llevan espacios ni acentos; usamos <em>camelCase</em> (<code>precioTotal</code>); y que se entienda qué guardan.</p>
+    <button onclick="ejemploVariables()">Ver ejemplo de variables</button>
+  </section>
 
-    <div class="section-buttons">
-        <button class="section-btn" style="background-color: #e67e22;" onclick="ejercicio1()">
-            🎯 Ejercicio 1: Declaración y tipos básicos
-        </button>
-        <button class="section-btn" style="background-color: #e67e22;" onclick="ejercicio2()">
-            🎯 Ejercicio 2: Reasignación de valores
-        </button>
-        <button class="section-btn" style="background-color: #e67e22;" onclick="ejercicio3()">
-            🎯 Ejercicio 3: Constantes
-        </button>
-        <button class="section-btn" style="background-color: #e67e22;" onclick="ejercicio4()">
-            🎯 Ejercicio 4: Arrays y objetos
-        </button>
-        <button class="section-btn" style="background-color: #e67e22;" onclick="ejercicio5()">
-            🎯 Ejercicio 5: Template literals
-        </button>
-        <button class="section-btn" style="background-color: #e67e22;" onclick="ejercicio6()">
-            🎯 Ejercicio 6: Conversión de tipos
-        </button>
-        <button class="section-btn" style="background-color: #e67e22;" onclick="ejercicio7()">
-            🎯 Ejercicio 7: Operadores y expresiones
-        </button>
-        <button class="section-btn" style="background-color: #e67e22;" onclick="ejercicio8()">
-            🎯 Ejercicio 8: Scope y alcance
-        </button>
-    </div>
+  <!-- ====================================================== -->
+  <section>
+    <h2>3. Tipos de datos</h2>
+    <p>Con <code>typeof</code> podemos preguntarle a JS qué tipo de dato tiene una variable.</p>
+    <table>
+      <tr><th>Tipo</th><th>Ejemplo</th><th>Para qué sirve</th></tr>
+      <tr><td><code>string</code></td><td><code>"Hola"</code>, <code>'JS'</code>, <code>`texto`</code></td><td>Texto</td></tr>
+      <tr><td><code>number</code></td><td><code>42</code>, <code>3.14</code>, <code>-7</code></td><td>Números (enteros y decimales)</td></tr>
+      <tr><td><code>boolean</code></td><td><code>true</code>, <code>false</code></td><td>Verdadero o falso</td></tr>
+      <tr><td><code>undefined</code></td><td><code>let x;</code></td><td>Variable declarada sin valor</td></tr>
+      <tr><td><code>null</code></td><td><code>let x = null;</code></td><td>"Vacío" a propósito</td></tr>
+      <tr><td><code>bigint</code></td><td><code>123n</code></td><td>Números enteros gigantes</td></tr>
+      <tr><td><code>symbol</code></td><td><code>Symbol("id")</code></td><td>Identificadores únicos (avanzado)</td></tr>
+      <tr><td><code>object</code></td><td><code>{ nombre: "Ana" }</code>, <code>[1, 2, 3]</code></td><td>Agrupar varios datos</td></tr>
+    </table>
+    <button onclick="ejemploTipos()">Ver tipos con typeof</button>
+  </section>
 
-    <footer>
-        <p>&copy; 2025 Curso de JavaScript - Versión Paso a Paso para Enseñar en Vivo</p>
-    </footer>
+  <!-- ====================================================== -->
+  <section>
+    <h2>4. Git y GitHub</h2>
+    <p><strong>Git</strong> es un programa que guarda el historial de cambios de tu código (como "puntos de guardado"). <strong>GitHub</strong> es una página web donde subís ese historial para tenerlo en la nube, compartirlo y trabajar en equipo.</p>
 
-    <!-- Vinculación del archivo JavaScript -->
-    <script src="script.js"></script>
+    <h3>Configuración inicial (una sola vez)</h3>
+    <pre><code>git config --global user.name "Tu Nombre"
+git config --global user.email "tu@email.com"</code></pre>
+
+    <h3>Flujo de trabajo básico</h3>
+    <pre><code>git init                  # 1. Crear un repositorio en la carpeta
+git status                # 2. Ver qué archivos cambiaron
+git add .                 # 3. Preparar los cambios (staging)
+git commit -m "Clase 01"  # 4. Guardar un punto en el historial
+git log --oneline         # Ver el historial de commits</code></pre>
+
+    <h3>Subir a GitHub</h3>
+    <ol>
+      <li>Crear un repositorio nuevo en <a href="https://github.com" target="_blank">github.com</a> (botón <em>New</em>).</li>
+      <li>Conectar tu carpeta con ese repositorio y subir:</li>
+    </ol>
+    <pre><code>git remote add origin https://github.com/usuario/mi-repo.git
+git branch -M main
+git push -u origin main   # la primera vez
+git push                  # las siguientes veces</code></pre>
+
+    <h3>Otros comandos útiles</h3>
+    <pre><code>git clone URL   # Descargar un repositorio existente
+git pull        # Traer los últimos cambios de GitHub</code></pre>
+    <button onclick="ejemploGit()">Repasar el flujo en la consola</button>
+  </section>
+
+  <!-- ====================================================== -->
+  <section>
+    <h2>Salida</h2>
+    <p>Lo que imprimen los botones aparece acá y también en la consola (F12).</p>
+    <div id="salida"></div>
+  </section>
+
+  <!-- ======================================================
+       FORMA 3: JavaScript en otro archivo (script.js)
+       Va al final del body para que el HTML ya esté cargado
+       ====================================================== -->
+  <script src="script.js"></script>
 </body>
 </html>

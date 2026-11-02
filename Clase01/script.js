@@ -1,777 +1,658 @@
-// ==========================================
-// PRIMERA CLASE - VARIABLES Y GIT/GITHUB
-// VERSIÓN PASO A PASO PARA ENSEÑAR EN VIVO
-// ==========================================
+// ==========================================================
+// CLASE 01 - INTRODUCCIÓN A JAVASCRIPT
+// ==========================================================
+// Clase introductoria para personas que nunca programaron.
+// No se necesita experiencia previa.
+//
+// Este archivo es la FORMA 3 de usar JavaScript: un archivo aparte,
+// vinculado desde index.html con <script src="script.js"></script>
+//
+// TEMAS
+//   1. ¿Qué es JavaScript?
+//   2. ¿Dónde se ejecuta? (motor, cómo lee el navegador, consola)
+//   3. Tres formas de usar JS dentro del HTML
+//   4. console.log y comentarios
+//   5. Variables: qué son y cómo se inicializan
+//   6. let: variable que puede cambiar
+//   7. const: variable que no cambia
+//   8. var: la forma antigua
+//   9. Tipos de datos
+//  10. Buenas prácticas
+//  11. Errores comunes
+//  12. Git y GitHub
+//  13. Quiz
+// ==========================================================
 
-// ============================
-// CONFIGURACIÓN INICIAL
-// ============================
+console.log("👋 Hola desde la FORMA 3: el archivo script.js");
 
-// Función para mostrar mensajes en la consola personalizada
-function mostrarEnConsola(mensaje, tipo = 'info') {
-    const output = document.getElementById('consoleOutput');
-    const div = document.createElement('div');
-    div.className = tipo;
-    div.textContent = `[${new Date().toLocaleTimeString()}] ${mensaje}`;
-    output.appendChild(div);
-    output.scrollTop = output.scrollHeight;
+// Muestra un mensaje en la consola (F12) y también en el recuadro "Salida" de la página
+function mostrar(mensaje) {
+  console.log(mensaje);
+  document.getElementById("salida").textContent += mensaje + "\n";
 }
 
-// Función para limpiar la consola
-function limpiarConsola() {
-    const output = document.getElementById('consoleOutput');
-    output.innerHTML = '<div class="info">🧹 Consola limpiada</div>';
+function limpiarSalida() {
+  document.getElementById("salida").textContent = "";
 }
 
-// Función para abrir la consola del navegador
-function abrirConsola() {
-    mostrarEnConsola('🔍 Instrucciones para abrir la consola del navegador:', 'info');
-    mostrarEnConsola('💡 Presiona F12 en tu teclado', 'info');
-    mostrarEnConsola('💡 O usa Ctrl+Shift+I (Windows/Linux)', 'info');
-    mostrarEnConsola('💡 O usa Cmd+Option+I (Mac)', 'info');
-    mostrarEnConsola('💡 O haz clic derecho → "Inspeccionar"', 'info');
-    
-    alert('Para abrir la consola del navegador:\n\n' +
-          '• Presiona F12\n' +
-          '• O usa Ctrl+Shift+I (Windows/Linux)\n' +
-          '• O usa Cmd+Option+I (Mac)\n' +
-          '• O haz clic derecho → "Inspeccionar"\n\n' +
-          'Luego ve a la pestaña "Console" para ver los mensajes.');
+
+// ==========================================================
+// 1. ¿QUÉ ES JAVASCRIPT?
+// ==========================================================
+/*
+  JavaScript es un LENGUAJE DE PROGRAMACIÓN que le da comportamiento
+  e interactividad a las páginas web. Es el lenguaje que hace que los
+  botones respondan, los formularios validen datos y el contenido cambie
+  sin recargar la página.
+
+  Los tres lenguajes del desarrollo web trabajan juntos:
+
+    | Tecnología  | Rol                             | Analogía                  |
+    |-------------|---------------------------------|---------------------------|
+    | HTML        | Estructura y contenido          | El esqueleto del cuerpo   |
+    | CSS         | Apariencia visual               | La ropa                   |
+    | JavaScript  | Comportamiento e interactividad | Los músculos y el cerebro |
+
+  Sin JavaScript, una página web es un documento estático: podés leerlo,
+  pero no interactuar con él.
+
+  ¿Por qué aprender JavaScript?
+    - Es el único lenguaje que funciona nativamente en todos los navegadores,
+      sin instalar nada.
+    - Se usa tanto para el frontend (interfaz de usuario) como para el
+      backend (servidor con Node.js).
+    - Es uno de los lenguajes más demandados en el mercado laboral.
+*/
+
+
+// ==========================================================
+// 2. ¿DÓNDE SE EJECUTA?
+// ==========================================================
+/*
+  JavaScript se ejecuta en el MOTOR DE JAVASCRIPT del navegador.
+  Cada navegador tiene el suyo, pero todos entienden el mismo lenguaje:
+
+    | Navegador      | Motor                  |
+    |----------------|------------------------|
+    | Chrome / Edge  | V8 (Google)            |
+    | Firefox        | SpiderMonkey (Mozilla) |
+    | Safari         | JavaScriptCore (Apple) |
+
+  ----------------------------------------------------------
+  CÓMO LEE EL NAVEGADOR UNA PÁGINA WEB
+  ----------------------------------------------------------
+  El navegador lee el HTML DE ARRIBA HACIA ABAJO, línea por línea, en orden.
+  No salta, no lee todo junto, no se adelanta. Va construyendo la página
+  a medida que avanza:
+
+    Línea 1  →  <!DOCTYPE html>          ← lo lee primero
+    Línea 2  →  <html lang="es">
+    Línea 3  →  <head>
+    Línea 4  →    <title>Mi página</title>
+    Línea 5  →  </head>
+    Línea 6  →  <body>
+    Línea 7  →    <h1>Hola Mundo</h1>    ← crea el título en la página
+    Línea 8  →    <p>Un párrafo</p>      ← crea el párrafo
+    Línea 9  →    <script src="...">     ← recién acá ejecuta el JS
+    Línea 10 →  </body>
+    Línea 11 →  </html>                  ← lo lee último
+
+  ----------------------------------------------------------
+  POR QUÉ EL SCRIPT VA AL FINAL DEL <body>
+  ----------------------------------------------------------
+  Si el script está en el <head> y quiere buscar el <h1> para cambiarle el
+  texto, el navegador todavía no llegó a leer el <h1>: ese elemento no existe
+  todavía. JavaScript busca algo que aún no fue creado y falla.
+
+    <!-- MAL: el script está en el head -->
+    <head>
+      <script src="script.js"></script>   <!-- JS corre acá -->
+    </head>
+    <body>
+      <h1>Hola Mundo</h1>                 <!-- esto todavía no existe -->
+    </body>
+
+    <!-- BIEN: el script está al final del body -->
+    <body>
+      <h1>Hola Mundo</h1>                 <!-- esto ya existe -->
+      <p>Un párrafo</p>                   <!-- esto ya existe -->
+      <script src="script.js"></script>   <!-- JS corre acá, todo lo de arriba ya existe -->
+    </body>
+
+  Pensalo así: primero construís la casa (HTML), después le ponés la
+  electricidad (JavaScript). No tiene sentido cablear una casa sin paredes.
+
+  ----------------------------------------------------------
+  TAMBIÉN IMPORTA EL ORDEN ENTRE VARIOS SCRIPTS
+  ----------------------------------------------------------
+    <script src="utilidades.js"></script>  <!-- se ejecuta primero -->
+    <script src="app.js"></script>         <!-- se ejecuta segundo, puede usar lo de utilidades.js -->
+
+  Si invertís el orden y app.js usa algo de utilidades.js, va a fallar
+  porque utilidades.js todavía no corrió.
+
+  ----------------------------------------------------------
+  LA CONSOLA DEL NAVEGADOR
+  ----------------------------------------------------------
+  Es donde vas a ver los resultados de tu código mientras aprendés:
+
+    | Sistema           | Atajo                                        |
+    |-------------------|----------------------------------------------|
+    | Windows / Linux   | F12  o  Ctrl + Shift + I                     |
+    | Mac               | Cmd + Option + I                             |
+    | Cualquier sistema | Clic derecho → "Inspeccionar" → "Console"    |
+*/
+
+
+// ==========================================================
+// 3. TRES FORMAS DE USAR JAVASCRIPT DENTRO DEL HTML
+// ==========================================================
+/*
+  FORMA 1: ADENTRO DE UNA ETIQUETA (inline)
+    El código se escribe directo en un atributo de la etiqueta, como onclick:
+
+      <button onclick="alert('Hola')">Probar</button>
+
+    ✅ Rápido para probar algo chiquito.
+    ❌ Mezcla HTML con JS, se vuelve desordenado y difícil de mantener.
+
+  FORMA 2: CON LA ETIQUETA <script> DENTRO DEL HTML
+    El código va entre <script> y </script> en el mismo archivo HTML:
+
+      <script>
+        console.log("Hola desde la forma 2");
+      </script>
+
+    ✅ Todo está en un solo archivo.
+    ❌ Si crece se vuelve muy largo y no se puede reutilizar en otras páginas.
+
+  FORMA 3: EN OTRO ARCHIVO (script.js)  ← LA RECOMENDADA
+    El código vive en un archivo .js aparte y se vincula con el atributo src,
+    al final del <body>:
+
+      <script src="script.js"></script>
+
+    ✅ HTML limpio, JS ordenado y reutilizable en varias páginas.
+
+  En index.html están las tres: el botón "Probar forma 1" (inline),
+  el <script> del <head> (forma 2) y este archivo (forma 3).
+*/
+
+function saludarDesdeArchivo() {
+  limpiarSalida();
+  mostrar("👋 Hola desde la FORMA 3: esta función está escrita en script.js");
+  mostrar("Es la forma recomendada: el HTML queda limpio y el JS ordenado.");
 }
 
-// Configurar interceptación de console.log
-function configurarInterceptacion() {
-    const originalLog = console.log;
-    const originalError = console.error;
-    const originalWarn = console.warn;
 
-    console.log = function(...args) {
-        originalLog.apply(console, args);
-        mostrarEnConsola(args.join(' '), 'success');
-    };
+// ==========================================================
+// 4. console.log Y COMENTARIOS
+// ==========================================================
+/*
+  console.log() es la herramienta más básica de JavaScript: muestra cualquier
+  valor en la consola. La vas a usar todo el tiempo para verificar que tu
+  código hace lo que esperás.
 
-    console.error = function(...args) {
-        originalError.apply(console, args);
-        mostrarEnConsola(args.join(' '), 'error');
-    };
+    console.log("Hola, mundo");
+    console.log(42);
+    console.log(true);
 
-    console.warn = function(...args) {
-        originalWarn.apply(console, args);
-        mostrarEnConsola(args.join(' '), 'warning');
-    };
-}
+  Podés pasarle varios valores separados por coma:
 
-// Configurar interceptación inmediatamente
-configurarInterceptacion();
+    console.log("Mi nombre es", "Ana", "y tengo", 25, "años");
+    // Mi nombre es Ana y tengo 25 años
 
-// ============================
-// FUNCIONES PARA CADA SECCIÓN
-// ============================
+  Otros tipos de mensajes:
 
-// SECCIÓN 1: ¿Qué es una variable?
-function explicarVariables() {
-    limpiarConsola();
-    mostrarEnConsola('📚 SECCIÓN 1: ¿Qué es una variable?', 'info');
-    mostrarEnConsola('Una variable es un contenedor para guardar datos', 'info');
-    mostrarEnConsola('Los datos pueden cambiar o no a lo largo del programa', 'info');
-    mostrarEnConsola('Ejemplo: edad = 25 (guardamos el número 25 en la variable "edad")', 'success');
-}
+    console.log("Mensaje normal");
+    console.warn("Esto es una advertencia");   // texto amarillo
+    console.error("Esto es un error");         // texto rojo
 
-// SECCIÓN 2: Declaración con let
-function explicarLet() {
-    limpiarConsola();
-    mostrarEnConsola('📚 SECCIÓN 2: Declaración con LET', 'info');
-    mostrarEnConsola('Se usa cuando el valor puede cambiar', 'info');
-    
-    let edad = 25;
-    console.log("Edad inicial:", edad);
-    
-    edad = 30;
-    console.log("Edad después del cambio:", edad);
-    
-    mostrarEnConsola('✅ Con LET puedes cambiar el valor después', 'success');
-}
+  ¿POR QUÉ LOS PARÉNTESIS?
+    console.log es una FUNCIÓN: un bloque de código que realiza una tarea.
+    Los paréntesis () son los que la EJECUTAN. Lo que va adentro se llama
+    ARGUMENTO: el valor que querés mostrar.
 
-// SECCIÓN 3: Declaración con const
-function explicarConst() {
-    limpiarConsola();
-    mostrarEnConsola('📚 SECCIÓN 3: Declaración con CONST', 'info');
-    mostrarEnConsola('Se usa cuando el valor NO debe cambiar', 'info');
-    
+      console.log           // referencia a la función, NO la ejecuta
+      console.log()         // la ejecuta sin argumentos (línea vacía)
+      console.log("Hola")   // la ejecuta con el argumento "Hola"
+
+  COMENTARIOS
+    Son texto que JavaScript ignora por completo. Sirven para aclarar el código
+    (¡como todo este archivo!):
+
+      // Comentario de una línea
+
+      /* Comentario
+         de varias líneas *\/
+
+      console.log("Esto sí se ejecuta");
+      // console.log("Esto NO se ejecuta");
+*/
+
+
+// ==========================================================
+// 5. VARIABLES: QUÉ SON Y CÓMO SE INICIALIZAN
+// ==========================================================
+/*
+  Una VARIABLE es un espacio con nombre en la memoria que guarda un valor.
+  Pensala como una caja etiquetada:
+
+    ┌──────────────────────┐
+    │  etiqueta: nombre    │  ← cómo la llamamos (identificador)
+    │  contenido: "María"  │  ← lo que guarda (valor)
+    └──────────────────────┘
+
+  ¿POR QUÉ NECESITAMOS VARIABLES?
+    Sin variables repetimos el dato en todos lados:
+      console.log("Bienvenida, María");
+      console.log("María tiene 25 años");
+
+    Con variables, si el dato cambia, lo modificás en un solo lugar:
+      let nombre = "María";
+      console.log("Bienvenida, " + nombre);
+      console.log(nombre + " tiene 25 años");
+
+  CÓMO SE INICIALIZA (darle su primer valor)
+
+    let  nombre  =  "María"  ;
+     ↑      ↑    ↑     ↑     ↑
+     │      │    │     │     └── punto y coma (fin de instrucción)
+     │      │    │     └──────── valor inicial
+     │      │    └────────────── operador de asignación
+     │      └─────────────────── nombre de la variable
+     └────────────────────────── palabra clave (let, const o var)
+
+    También se puede declarar sin valor y asignarlo después:
+      let edad;           // declarada sin valor → vale undefined
+      edad = 25;          // asignación posterior
+
+  REGLAS PARA NOMBRAR VARIABLES
+
+    | Regla                                  | Válido               | Inválido            |
+    |----------------------------------------|----------------------|---------------------|
+    | Letras, números, _ y $                 | nombre2, _dato       | mi-variable         |
+    | No puede empezar con número            | dato1                | 1dato               |
+    | No puede ser palabra reservada         | miLet                | let, const, var     |
+    | Distingue mayúsculas de minúsculas     | edad y Edad son distintas                  |
+
+  CONVENCIÓN camelCase
+    Primera palabra en minúscula, cada palabra siguiente con mayúscula:
+      let nombreUsuario = "Juan";          ✅ (convención en JS)
+      let cantidadDeProductos = 5;         ✅
+      let nombre_usuario = "Juan";         snake_case (lo usa Python)
+      let NombreUsuario = "Juan";          PascalCase (se reserva para clases)
+*/
+
+
+// ==========================================================
+// 6. let: VARIABLE QUE PUEDE CAMBIAR
+// ==========================================================
+/*
+  let declara una variable cuyo valor PUEDE CAMBIAR.
+
+    let edad = 20;
+    edad = 21;        // reasignación: NO se escribe "let" de nuevo
+    edad = 22;
+
+  let solo va la primera vez, al declarar.
+
+  Cuándo usarlo: cuando el valor cambia durante el programa
+    let puntos = 0;
+    puntos = puntos + 10;     // el jugador ganó puntos
+
+    let intentos = 0;
+    intentos++;               // atajo de intentos = intentos + 1
+
+  SCOPE DE BLOQUE: let solo existe dentro de las llaves {} donde se declaró
+    if (true) {
+      let mensaje = "Hola";
+      console.log(mensaje);   // "Hola" ✅
+    }
+    console.log(mensaje);     // ReferenceError ❌
+*/
+
+
+// ==========================================================
+// 7. const: VARIABLE QUE NO CAMBIA
+// ==========================================================
+/*
+  const declara una variable que NO PUEDE SER REASIGNADA.
+
     const pais = "Argentina";
-    console.log("País:", pais);
-    
-    mostrarEnConsola('✅ CONST mantiene el valor fijo', 'success');
-    mostrarEnConsola('❌ Si intentas cambiar const, dará error', 'error');
-    
-    // Mostrar el error (comentado para no romper el código)
-    mostrarEnConsola('// pais = "Chile"; ← Esto daría error', 'warning');
-}
+    pais = "Chile";   // TypeError: Assignment to constant variable.
 
-// SECCIÓN 4: Declaración con var
-function explicarVar() {
-    limpiarConsola();
-    mostrarEnConsola('📚 SECCIÓN 4: Declaración con VAR', 'info');
-    mostrarEnConsola('Es más antigua, se puede redeclarar', 'info');
-    
-    var nombre = "Juan";
-    console.log("Primer nombre:", nombre);
-    
-    var nombre = "Pedro"; // Se puede redeclarar
-    console.log("Segundo nombre:", nombre);
-    
-    mostrarEnConsola('✅ Con VAR puedes redeclarar la misma variable', 'success');
-    mostrarEnConsola('⚠️ VAR es más antigua, se recomienda usar LET', 'warning');
-}
-
-// SECCIÓN 5: Tipos de datos
-function explicarTiposDatos() {
-    limpiarConsola();
-    mostrarEnConsola('📚 SECCIÓN 5: Tipos de datos en variables', 'info');
-    
-    let texto = "Hola mundo";
-    let numero = 42;
-    let activo = true;
-    let indefinido;
-    let nulo = null;
-    
-    console.log("Texto (string):", texto);
-    console.log("Número (number):", numero);
-    console.log("Booleano (boolean):", activo);
-    console.log("Indefinido (undefined):", indefinido);
-    console.log("Nulo (null):", nulo);
-    
-    mostrarEnConsola('✅ JavaScript detecta automáticamente el tipo de dato', 'success');
-}
-
-// SECCIÓN 6: Arrays y Objetos
-function explicarArraysObjetos() {
-    limpiarConsola();
-    mostrarEnConsola('📚 SECCIÓN 6: Arrays y Objetos básicos', 'info');
-    
-    let colores = ["rojo", "verde", "azul"];
-    let persona = {
-        nombre: "María",
-        edad: 25,
-        ciudad: "Buenos Aires"
-    };
-    
-    console.log("Array de colores:", colores);
-    console.log("Objeto persona:", persona);
-    console.log("Primer color:", colores[0]);
-    console.log("Nombre de la persona:", persona.nombre);
-    
-    mostrarEnConsola('✅ Arrays: lista de elementos [elemento1, elemento2]', 'success');
-    mostrarEnConsola('✅ Objetos: colección de propiedades {propiedad: valor}', 'success');
-}
-
-// SECCIÓN 7: Ejercicios prácticos
-function ejerciciosPracticos() {
-    limpiarConsola();
-    mostrarEnConsola('📚 SECCIÓN 7: Ejercicios prácticos', 'info');
-    
-    // Ejercicio 1
-    mostrarEnConsola('🎯 EJERCICIO 1: Declaración simple', 'info');
-    let miNombre = "Lucía";
-    console.log("Mi nombre es:", miNombre);
-    
-    // Ejercicio 2
-    mostrarEnConsola('🎯 EJERCICIO 2: Reasignar valor', 'info');
-    let ciudad = "Rosario";
-    console.log("Ciudad inicial:", ciudad);
-    ciudad = "Mendoza";
-    console.log("Ciudad final:", ciudad);
-    
-    // Ejercicio 3
-    mostrarEnConsola('🎯 EJERCICIO 3: Uso de const', 'info');
-    const nacimiento = 2000;
-    console.log("Año de nacimiento:", nacimiento);
-    
-    // Ejercicio 4
-    mostrarEnConsola('🎯 EJERCICIO 4: Tipos de datos', 'info');
-    let usuario = "Carlos";
-    let edadUsuario = 22;
-    let estaActivo = false;
-    console.log("Usuario:", usuario, "Edad:", edadUsuario, "Activo:", estaActivo);
-    
-    // Ejercicio 5
-    mostrarEnConsola('🎯 EJERCICIO 5: Template literals', 'info');
-    let nom = "Ana";
-    let ape = "López";
-    let ed = 28;
-    console.log(`Mi nombre es ${nom} ${ape} y tengo ${ed} años.`);
-}
-
-// SECCIÓN 8: Manejo de errores
-function manejoErrores() {
-    limpiarConsola();
-    mostrarEnConsola('📚 SECCIÓN 8: Manejo de errores comunes', 'info');
-    
-    // Error 1: Cambiar constante
-    mostrarEnConsola('❌ Error 1: Intentar cambiar una constante', 'error');
-    const PI = 3.1416;
-    console.log("PI es:", PI);
-    mostrarEnConsola('// PI = 3.14; ← Esto causaría un error', 'warning');
-    
-    // Error 2: Variable no declarada
-    mostrarEnConsola('❌ Error 2: Usar variable antes de declararla', 'error');
-    // console.log(variableNoDeclarada); ← Esto causaría un error
-    mostrarEnConsola('// console.log(variableNoDeclarada); ← Error', 'warning');
-    let variableNoDeclarada = "Ahora sí está declarada";
-    console.log("Variable declarada:", variableNoDeclarada);
-    
-    // Error 3: Acceso a array
-    mostrarEnConsola('❌ Error 3: Acceder a índice inexistente', 'error');
-    let frutas = ["manzana", "banana"];
-    console.log("Primera fruta:", frutas[0]); // ✅ Correcto
-    console.log("Tercera fruta:", frutas[2]); // ❌ undefined
-}
-
-// SECCIÓN 9: Diferencias var vs let
-function diferenciasVarLet() {
-    limpiarConsola();
-    mostrarEnConsola('📚 SECCIÓN 9: Diferencias entre VAR y LET', 'info');
-    
-    mostrarEnConsola('VAR tiene alcance de función', 'info');
-    mostrarEnConsola('LET tiene alcance de bloque', 'info');
-    
-    // Ejemplo con var
-    mostrarEnConsola('Ejemplo con VAR:', 'info');
-    if (true) {
-        var x = 10;
-    }
-    console.log("x con var:", x); // Accesible fuera del bloque
-    
-    // Ejemplo con let
-    mostrarEnConsola('Ejemplo con LET:', 'info');
-    if (true) {
-        let y = 20;
-        console.log("y dentro del bloque:", y);
-    }
-    // console.log("y fuera del bloque:", y); ← Esto daría error
-    mostrarEnConsola('// y no es accesible fuera del bloque con LET', 'warning');
-}
-
-// SECCIÓN 10: Git y GitHub
-function explicarGit() {
-    limpiarConsola();
-    mostrarEnConsola('📚 SECCIÓN 10: Repaso de Git y GitHub', 'info');
-    
-    mostrarEnConsola('Git: Control de versiones para proyectos', 'info');
-    mostrarEnConsola('GitHub: Plataforma online para compartir proyectos', 'info');
-    
-    console.log("Comandos básicos de Git:");
-    console.log("git init                    # Iniciar repositorio");
-    console.log("git status                  # Ver estado de archivos");
-    console.log("git add archivo.js          # Agregar archivo al staging");
-    console.log("git commit -m 'mensaje'     # Guardar cambios");
-    console.log("git push -u origin main     # Subir al repositorio");
-    
-    mostrarEnConsola('✅ Git te permite guardar versiones de tu código', 'success');
-}
-
-// ============================
-// TEORÍA DETALLADA
-// ============================
-
-// TEORÍA 1: Conceptos fundamentales de variables
-function teoriaConceptosFundamentales() {
-    limpiarConsola();
-    mostrarEnConsola('📖 TEORÍA 1: Conceptos fundamentales de variables', 'info');
-    
-    mostrarEnConsola('🔍 ¿Qué es una variable?', 'info');
-    mostrarEnConsola('• Es un espacio en memoria para almacenar datos', 'info');
-    mostrarEnConsola('• Tiene un nombre único (identificador)', 'info');
-    mostrarEnConsola('• Puede contener diferentes tipos de información', 'info');
-    mostrarEnConsola('• El valor puede cambiar durante la ejecución', 'info');
-    
-    mostrarEnConsola('📝 Reglas para nombrar variables:', 'info');
-    mostrarEnConsola('• Pueden contener letras, números, _ y $', 'info');
-    mostrarEnConsola('• NO pueden empezar con números', 'info');
-    mostrarEnConsola('• NO pueden usar palabras reservadas (let, const, var, etc.)', 'info');
-    mostrarEnConsola('• Es sensible a mayúsculas/minúsculas (edad ≠ Edad)', 'info');
-    
-    console.log("Ejemplos de nombres válidos:");
-    console.log("let nombre = 'Juan';");
-    console.log("let edad_usuario = 25;");
-    console.log("let $precio = 100;");
-    console.log("let nombreUsuario = 'Ana';");
-    
-    console.log("Ejemplos de nombres NO válidos:");
-    console.log("let 1nombre = 'Juan'; // ❌ No puede empezar con número");
-    console.log("let let = 'valor'; // ❌ Palabra reservada");
-    console.log("let nombre-usuario = 'Juan'; // ❌ No puede usar guiones");
-}
-
-// TEORÍA 2: Diferencias entre let, const y var
-function teoriaDiferenciasDeclaraciones() {
-    limpiarConsola();
-    mostrarEnConsola('📖 TEORÍA 2: Diferencias entre let, const y var', 'info');
-    
-    mostrarEnConsola('🔍 LET (ES6 - Moderno):', 'info');
-    mostrarEnConsola('• Alcance de bloque (block scope)', 'info');
-    mostrarEnConsola('• NO se puede redeclarar en el mismo scope', 'info');
-    mostrarEnConsola('• Se puede reasignar', 'info');
-    mostrarEnConsola('• Recomendado para la mayoría de casos', 'info');
-    
-    mostrarEnConsola('🔍 CONST (ES6 - Moderno):', 'info');
-    mostrarEnConsola('• Alcance de bloque (block scope)', 'info');
-    mostrarEnConsola('• NO se puede redeclarar', 'info');
-    mostrarEnConsola('• NO se puede reasignar (valor inmutable)', 'info');
-    mostrarEnConsola('• Para valores que no cambian', 'info');
-    
-    mostrarEnConsola('🔍 VAR (Antiguo):', 'info');
-    mostrarEnConsola('• Alcance de función (function scope)', 'info');
-    mostrarEnConsola('• Se puede redeclarar', 'info');
-    mostrarEnConsola('• Se puede reasignar', 'info');
-    mostrarEnConsola('• NO recomendado (problemas de hoisting)', 'info');
-    
-    console.log("Ejemplo de alcance:");
-    console.log("function ejemplo() {");
-    console.log("  var x = 1; // Accesible en toda la función");
-    console.log("  if (true) {");
-    console.log("    let y = 2; // Solo accesible en este bloque");
-    console.log("    const z = 3; // Solo accesible en este bloque");
-    console.log("  }");
-    console.log("  // x es accesible aquí");
-    console.log("  // y y z NO son accesibles aquí");
-    console.log("}");
-}
-
-// TEORÍA 3: Tipos de datos en JavaScript
-function teoriaTiposDatos() {
-    limpiarConsola();
-    mostrarEnConsola('📖 TEORÍA 3: Tipos de datos en JavaScript', 'info');
-    
-    mostrarEnConsola('🔍 Tipos primitivos:', 'info');
-    mostrarEnConsola('• String: Texto entre comillas', 'info');
-    mostrarEnConsola('• Number: Números (enteros y decimales)', 'info');
-    mostrarEnConsola('• Boolean: true o false', 'info');
-    mostrarEnConsola('• Undefined: Variable declarada sin valor', 'info');
-    mostrarEnConsola('• Null: Valor nulo intencional', 'info');
-    mostrarEnConsola('• Symbol: Identificador único (ES6)', 'info');
-    
-    mostrarEnConsola('🔍 Tipos de referencia:', 'info');
-    mostrarEnConsola('• Object: Colección de propiedades', 'info');
-    mostrarEnConsola('• Array: Lista ordenada de elementos', 'info');
-    mostrarEnConsola('• Function: Bloque de código reutilizable', 'info');
-    
-    console.log("Ejemplos de tipos primitivos:");
-    console.log("let texto = 'Hola mundo'; // String");
-    console.log("let numero = 42; // Number");
-    console.log("let decimal = 3.14; // Number");
-    console.log("let activo = true; // Boolean");
-    console.log("let indefinido; // Undefined");
-    console.log("let nulo = null; // Null");
-    
-    console.log("Ejemplos de tipos de referencia:");
-    console.log("let persona = { nombre: 'Juan', edad: 25 }; // Object");
-    console.log("let colores = ['rojo', 'verde', 'azul']; // Array");
-    console.log("let funcion = function() { return 'Hola'; }; // Function");
-}
-
-// TEORÍA 4: Hoisting y temporal dead zone
-function teoriaHoisting() {
-    limpiarConsola();
-    mostrarEnConsola('📖 TEORÍA 4: Hoisting y Temporal Dead Zone', 'info');
-    
-    mostrarEnConsola('🔍 Hoisting con VAR:', 'info');
-    mostrarEnConsola('• Las declaraciones se "elevan" al inicio del scope', 'info');
-    mostrarEnConsola('• Se puede usar antes de declarar (undefined)', 'info');
-    mostrarEnConsola('• NO recomendado por confuso', 'info');
-    
-    mostrarEnConsola('🔍 Temporal Dead Zone (let/const):', 'info');
-    mostrarEnConsola('• Las variables existen pero NO se pueden usar', 'info');
-    mostrarEnConsola('• Error si se usa antes de declarar', 'info');
-    mostrarEnConsola('• Comportamiento más predecible', 'info');
-    
-    console.log("Ejemplo de hoisting con var:");
-    console.log("console.log(x); // undefined (NO error)");
-    console.log("var x = 5;");
-    console.log("console.log(x); // 5");
-    
-    console.log("Ejemplo con let (temporal dead zone):");
-    console.log("console.log(y); // ReferenceError");
-    console.log("let y = 5;");
-    console.log("console.log(y); // 5");
-    
-    mostrarEnConsola('✅ Recomendación: Usar let/const para evitar confusiones', 'success');
-}
-
-// ============================
-// EJERCICIOS CON RESOLUCIÓN
-// ============================
-
-// EJERCICIO 1: Declaración y tipos básicos
-function ejercicio1() {
-    limpiarConsola();
-    mostrarEnConsola('🎯 EJERCICIO 1: Declaración y tipos básicos', 'info');
-    mostrarEnConsola('Declara variables para: nombre, edad, altura, esEstudiante', 'info');
-    
-    // RESOLUCIÓN
-    mostrarEnConsola('📝 RESOLUCIÓN:', 'info');
-    
-    let nombre = "María";
-    let edad = 23;
-    let altura = 1.65;
-    let esEstudiante = true;
-    
-    console.log("// Declaración de variables:");
-    console.log("let nombre = 'María';");
-    console.log("let edad = 23;");
-    console.log("let altura = 1.65;");
-    console.log("let esEstudiante = true;");
-    
-    console.log("// Valores:");
-    console.log("Nombre:", nombre);
-    console.log("Edad:", edad);
-    console.log("Altura:", altura);
-    console.log("¿Es estudiante?:", esEstudiante);
-    
-    mostrarEnConsola('✅ Tipos detectados automáticamente:', 'success');
-    mostrarEnConsola('• nombre: string', 'info');
-    mostrarEnConsola('• edad: number (entero)', 'info');
-    mostrarEnConsola('• altura: number (decimal)', 'info');
-    mostrarEnConsola('• esEstudiante: boolean', 'info');
-}
-
-// EJERCICIO 2: Reasignación de valores
-function ejercicio2() {
-    limpiarConsola();
-    mostrarEnConsola('🎯 EJERCICIO 2: Reasignación de valores', 'info');
-    mostrarEnConsola('Crea una variable "precio" con valor 100, luego cámbiala a 150', 'info');
-    
-    // RESOLUCIÓN
-    mostrarEnConsola('📝 RESOLUCIÓN:', 'info');
-    
-    let precio = 100;
-    console.log("Precio inicial:", precio);
-    
-    precio = 150;
-    console.log("Precio después del cambio:", precio);
-    
-    console.log("// Código:");
-    console.log("let precio = 100;");
-    console.log("precio = 150; // Reasignación");
-    
-    mostrarEnConsola('✅ Con LET puedes cambiar el valor', 'success');
-    mostrarEnConsola('❌ Con CONST no podrías hacer esto', 'error');
-}
-
-// EJERCICIO 3: Constantes
-function ejercicio3() {
-    limpiarConsola();
-    mostrarEnConsola('🎯 EJERCICIO 3: Constantes', 'info');
-    mostrarEnConsola('Crea constantes para: PI, GRAVEDAD, PAIS', 'info');
-    
-    // RESOLUCIÓN
-    mostrarEnConsola('📝 RESOLUCIÓN:', 'info');
-    
+  Cuándo usarlo: cuando el valor es fijo
     const PI = 3.14159;
-    const GRAVEDAD = 9.8;
-    const PAIS = "Argentina";
-    
-    console.log("// Declaración de constantes:");
-    console.log("const PI = 3.14159;");
-    console.log("const GRAVEDAD = 9.8;");
-    console.log("const PAIS = 'Argentina';");
-    
-    console.log("// Valores:");
-    console.log("PI:", PI);
-    console.log("Gravedad:", GRAVEDAD);
-    console.log("País:", PAIS);
-    
-    mostrarEnConsola('✅ CONST para valores que NO cambian', 'success');
-    mostrarEnConsola('❌ Si intentas cambiar const, dará error', 'error');
-    
-    // Mostrar el error (comentado)
-    mostrarEnConsola('// PI = 3.14; ← Esto causaría: TypeError', 'warning');
+    const EDAD_MINIMA = 18;
+    const NOMBRE_APP = "Mi Aplicación";
+
+  Convención: las constantes de configuración o valores matemáticos se
+  suelen escribir en MAYUSCULAS_CON_GUION_BAJO.
+
+  const NO significa "inmutable" en objetos y arrays: no podés reasignar
+  la variable, pero sí cambiar su contenido (lo vemos más adelante):
+
+    const persona = { nombre: "Ana", edad: 25 };
+    persona = { nombre: "Juan" };   // ❌ Error
+    persona.edad = 26;              // ✅ Esto sí funciona
+*/
+
+
+// ==========================================================
+// 8. var: LA FORMA ANTIGUA
+// ==========================================================
+/*
+  var es la forma original de declarar variables (1995). Todavía funciona,
+  pero tiene problemas que let y const vinieron a corregir. La vas a ver
+  en código viejo.
+
+  PROBLEMA 1: scope de función, no de bloque (se "escapa" de las llaves)
+    if (true) { var x = 10; }
+    console.log(x);   // 10 → accesible afuera del bloque
+
+  PROBLEMA 2: se puede redeclarar sin error
+    var nombre = "Juan";
+    var nombre = "Pedro";        // no avisa nada, pisa el valor
+    let apellido = "García";
+    let apellido = "López";      // SyntaxError: ya fue declarada
+
+  PROBLEMA 3: hoisting (elevación)
+    console.log(nombre);   // undefined → no da error, pero confunde
+    var nombre = "Juan";
+
+    Con let/const eso SÍ da error (ReferenceError), que es más seguro.
+
+  RESUMEN
+
+    |              | var             | let            | const          |
+    |--------------|-----------------|----------------|----------------|
+    | Scope        | Función         | Bloque         | Bloque         |
+    | Reasignable  | Sí              | Sí             | No             |
+    | Redeclarable | Sí              | No             | No             |
+    | Hoisting     | Sí (undefined)  | Sí (da error)  | Sí (da error)  |
+    | Recomendado  | No              | Sí             | Sí             |
+
+  Conclusión: nunca uses var en código nuevo. Siempre let o const.
+*/
+
+function ejemploVariables() {
+  limpiarSalida();
+
+  // let: el valor puede cambiar
+  let contador = 0;
+  mostrar("let contador = " + contador);
+  contador = contador + 1;
+  mostrar("Después de sumarle 1 → contador = " + contador);
+
+  // const: el valor NO puede cambiar
+  const nombre = "Ana";
+  mostrar("const nombre = " + nombre);
+  try {
+    nombre = "Juan"; // esto da error
+  } catch (error) {
+    mostrar("❌ Intentamos cambiar una const: " + error.message);
+  }
+
+  // var: se puede volver a declarar sin error (y eso trae problemas)
+  var ciudad = "Rosario";
+  var ciudad = "Córdoba";
+  mostrar("var ciudad (declarada dos veces) = " + ciudad);
+  mostrar("💡 Regla: usá const por defecto, let si va a cambiar, y evitá var.");
 }
 
-// EJERCICIO 4: Arrays y objetos
-function ejercicio4() {
-    limpiarConsola();
-    mostrarEnConsola('🎯 EJERCICIO 4: Arrays y objetos', 'info');
-    mostrarEnConsola('Crea un array de frutas y un objeto persona', 'info');
-    
-    // RESOLUCIÓN
-    mostrarEnConsola('📝 RESOLUCIÓN:', 'info');
-    
-    let frutas = ["manzana", "banana", "naranja"];
-    let persona = {
-        nombre: "Carlos",
-        edad: 30,
-        ciudad: "Córdoba",
-        activo: true
-    };
-    
-    console.log("// Array de frutas:");
-    console.log("let frutas = ['manzana', 'banana', 'naranja'];");
-    console.log("// Objeto persona:");
-    console.log("let persona = {");
-    console.log("  nombre: 'Carlos',");
-    console.log("  edad: 30,");
-    console.log("  ciudad: 'Córdoba',");
-    console.log("  activo: true");
-    console.log("};");
-    
-    console.log("// Acceso a elementos:");
-    console.log("Primera fruta:", frutas[0]);
-    console.log("Nombre de la persona:", persona.nombre);
-    console.log("¿Está activo?:", persona.activo);
-    
-    mostrarEnConsola('✅ Arrays: acceso por índice [0, 1, 2...]', 'success');
-    mostrarEnConsola('✅ Objetos: acceso por propiedad .nombre', 'success');
+
+// ==========================================================
+// 9. TIPOS DE DATOS
+// ==========================================================
+/*
+  Cada valor en JavaScript tiene un TIPO, que define qué clase de dato es
+  y qué operaciones le podés hacer.
+
+  STRING (texto) → entre comillas
+    let nombre = "María";            // comillas dobles
+    let ciudad = 'Buenos Aires';     // comillas simples
+    let saludo = `Hola, ${nombre}`;  // backticks (template literal)
+
+    Los backticks permiten meter variables con ${}:
+      "Hola, soy " + nombre + " y tengo " + edad + " años."   // concatenación
+      `Hola, soy ${nombre} y tengo ${edad} años.`              // template literal (más limpio)
+
+  NUMBER (número) → un solo tipo para enteros y decimales
+    let entero = 42;
+    let decimal = 3.14;
+    let negativo = -100;
+
+    Valores especiales:
+      10 / 0       // Infinity
+      "hola" * 2   // NaN (Not a Number): la operación no tiene sentido
+
+  BOOLEAN → solo true o false. Es la base de toda la lógica.
+    let esMayorDeEdad = true;
+    let tieneDeuda = false;
+    Son el resultado de comparaciones:
+      edad > 18     // true
+      edad === 18   // false
+
+  UNDEFINED → variable declarada sin valor (lo pone JS solo)
+    let variable;
+    console.log(variable);   // undefined
+
+  NULL → ausencia INTENCIONAL de valor (lo ponés vos)
+    let resultado = null;
+
+    Diferencia clave:
+      let a;          // undefined → nadie le asignó nada
+      let b = null;   // null → yo decidí que no tiene valor
+
+  BIGINT → enteros gigantes, terminan en n:   123456789012345678901234567890n
+  SYMBOL → identificadores únicos (avanzado): Symbol("id")
+
+  OBJECT → agrupa varios datos (no es primitivo, lo vemos más adelante)
+    const persona = { nombre: "Ana", edad: 25 };   // objeto
+    const frutas = ["manzana", "banana"];          // array (también es objeto)
+
+  VERIFICAR EL TIPO CON typeof
+    typeof "Hola"      // "string"
+    typeof 42          // "number"
+    typeof true        // "boolean"
+    typeof undefined   // "undefined"
+    typeof null        // "object"  ← bug histórico de JS
+*/
+
+function ejemploTipos() {
+  limpiarSalida();
+
+  const texto = "Hola mundo";
+  const numero = 42;
+  const decimal = 3.14;
+  const esEstudiante = true;
+  let sinValor;
+  const vacio = null;
+  const numeroGigante = 12345678901234567890n;
+  const identificador = Symbol("id");
+  const persona = { nombre: "Ana", edad: 25 };
+  const frutas = ["manzana", "banana", "pera"];
+
+  mostrar('"Hola mundo"          → ' + typeof texto);
+  mostrar("42                    → " + typeof numero);
+  mostrar("3.14                  → " + typeof decimal);
+  mostrar("true                  → " + typeof esEstudiante);
+  mostrar("let sinValor;         → " + typeof sinValor);
+  mostrar("null                  → " + typeof vacio + "  (⚠️ error histórico de JS, en realidad es null)");
+  mostrar("12345678901234567890n → " + typeof numeroGigante);
+  mostrar('Symbol("id")          → ' + typeof identificador);
+  mostrar("{ nombre, edad }      → " + typeof persona);
+  mostrar('["manzana", ...]      → ' + typeof frutas + "  (los arrays también son objetos)");
+
+  // Valores especiales de number
+  mostrar("\n10 / 0       → " + 10 / 0);
+  mostrar('"hola" * 2   → ' + "hola" * 2);
+
+  // Template literal: armar strings con variables adentro
+  mostrar(`\n${persona.nombre} tiene ${persona.edad} años y le gusta la ${frutas[0]}.`);
 }
 
-// EJERCICIO 5: Template literals
-function ejercicio5() {
-    limpiarConsola();
-    mostrarEnConsola('🎯 EJERCICIO 5: Template literals', 'info');
-    mostrarEnConsola('Crea una presentación usando template literals', 'info');
-    
-    // RESOLUCIÓN
-    mostrarEnConsola('📝 RESOLUCIÓN:', 'info');
-    
-    let nombre = "Laura";
-    let edad = 28;
-    let profesion = "Desarrolladora";
-    let ciudad = "Rosario";
-    
-    let presentacion = `Hola, soy ${nombre}, tengo ${edad} años.
-Soy ${profesion} y vivo en ${ciudad}.
-Mi edad en 5 años será ${edad + 5}.`;
-    
-    console.log("// Variables:");
-    console.log("let nombre = 'Laura';");
-    console.log("let edad = 28;");
-    console.log("let profesion = 'Desarrolladora';");
-    console.log("let ciudad = 'Rosario';");
-    
-    console.log("// Template literal:");
-    console.log("let presentacion = `Hola, soy ${nombre}, tengo ${edad} años.");
-    console.log("Soy ${profesion} y vivo en ${ciudad}.");
-    console.log("Mi edad en 5 años será ${edad + 5}.`;");
-    
-    console.log("// Resultado:");
-    console.log(presentacion);
-    
-    mostrarEnConsola('✅ Template literals permiten interpolación', 'success');
-    mostrarEnConsola('✅ Se pueden usar expresiones ${edad + 5}', 'success');
-    mostrarEnConsola('✅ Mantienen el formato (saltos de línea)', 'success');
+
+// ==========================================================
+// 10. BUENAS PRÁCTICAS
+// ==========================================================
+/*
+  1) const por defecto, let solo si el valor tiene que cambiar.
+       const nombre = "Ana";
+       let intentos = 0;
+       intentos++;
+
+  2) Nombres descriptivos: que se entienda qué guarda.
+       let d = "2024-01-15";              ❌
+       let fechaRegistro = "2024-01-15";  ✅
+     Para booleanos, nombres tipo pregunta: esMayorDeEdad, tienePermiso, estaActivo.
+
+  3) Declarar antes de usar.
+
+  4) Nunca usar var.
+
+  5) Usar === en lugar de ==
+       5 == "5"    // true  ← JS convirtió el string a número
+       5 === "5"   // false ← compara valor Y tipo (más predecible)
+*/
+
+
+// ==========================================================
+// 11. ERRORES COMUNES
+// ==========================================================
+/*
+  ERROR 1: Reasignar una constante
+    const pais = "Argentina";
+    pais = "Chile";          // TypeError
+    Solución: si va a cambiar, usá let.
+
+  ERROR 2: Escribir let al reasignar
+    let nombre = "Ana";
+    let nombre = "María";    // SyntaxError: ya fue declarada
+    Solución: nombre = "María";  (sin let)
+
+  ERROR 3: Usar una variable antes de declararla
+    console.log(precio);     // ReferenceError
+    let precio = 100;
+
+  ERROR 4: Confundir = (asignación) con === (comparación)
+    if (edad = 18) { ... }   // ASIGNA 18, siempre entra al if
+    if (edad === 18) { ... } // COMPARA correctamente
+
+  ERROR 5: Mayúsculas y minúsculas
+    let nombre = "Ana";
+    console.log(Nombre);     // ReferenceError: Nombre is not defined
+    nombre, Nombre y NOMBRE son tres variables distintas.
+
+  ERROR 6: Olvidar los paréntesis en console.log
+    console.log              // no hace nada
+    console.log("Hola")      // ✅
+*/
+
+
+// ==========================================================
+// 12. GIT Y GITHUB
+// ==========================================================
+/*
+  GIT es un programa que guarda el HISTORIAL de cambios de tu código, como
+  "puntos de guardado" de un videojuego. Si rompés algo, podés volver atrás.
+
+  GITHUB es una página web donde subís ese historial para tenerlo en la nube,
+  compartirlo y trabajar en equipo.
+
+    Git    = historial en tu compu
+    GitHub = ese historial en internet
+
+  CONFIGURACIÓN INICIAL (una sola vez por compu)
+    git config --global user.name "Tu Nombre"
+    git config --global user.email "tu@email.com"
+
+  FLUJO DE TRABAJO BÁSICO
+    git init                  // 1. Crear un repositorio en la carpeta
+    git status                // 2. Ver qué archivos cambiaron
+    git add .                 // 3. Preparar los cambios (staging)
+    git commit -m "Clase 01"  // 4. Guardar un punto en el historial
+    git log --oneline         //    Ver el historial de commits
+
+  SUBIR A GITHUB
+    1. Crear un repositorio nuevo en github.com (botón "New")
+    2. Conectar la carpeta y subir:
+         git remote add origin https://github.com/usuario/mi-repo.git
+         git branch -M main
+         git push -u origin main   // la primera vez
+         git push                  // las siguientes veces
+
+  OTROS COMANDOS ÚTILES
+    git clone URL   // Descargar un repositorio existente
+    git pull        // Traer los últimos cambios de GitHub
+*/
+
+function ejemploGit() {
+  limpiarSalida();
+  mostrar("📝 Flujo básico de Git:");
+  mostrar("1. git init                 → crear el repositorio");
+  mostrar("2. git status               → ver qué cambió");
+  mostrar("3. git add .                → preparar los cambios");
+  mostrar('4. git commit -m "mensaje"  → guardar un punto en el historial');
+  mostrar("5. git push                 → subir los commits a GitHub");
+  mostrar("");
+  mostrar("🌐 Git = historial en tu compu · GitHub = ese historial en la nube");
 }
 
-// EJERCICIO 6: Conversión de tipos
-function ejercicio6() {
-    limpiarConsola();
-    mostrarEnConsola('🎯 EJERCICIO 6: Conversión de tipos', 'info');
-    mostrarEnConsola('Convierte strings a números y viceversa', 'info');
-    
-    // RESOLUCIÓN
-    mostrarEnConsola('📝 RESOLUCIÓN:', 'info');
-    
-    // String a Number
-    let numeroString = "42";
-    let numeroReal = Number(numeroString);
-    let numeroReal2 = parseInt(numeroString);
-    let numeroReal3 = parseFloat("42.5");
-    
-    // Number a String
-    let numero = 100;
-    let numeroComoString = String(numero);
-    let numeroComoString2 = numero.toString();
-    let numeroComoString3 = numero + "";
-    
-    console.log("// Conversión String → Number:");
-    console.log("let numeroString = '42';");
-    console.log("let numeroReal = Number(numeroString); // 42");
-    console.log("let numeroReal2 = parseInt(numeroString); // 42");
-    console.log("let numeroReal3 = parseFloat('42.5'); // 42.5");
-    
-    console.log("// Conversión Number → String:");
-    console.log("let numero = 100;");
-    console.log("let numeroComoString = String(numero); // '100'");
-    console.log("let numeroComoString2 = numero.toString(); // '100'");
-    console.log("let numeroComoString3 = numero + ''; // '100'");
-    
-    console.log("// Resultados:");
-    console.log("String '42' convertido a número:", numeroReal);
-    console.log("Número 100 convertido a string:", numeroComoString);
-    console.log("Tipo de numeroReal:", typeof numeroReal);
-    console.log("Tipo de numeroComoString:", typeof numeroComoString);
-    
-    mostrarEnConsola('✅ Number(): Convierte a número', 'success');
-    mostrarEnConsola('✅ String(): Convierte a string', 'success');
-    mostrarEnConsola('✅ toString(): Método para convertir a string', 'success');
-}
 
-// EJERCICIO 7: Operadores y expresiones
-function ejercicio7() {
-    limpiarConsola();
-    mostrarEnConsola('🎯 EJERCICIO 7: Operadores y expresiones', 'info');
-    mostrarEnConsola('Realiza operaciones matemáticas y lógicas', 'info');
-    
-    // RESOLUCIÓN
-    mostrarEnConsola('📝 RESOLUCIÓN:', 'info');
-    
-    let a = 10;
-    let b = 5;
-    let c = "15";
-    
-    // Operaciones matemáticas
-    let suma = a + b;
-    let resta = a - b;
-    let multiplicacion = a * b;
-    let division = a / b;
-    let modulo = a % b;
-    let potencia = a ** 2;
-    
-    // Operaciones con conversión
-    let sumaConString = a + c; // 10 + "15" = "1015"
-    let sumaConNumber = a + Number(c); // 10 + 15 = 25
-    
-    // Operadores de comparación
-    let esMayor = a > b;
-    let esIgual = a == 10;
-    let esEstrictamenteIgual = a === 10;
-    
-    console.log("// Variables:");
-    console.log("let a = 10;");
-    console.log("let b = 5;");
-    console.log("let c = '15';");
-    
-    console.log("// Operaciones matemáticas:");
-    console.log("Suma:", suma);
-    console.log("Resta:", resta);
-    console.log("Multiplicación:", multiplicacion);
-    console.log("División:", division);
-    console.log("Módulo:", modulo);
-    console.log("Potencia:", potencia);
-    
-    console.log("// Operaciones con conversión:");
-    console.log("a + c (string):", sumaConString);
-    console.log("a + Number(c):", sumaConNumber);
-    
-    console.log("// Operadores de comparación:");
-    console.log("a > b:", esMayor);
-    console.log("a == 10:", esIgual);
-    console.log("a === 10:", esEstrictamenteIgual);
-    
-    mostrarEnConsola('✅ Operadores aritméticos: +, -, *, /, %, **', 'success');
-    mostrarEnConsola('✅ Operadores de comparación: >, <, >=, <=, ==, ===', 'success');
-    mostrarEnConsola('⚠️ == compara valor, === compara valor Y tipo', 'warning');
-}
+// ==========================================================
+// 13. QUIZ
+// ==========================================================
+/*
+  Respondé sin mirar las notas. Las respuestas están abajo.
 
-// EJERCICIO 8: Scope y alcance
-function ejercicio8() {
-    limpiarConsola();
-    mostrarEnConsola('🎯 EJERCICIO 8: Scope y alcance', 'info');
-    mostrarEnConsola('Demuestra las diferencias de scope entre var y let', 'info');
-    
-    // RESOLUCIÓN
-    mostrarEnConsola('📝 RESOLUCIÓN:', 'info');
-    
-    // Variable global
-    let variableGlobal = "Soy global";
-    
-    console.log("// Variable global:");
-    console.log("let variableGlobal = 'Soy global';");
-    
-    // Función para demostrar scope
-    function demostrarScope() {
-        let variableLocal = "Soy local";
-        var variableVar = "Soy var";
-        
-        console.log("Dentro de la función:");
-        console.log("variableGlobal:", variableGlobal);
-        console.log("variableLocal:", variableLocal);
-        console.log("variableVar:", variableVar);
-        
-        // Bloque interno
-        if (true) {
-            let variableBloque = "Soy del bloque";
-            var variableVarBloque = "Soy var del bloque";
-            
-            console.log("Dentro del bloque:");
-            console.log("variableBloque:", variableBloque);
-            console.log("variableVarBloque:", variableVarBloque);
-        }
-        
-        // Fuera del bloque
-        console.log("Fuera del bloque:");
-        // console.log("variableBloque:", variableBloque); // ❌ Error
-        console.log("variableVarBloque:", variableVarBloque); // ✅ Accesible
-    }
-    
-    console.log("// Antes de llamar la función:");
-    console.log("variableGlobal:", variableGlobal);
-    
-    // Llamar la función
-    demostrarScope();
-    
-    console.log("// Después de llamar la función:");
-    console.log("variableGlobal:", variableGlobal);
-    // console.log("variableLocal:", variableLocal); // ❌ Error
-    
-    mostrarEnConsola('✅ LET: scope de bloque (más seguro)', 'success');
-    mostrarEnConsola('❌ VAR: scope de función (puede causar problemas)', 'error');
-    mostrarEnConsola('✅ CONST: mismo scope que LET', 'success');
-}
+  1) ¿Cuál es la diferencia entre let y const?
 
-// ============================
-// FUNCIONES PARA EJECUTAR TODO
-// ============================
+  2) ¿Qué imprime este código?
+       let x = 10;
+       x = x + 5;
+       console.log(x);
 
-// Función para ejecutar toda la teoría
-function ejecutarTeoria() {
-    limpiarConsola();
-    mostrarEnConsola('📚 EJECUTANDO TODA LA TEORÍA', 'info');
-    
-    setTimeout(() => teoriaConceptosFundamentales(), 500);
-    setTimeout(() => teoriaDiferenciasDeclaraciones(), 8000);
-    setTimeout(() => teoriaTiposDatos(), 15000);
-    setTimeout(() => teoriaHoisting(), 22000);
-}
+  3) ¿Por qué este código da error?
+       const pais = "Argentina";
+       pais = "Chile";
 
-// Función para ejecutar todos los ejercicios
-function ejecutarEjercicios() {
-    limpiarConsola();
-    mostrarEnConsola('🎯 EJECUTANDO TODOS LOS EJERCICIOS', 'info');
-    
-    setTimeout(() => ejercicio1(), 500);
-    setTimeout(() => ejercicio2(), 6000);
-    setTimeout(() => ejercicio3(), 12000);
-    setTimeout(() => ejercicio4(), 18000);
-    setTimeout(() => ejercicio5(), 24000);
-    setTimeout(() => ejercicio6(), 30000);
-    setTimeout(() => ejercicio7(), 36000);
-    setTimeout(() => ejercicio8(), 42000);
-}
+  4) ¿Cuál de estas declaraciones es incorrecta?
+       a) let nombre = "Juan";
+       b) const PI = 3.14;
+       c) let 1dato = "valor";
+       d) let _privado = true;
 
-// Función para ejecutar todo de una vez
-function ejecutarTodo() {
-    limpiarConsola();
-    mostrarEnConsola('🚀 EJECUTANDO TODA LA CLASE', 'info');
-    
-    setTimeout(() => explicarVariables(), 500);
-    setTimeout(() => explicarLet(), 2000);
-    setTimeout(() => explicarConst(), 4000);
-    setTimeout(() => explicarVar(), 6000);
-    setTimeout(() => explicarTiposDatos(), 8000);
-    setTimeout(() => explicarArraysObjetos(), 10000);
-    setTimeout(() => ejerciciosPracticos(), 12000);
-    setTimeout(() => manejoErrores(), 14000);
-    setTimeout(() => diferenciasVarLet(), 16000);
-    setTimeout(() => explicarGit(), 18000);
-}
+  5) ¿Qué tipo de dato es cada uno?   "Hola"   42   true
 
-// Inicializar interfaz
-function inicializarInterfaz() {
-    mostrarEnConsola('✅ Página cargada correctamente', 'success');
-    mostrarEnConsola('📚 Clase de Variables - Versión Paso a Paso', 'info');
-    mostrarEnConsola('💡 Usa los botones para ejecutar cada sección', 'info');
-}
+  6) ¿Qué diferencia hay entre undefined y null?
 
-// Ejecutar cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', inicializarInterfaz);
+  7) ¿Qué imprime esto y por qué?
+       let nombre;
+       console.log(nombre);
 
+  8) ¿Qué está mal en este código?
+       let puntos = 0;
+       let puntos = 10;
+
+  9) ¿Cuáles son las tres formas de usar JS en un HTML? ¿Cuál conviene?
+
+  10) ¿Qué diferencia hay entre Git y GitHub?
+
+  ----------------------------------------------------------
+  RESPUESTAS
+  ----------------------------------------------------------
+  1) Con let podés reasignar el valor; con const no (da TypeError).
+  2) 15. x empieza en 10 y luego x = 10 + 5.
+  3) Porque const no permite reasignación. Habría que usar let.
+  4) La c): los nombres no pueden empezar con un número.
+  5) "Hola" es string, 42 es number, true es boolean.
+  6) undefined lo pone JS cuando una variable nunca recibió valor;
+     null lo asignás vos para decir "existe, pero está vacía a propósito".
+  7) undefined: se declaró con let pero nunca se le asignó un valor.
+  8) Se declara dos veces con let. La segunda línea debería ser: puntos = 10;
+  9) Inline (en un atributo como onclick), con <script> dentro del HTML y en
+     un archivo aparte con <script src="script.js">. Conviene el archivo aparte.
+  10) Git guarda el historial en tu compu; GitHub lo guarda en la nube.
+*/
