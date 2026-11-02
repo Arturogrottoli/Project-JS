@@ -3,192 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clase 01 - Introducción a JavaScript</title>
+  <title>Clase 01</title>
 
-  <!-- Los estilos van acá mismo para que la clase tenga solo 2 archivos: index.html y script.js -->
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #f5f5f5;
-      color: #2c3e50;
-      line-height: 1.6;
-    }
-    header {
-      background-color: #2c3e50;
-      color: white;
-      padding: 20px;
-      border-radius: 8px;
-    }
-    section {
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      margin-top: 20px;
-    }
-    h2 { border-bottom: 2px solid #3498db; padding-bottom: 5px; }
-    pre {
-      background-color: #1e1e1e;
-      color: #d4d4d4;
-      padding: 15px;
-      border-radius: 6px;
-      overflow-x: auto;
-    }
-    code { font-family: Consolas, monospace; }
-    button {
-      background-color: #3498db;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 15px;
-      margin: 5px 5px 5px 0;
-    }
-    button:hover { background-color: #2980b9; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-    th { background-color: #ecf0f1; }
-    .nota {
-      background-color: #fff8e1;
-      border-left: 4px solid #f39c12;
-      padding: 10px 15px;
-    }
-    #salida {
-      background-color: #1e1e1e;
-      color: #2ecc71;
-      font-family: Consolas, monospace;
-      padding: 15px;
-      border-radius: 6px;
-      min-height: 60px;
-      white-space: pre-wrap;
-    }
-  </style>
-
-  <!-- ======================================================
-       FORMA 2: JavaScript dentro de una etiqueta <script>
-       ====================================================== -->
+  <!-- FORMA 2: JavaScript dentro de una etiqueta <script> en el HTML -->
   <script>
-    console.log("👋 Hola desde la FORMA 2: un <script> escrito dentro del index.html");
+    console.log("Hola desde el <script> del HTML")
   </script>
 </head>
 <body>
-  <header>
-    <h1>Clase 01: Introducción a JavaScript</h1>
-    <p>Cómo conectar JS con HTML · Variables y tipos de datos · Git y GitHub</p>
-  </header>
+  <h1>Clase 01</h1>
 
-  <p class="nota">💡 Abrí la consola del navegador con <strong>F12</strong> (o clic derecho → Inspeccionar → pestaña <em>Console</em>) para ver todo lo que imprime <code>console.log()</code>.</p>
+  <!-- FORMA 1: JavaScript adentro de una etiqueta (inline) -->
+  <button onclick="alert('Hola desde el botón')">Click</button>
 
-  <!-- ====================================================== -->
-  <section>
-    <h2>1. Tres formas de usar JavaScript en un HTML</h2>
-
-    <h3>Forma 1: Adentro de una etiqueta (inline)</h3>
-    <p>El código JS se escribe directamente en un atributo de una etiqueta HTML, por ejemplo <code>onclick</code>. Sirve para cosas muy chiquitas, pero mezcla HTML con JS y se vuelve difícil de mantener.</p>
-    <pre><code>&lt;button onclick="alert('Hola desde la forma 1')"&gt;Probar&lt;/button&gt;</code></pre>
-    <button onclick="alert('👋 Hola desde la FORMA 1: código inline en el botón')">Probar forma 1</button>
-
-    <h3>Forma 2: Con la etiqueta &lt;script&gt; dentro del HTML</h3>
-    <p>Escribimos el código entre <code>&lt;script&gt;</code> y <code>&lt;/script&gt;</code> en el mismo archivo HTML. Está todo junto, pero si el archivo crece se vuelve largo y no podemos reutilizar el código en otras páginas.</p>
-    <pre><code>&lt;script&gt;
-  console.log("Hola desde la forma 2");
-&lt;/script&gt;</code></pre>
-    <p>👉 Este archivo tiene uno en el <code>&lt;head&gt;</code>: mirá el mensaje en la consola.</p>
-
-    <h3>Forma 3: En otro archivo (script.js) ✅ la recomendada</h3>
-    <p>El código vive en un archivo aparte y lo vinculamos con el atributo <code>src</code>. Se pone al final del <code>&lt;body&gt;</code> para que el HTML ya esté cargado cuando se ejecute el JS.</p>
-    <pre><code>&lt;script src="script.js"&gt;&lt;/script&gt;</code></pre>
-    <button onclick="saludarDesdeArchivo()">Probar forma 3</button>
-
-    <table>
-      <tr><th>Forma</th><th>Ventaja</th><th>Desventaja</th></tr>
-      <tr><td>1. Inline</td><td>Rápido para probar</td><td>Mezcla HTML y JS, desordenado</td></tr>
-      <tr><td>2. &lt;script&gt; interno</td><td>Todo en un archivo</td><td>No se reutiliza, archivo largo</td></tr>
-      <tr><td>3. Archivo externo</td><td>Ordenado y reutilizable</td><td>Un archivo más (¡no es problema!)</td></tr>
-    </table>
-  </section>
-
-  <!-- ====================================================== -->
-  <section>
-    <h2>2. Variables: let, const y var</h2>
-    <p>Una <strong>variable</strong> es una "caja" con nombre donde guardamos un dato para usarlo después.</p>
-    <pre><code>let edad = 25;          // puede cambiar
-const nombre = "Ana";   // NO puede cambiar
-var ciudad = "Rosario"; // forma vieja, evitarla</code></pre>
-    <table>
-      <tr><th>Palabra</th><th>¿Se puede reasignar?</th><th>¿Cuándo usarla?</th></tr>
-      <tr><td><code>let</code></td><td>Sí</td><td>Cuando el valor va a cambiar (contadores, totales)</td></tr>
-      <tr><td><code>const</code></td><td>No</td><td>Por defecto, para todo lo que no cambia</td></tr>
-      <tr><td><code>var</code></td><td>Sí</td><td>Nunca en código nuevo (tiene comportamientos raros)</td></tr>
-    </table>
-    <p><strong>Reglas para nombres:</strong> empiezan con letra, <code>_</code> o <code>$</code>; no llevan espacios ni acentos; usamos <em>camelCase</em> (<code>precioTotal</code>); y que se entienda qué guardan.</p>
-    <button onclick="ejemploVariables()">Ver ejemplo de variables</button>
-  </section>
-
-  <!-- ====================================================== -->
-  <section>
-    <h2>3. Tipos de datos</h2>
-    <p>Con <code>typeof</code> podemos preguntarle a JS qué tipo de dato tiene una variable.</p>
-    <table>
-      <tr><th>Tipo</th><th>Ejemplo</th><th>Para qué sirve</th></tr>
-      <tr><td><code>string</code></td><td><code>"Hola"</code>, <code>'JS'</code>, <code>`texto`</code></td><td>Texto</td></tr>
-      <tr><td><code>number</code></td><td><code>42</code>, <code>3.14</code>, <code>-7</code></td><td>Números (enteros y decimales)</td></tr>
-      <tr><td><code>boolean</code></td><td><code>true</code>, <code>false</code></td><td>Verdadero o falso</td></tr>
-      <tr><td><code>undefined</code></td><td><code>let x;</code></td><td>Variable declarada sin valor</td></tr>
-      <tr><td><code>null</code></td><td><code>let x = null;</code></td><td>"Vacío" a propósito</td></tr>
-      <tr><td><code>bigint</code></td><td><code>123n</code></td><td>Números enteros gigantes</td></tr>
-      <tr><td><code>symbol</code></td><td><code>Symbol("id")</code></td><td>Identificadores únicos (avanzado)</td></tr>
-      <tr><td><code>object</code></td><td><code>{ nombre: "Ana" }</code>, <code>[1, 2, 3]</code></td><td>Agrupar varios datos</td></tr>
-    </table>
-    <button onclick="ejemploTipos()">Ver tipos con typeof</button>
-  </section>
-
-  <!-- ====================================================== -->
-  <section>
-    <h2>4. Git y GitHub</h2>
-    <p><strong>Git</strong> es un programa que guarda el historial de cambios de tu código (como "puntos de guardado"). <strong>GitHub</strong> es una página web donde subís ese historial para tenerlo en la nube, compartirlo y trabajar en equipo.</p>
-
-    <h3>Configuración inicial (una sola vez)</h3>
-    <pre><code>git config --global user.name "Tu Nombre"
-git config --global user.email "tu@email.com"</code></pre>
-
-    <h3>Flujo de trabajo básico</h3>
-    <pre><code>git init                  # 1. Crear un repositorio en la carpeta
-git status                # 2. Ver qué archivos cambiaron
-git add .                 # 3. Preparar los cambios (staging)
-git commit -m "Clase 01"  # 4. Guardar un punto en el historial
-git log --oneline         # Ver el historial de commits</code></pre>
-
-    <h3>Subir a GitHub</h3>
-    <ol>
-      <li>Crear un repositorio nuevo en <a href="https://github.com" target="_blank">github.com</a> (botón <em>New</em>).</li>
-      <li>Conectar tu carpeta con ese repositorio y subir:</li>
-    </ol>
-    <pre><code>git remote add origin https://github.com/usuario/mi-repo.git
-git branch -M main
-git push -u origin main   # la primera vez
-git push                  # las siguientes veces</code></pre>
-
-    <h3>Otros comandos útiles</h3>
-    <pre><code>git clone URL   # Descargar un repositorio existente
-git pull        # Traer los últimos cambios de GitHub</code></pre>
-    <button onclick="ejemploGit()">Repasar el flujo en la consola</button>
-  </section>
-
-  <!-- ====================================================== -->
-  <section>
-    <h2>Salida</h2>
-    <p>Lo que imprimen los botones aparece acá y también en la consola (F12).</p>
-    <div id="salida"></div>
-  </section>
-
-  <!-- ======================================================
-       FORMA 3: JavaScript en otro archivo (script.js)
-       Va al final del body para que el HTML ya esté cargado
-       ====================================================== -->
+  <!-- FORMA 3: JavaScript en un archivo externo (la recomendada).
+       Va al final del body, abajo de todo el HTML. -->
   <script src="script.js"></script>
 </body>
 </html>

@@ -1,658 +1,342 @@
 // ==========================================================
-// CLASE 01 - INTRODUCCIÓN A JAVASCRIPT
+// CLASE 01 - JAVASCRIPT Y SU ENTORNO DE EJECUCIÓN
 // ==========================================================
-// Clase introductoria para personas que nunca programaron.
-// No se necesita experiencia previa.
-//
-// Este archivo es la FORMA 3 de usar JavaScript: un archivo aparte,
-// vinculado desde index.html con <script src="script.js"></script>
-//
-// TEMAS
-//   1. ¿Qué es JavaScript?
-//   2. ¿Dónde se ejecuta? (motor, cómo lee el navegador, consola)
-//   3. Tres formas de usar JS dentro del HTML
-//   4. console.log y comentarios
-//   5. Variables: qué son y cómo se inicializan
-//   6. let: variable que puede cambiar
-//   7. const: variable que no cambia
-//   8. var: la forma antigua
-//   9. Tipos de datos
-//  10. Buenas prácticas
-//  11. Errores comunes
-//  12. Git y GitHub
-//  13. Quiz
+//   1. ¿Qué es un entorno de ejecución?
+//   2. El navegador: window, document y APIs
+//   3. Conectar JavaScript a HTML (3 formas, async y defer)
+//   4. Variables modernas: let y const
+//   5. Mostrar información: console.log() y alert()
+//   6. Tipos de datos primitivos
+//   7. typeof
+//   8. Concatenación
+//   9. prompt(), parseInt() y parseFloat()
+//  10. Operadores aritméticos y precedencia
+//  11. Git y GitHub
 // ==========================================================
-
-console.log("👋 Hola desde la FORMA 3: el archivo script.js");
-
-// Muestra un mensaje en la consola (F12) y también en el recuadro "Salida" de la página
-function mostrar(mensaje) {
-  console.log(mensaje);
-  document.getElementById("salida").textContent += mensaje + "\n";
-}
-
-function limpiarSalida() {
-  document.getElementById("salida").textContent = "";
-}
 
 
 // ==========================================================
-// 1. ¿QUÉ ES JAVASCRIPT?
+// 1. ¿QUÉ ES UN ENTORNO DE EJECUCIÓN?
 // ==========================================================
 /*
-  JavaScript es un LENGUAJE DE PROGRAMACIÓN que le da comportamiento
-  e interactividad a las páginas web. Es el lenguaje que hace que los
-  botones respondan, los formularios validen datos y el contenido cambie
-  sin recargar la página.
+  Hay que distinguir dos cosas:
+    - El LENGUAJE: las reglas de cómo escribimos.
+    - El ENTORNO DE EJECUCIÓN: el lugar donde ese código cobra vida.
 
-  Los tres lenguajes del desarrollo web trabajan juntos:
+  Analogía: JavaScript es una RECETA. La receta dice qué ingredientes usar y
+  qué pasos seguir, pero sola no cocina nada. Necesitás una COCINA equipada
+  (fuego, sartenes, horno, agua).
 
-    | Tecnología  | Rol                             | Analogía                  |
-    |-------------|---------------------------------|---------------------------|
-    | HTML        | Estructura y contenido          | El esqueleto del cuerpo   |
-    | CSS         | Apariencia visual               | La ropa                   |
-    | JavaScript  | Comportamiento e interactividad | Los músculos y el cerebro |
+  El entorno de ejecución es esa cocina: el software que ejecuta el código y
+  le da herramientas extra para interactuar con el mundo.
 
-  Sin JavaScript, una página web es un documento estático: podés leerlo,
-  pero no interactuar con él.
-
-  ¿Por qué aprender JavaScript?
-    - Es el único lenguaje que funciona nativamente en todos los navegadores,
-      sin instalar nada.
-    - Se usa tanto para el frontend (interfaz de usuario) como para el
-      backend (servidor con Node.js).
-    - Es uno de los lenguajes más demandados en el mercado laboral.
+  En este curso, el entorno es el NAVEGADOR WEB (Chrome, Firefox, Edge).
 */
 
 
 // ==========================================================
-// 2. ¿DÓNDE SE EJECUTA?
+// 2. EL NAVEGADOR: window, document Y APIs
 // ==========================================================
 /*
-  JavaScript se ejecuta en el MOTOR DE JAVASCRIPT del navegador.
-  Cada navegador tiene el suyo, pero todos entienden el mismo lenguaje:
+  El navegador descarga los archivos JS y los ejecuta. Su objetivo principal
+  es la INTERACCIÓN CON EL USUARIO.
 
-    | Navegador      | Motor                  |
-    |----------------|------------------------|
-    | Chrome / Edge  | V8 (Google)            |
-    | Firefox        | SpiderMonkey (Mozilla) |
-    | Safari         | JavaScriptCore (Apple) |
+  window   → la ventana del navegador: tamaño de pantalla, alertas, URL.
+  document → todo el HTML de la página. Permite crear elementos, borrar
+             párrafos, cambiar colores o reaccionar a un clic.
+             Esto es el DOM (Document Object Model), lo vemos más adelante.
 
-  ----------------------------------------------------------
-  CÓMO LEE EL NAVEGADOR UNA PÁGINA WEB
-  ----------------------------------------------------------
-  El navegador lee el HTML DE ARRIBA HACIA ABAJO, línea por línea, en orden.
-  No salta, no lee todo junto, no se adelanta. Va construyendo la página
-  a medida que avanza:
+  APIs del navegador (herramientas extra):
+    - Fetch API   → pedir datos a otros sitios (clima, noticias).
+    - Web Storage → que la página "recuerde" cosas (modo oscuro, carrito).
+    - Geolocation → saber la ubicación del usuario (con permiso).
 
-    Línea 1  →  <!DOCTYPE html>          ← lo lee primero
-    Línea 2  →  <html lang="es">
-    Línea 3  →  <head>
-    Línea 4  →    <title>Mi página</title>
-    Línea 5  →  </head>
-    Línea 6  →  <body>
-    Línea 7  →    <h1>Hola Mundo</h1>    ← crea el título en la página
-    Línea 8  →    <p>Un párrafo</p>      ← crea el párrafo
-    Línea 9  →    <script src="...">     ← recién acá ejecuta el JS
-    Línea 10 →  </body>
-    Línea 11 →  </html>                  ← lo lee último
+  Ejemplo real: Google Docs usa "document" para dibujar cada letra que
+  escribís y "fetch" para guardar los cambios en la nube en tiempo real.
+*/
 
-  ----------------------------------------------------------
-  POR QUÉ EL SCRIPT VA AL FINAL DEL <body>
-  ----------------------------------------------------------
-  Si el script está en el <head> y quiere buscar el <h1> para cambiarle el
-  texto, el navegador todavía no llegó a leer el <h1>: ese elemento no existe
-  todavía. JavaScript busca algo que aún no fue creado y falla.
+// console.log(window.innerWidth)
+// console.log(window.location.href)
+// console.log(document.title)
 
-    <!-- MAL: el script está en el head -->
-    <head>
-      <script src="script.js"></script>   <!-- JS corre acá -->
-    </head>
-    <body>
-      <h1>Hola Mundo</h1>                 <!-- esto todavía no existe -->
-    </body>
 
-    <!-- BIEN: el script está al final del body -->
-    <body>
-      <h1>Hola Mundo</h1>                 <!-- esto ya existe -->
-      <p>Un párrafo</p>                   <!-- esto ya existe -->
-      <script src="script.js"></script>   <!-- JS corre acá, todo lo de arriba ya existe -->
-    </body>
+// ==========================================================
+// 3. CONECTAR JAVASCRIPT A HTML
+// ==========================================================
+/*
+  TRES FORMAS:
 
-  Pensalo así: primero construís la casa (HTML), después le ponés la
-  electricidad (JavaScript). No tiene sentido cablear una casa sin paredes.
+  1) Adentro de una etiqueta (inline):
+       <button onclick="alert('Hola')">Click</button>
 
-  ----------------------------------------------------------
-  TAMBIÉN IMPORTA EL ORDEN ENTRE VARIOS SCRIPTS
-  ----------------------------------------------------------
-    <script src="utilidades.js"></script>  <!-- se ejecuta primero -->
-    <script src="app.js"></script>         <!-- se ejecuta segundo, puede usar lo de utilidades.js -->
+  2) Con la etiqueta <script> dentro del HTML:
+       <script>
+         console.log("Hola")
+       </script>
 
-  Si invertís el orden y app.js usa algo de utilidades.js, va a fallar
-  porque utilidades.js todavía no corrió.
+  3) En un archivo externo ✅ (la recomendada):
+       <script src="script.js"></script>
+     Separa el HTML del JS → código organizado y fácil de mantener.
 
-  ----------------------------------------------------------
-  LA CONSOLA DEL NAVEGADOR
-  ----------------------------------------------------------
-  Es donde vas a ver los resultados de tu código mientras aprendés:
+  ¿POR QUÉ script.js VA ABAJO DE TODO Y NO EN EL <head>?
+    El navegador lee el HTML DE ARRIBA HACIA ABAJO, línea por línea, y va
+    construyendo la página a medida que avanza. Cuando encuentra un <script>,
+    FRENA, lo descarga y lo ejecuta ANTES de seguir leyendo.
 
-    | Sistema           | Atajo                                        |
-    |-------------------|----------------------------------------------|
-    | Windows / Linux   | F12  o  Ctrl + Shift + I                     |
-    | Mac               | Cmd + Option + I                             |
-    | Cualquier sistema | Clic derecho → "Inspeccionar" → "Console"    |
+    Si el script está en el <head>, se ejecuta cuando el <body> todavía no
+    fue leído: el <h1>, el botón y todo lo demás TODAVÍA NO EXISTEN. Si el JS
+    intenta usarlos, falla.
+
+      <head>
+        <script src="script.js"></script>   ❌ corre acá, el body no existe aún
+      </head>
+      <body>
+        <h1>Hola</h1>
+      </body>
+
+      <body>
+        <h1>Hola</h1>                       ← ya existe
+        <button>Click</button>              ← ya existe
+        <script src="script.js"></script>   ✅ corre acá, todo lo de arriba existe
+      </body>
+
+    Analogía: primero se construye la casa (HTML) y después se pone la
+    electricidad (JS). No se puede cablear una casa sin paredes.
+
+    Además, el HTML se muestra antes → la página aparece más rápido.
+
+    El ORDEN entre scripts también importa: se ejecutan de arriba hacia
+    abajo. Por eso en el index el mensaje del <script> del <head> aparece
+    en la consola ANTES que los de script.js.
+
+  async Y defer (para cuando el script SÍ está en el <head>)
+    async → se descarga en paralelo y se ejecuta APENAS ESTÁ LISTO.
+              <script async src="script.js"></script>
+    defer → se descarga en paralelo y se ejecuta CUANDO TODO EL HTML
+            YA FUE LEÍDO, respetando el orden. Logra lo mismo que ponerlo
+            al final del body.
+              <script defer src="script.js"></script>
 */
 
 
 // ==========================================================
-// 3. TRES FORMAS DE USAR JAVASCRIPT DENTRO DEL HTML
+// 4. VARIABLES MODERNAS: let Y const
 // ==========================================================
 /*
-  FORMA 1: ADENTRO DE UNA ETIQUETA (inline)
-    El código se escribe directo en un atributo de la etiqueta, como onclick:
+  Una variable es una "caja" con nombre donde guardamos un dato.
 
-      <button onclick="alert('Hola')">Probar</button>
+  Ejemplo app de banca: el nombre del banco nunca cambia, el saldo cambia
+  todo el tiempo. Elegir mal puede sobrescribir datos que no deberían cambiar.
 
-    ✅ Rápido para probar algo chiquito.
-    ❌ Mezcla HTML con JS, se vuelve desordenado y difícil de mantener.
+  const → opción POR DEFECTO. No se puede reasignar.
+  let   → cuando el valor VA A CAMBIAR (contador, total, saldo).
+  var   → forma antigua. Ignora los bloques ({ } de if, for...) y la
+          variable "se filtra" hacia afuera. Hoy NO se usa.
 
-  FORMA 2: CON LA ETIQUETA <script> DENTRO DEL HTML
-    El código va entre <script> y </script> en el mismo archivo HTML:
+  Errores comunes:
+    const pi = 3.14
+    pi = 4              // ❌ TypeError: no se puede reasignar un const
+    const nombre        // ❌ SyntaxError: un const necesita valor al declararlo
 
-      <script>
-        console.log("Hola desde la forma 2");
-      </script>
-
-    ✅ Todo está en un solo archivo.
-    ❌ Si crece se vuelve muy largo y no se puede reutilizar en otras páginas.
-
-  FORMA 3: EN OTRO ARCHIVO (script.js)  ← LA RECOMENDADA
-    El código vive en un archivo .js aparte y se vincula con el atributo src,
-    al final del <body>:
-
-      <script src="script.js"></script>
-
-    ✅ HTML limpio, JS ordenado y reutilizable en varias páginas.
-
-  En index.html están las tres: el botón "Probar forma 1" (inline),
-  el <script> del <head> (forma 2) y este archivo (forma 3).
+  Nombres: camelCase (precioTotal), sin espacios ni acentos, no empiezan
+  con número. JS distingue mayúsculas: saldo ≠ Saldo.
 */
 
-function saludarDesdeArchivo() {
-  limpiarSalida();
-  mostrar("👋 Hola desde la FORMA 3: esta función está escrita en script.js");
-  mostrar("Es la forma recomendada: el HTML queda limpio y el JS ordenado.");
-}
+const nombreBanco = "Banco JS"
+let saldo = 1000
+saldo = saldo - 200     // al reasignar NO se escribe let de nuevo
+console.log(nombreBanco, saldo)
+
+// nombreBanco = "Otro banco"   // ❌ descomentar para ver el error
 
 
 // ==========================================================
-// 4. console.log Y COMENTARIOS
+// 5. MOSTRAR INFORMACIÓN: console.log() Y alert()
 // ==========================================================
 /*
-  console.log() es la herramienta más básica de JavaScript: muestra cualquier
-  valor en la consola. La vas a usar todo el tiempo para verificar que tu
-  código hace lo que esperás.
+  ¿QUÉ ES console.log()?
+    Es la herramienta más básica de JS: MUESTRA un valor en la CONSOLA del
+    navegador. El usuario no lo ve, es para nosotros, los programadores.
 
-    console.log("Hola, mundo");
-    console.log(42);
-    console.log(true);
+    Cómo abrir la consola:
+      F12  o  Ctrl + Shift + I  (Mac: Cmd + Option + I)
+      o clic derecho → Inspeccionar → pestaña "Console"
 
-  Podés pasarle varios valores separados por coma:
+    Cómo se lee:
+      console   → el objeto "consola" que nos da el navegador
+      .log      → la acción: "registrar / mostrar"
+      ( )       → los paréntesis la EJECUTAN
+      "Hola"    → lo que va adentro se llama ARGUMENTO: lo que queremos mostrar
 
-    console.log("Mi nombre es", "Ana", "y tengo", 25, "años");
-    // Mi nombre es Ana y tengo 25 años
+      console.log("Hola")               // texto
+      console.log(42)                   // número
+      console.log(nombre)               // el valor de una variable
+      console.log("Tengo", 25, "años")  // varios valores separados por coma
 
-  Otros tipos de mensajes:
+    ¿Para qué sirve?
+      - Ver qué valor tiene una variable en un momento.
+      - Comprobar si una parte del código se ejecuta.
+      - Encontrar errores (depurar). Los errores también aparecen en la consola.
 
-    console.log("Mensaje normal");
-    console.warn("Esto es una advertencia");   // texto amarillo
-    console.error("Esto es un error");         // texto rojo
+    Variantes:
+      console.warn("Cuidado")   // advertencia (amarillo)
+      console.error("Falló")    // error (rojo)
 
-  ¿POR QUÉ LOS PARÉNTESIS?
-    console.log es una FUNCIÓN: un bloque de código que realiza una tarea.
-    Los paréntesis () son los que la EJECUTAN. Lo que va adentro se llama
-    ARGUMENTO: el valor que querés mostrar.
+  console.log() → muestra en la CONSOLA (F12 → pestaña Console).
+                  Sirve para verificar valores, probar funciones y depurar.
+  alert()       → muestra una VENTANA EMERGENTE con botón "Aceptar".
+                  Sirve para avisos simples al usuario.
 
-      console.log           // referencia a la función, NO la ejecuta
-      console.log()         // la ejecuta sin argumentos (línea vacía)
-      console.log("Hola")   // la ejecuta con el argumento "Hola"
+  | console.log()                    | alert()                              |
+  |----------------------------------|--------------------------------------|
+  | Se ve en la consola              | Ventana emergente                    |
+  | Lo usa el programador            | Lo ve el usuario                     |
+  | No interrumpe la página          | Detiene la interacción hasta aceptar |
 
-  COMENTARIOS
-    Son texto que JavaScript ignora por completo. Sirven para aclarar el código
-    (¡como todo este archivo!):
-
-      // Comentario de una línea
-
-      /* Comentario
-         de varias líneas *\/
-
-      console.log("Esto sí se ejecuta");
-      // console.log("Esto NO se ejecuta");
+  Comentarios: // una línea    /* varias líneas *\/   → JS los ignora.
 */
 
+let nombre = "Ana"
+console.log(nombre)
+
+// alert("Bienvenido al curso de JavaScript")
+
 
 // ==========================================================
-// 5. VARIABLES: QUÉ SON Y CÓMO SE INICIALIZAN
+// 6. TIPOS DE DATOS PRIMITIVOS
 // ==========================================================
 /*
-  Una VARIABLE es un espacio con nombre en la memoria que guarda un valor.
-  Pensala como una caja etiquetada:
+  Ejemplo supermercado: nombre del producto (texto), precio (número),
+  stock (número), ¿tiene descuento? (sí/no).
 
-    ┌──────────────────────┐
-    │  etiqueta: nombre    │  ← cómo la llamamos (identificador)
-    │  contenido: "María"  │  ← lo que guarda (valor)
-    └──────────────────────┘
+  Primitivo = un dato simple, un ÚNICO valor, sin métodos propios.
+  Son INMUTABLES: si tenés 5 y querés 6, no se "cambia" el 5, se crea un
+  valor nuevo y se asigna a la variable.
 
-  ¿POR QUÉ NECESITAMOS VARIABLES?
-    Sin variables repetimos el dato en todos lados:
-      console.log("Bienvenida, María");
-      console.log("María tiene 25 años");
+  Los 5 principales:
+    number    → enteros y decimales (con PUNTO, no coma)
+    string    → texto, entre comillas "dobles" o 'simples'
+    boolean   → true o false (base de la toma de decisiones)
+    undefined → declarada sin valor. Lo pone JS solo: "no sé qué es esto aún"
+    null      → vacía A PROPÓSITO. Lo ponés vos: "sé qué es y no tiene valor"
 
-    Con variables, si el dato cambia, lo modificás en un solo lugar:
-      let nombre = "María";
-      console.log("Bienvenida, " + nombre);
-      console.log(nombre + " tiene 25 años");
-
-  CÓMO SE INICIALIZA (darle su primer valor)
-
-    let  nombre  =  "María"  ;
-     ↑      ↑    ↑     ↑     ↑
-     │      │    │     │     └── punto y coma (fin de instrucción)
-     │      │    │     └──────── valor inicial
-     │      │    └────────────── operador de asignación
-     │      └─────────────────── nombre de la variable
-     └────────────────────────── palabra clave (let, const o var)
-
-    También se puede declarar sin valor y asignarlo después:
-      let edad;           // declarada sin valor → vale undefined
-      edad = 25;          // asignación posterior
-
-  REGLAS PARA NOMBRAR VARIABLES
-
-    | Regla                                  | Válido               | Inválido            |
-    |----------------------------------------|----------------------|---------------------|
-    | Letras, números, _ y $                 | nombre2, _dato       | mi-variable         |
-    | No puede empezar con número            | dato1                | 1dato               |
-    | No puede ser palabra reservada         | miLet                | let, const, var     |
-    | Distingue mayúsculas de minúsculas     | edad y Edad son distintas                  |
-
-  CONVENCIÓN camelCase
-    Primera palabra en minúscula, cada palabra siguiente con mayúscula:
-      let nombreUsuario = "Juan";          ✅ (convención en JS)
-      let cantidadDeProductos = 5;         ✅
-      let nombre_usuario = "Juan";         snake_case (lo usa Python)
-      let NombreUsuario = "Juan";          PascalCase (se reserva para clases)
+  Valores especiales de number:
+    NaN      → operación imposible ("hola" * 2). ¡Su tipo sigue siendo number!
+    Infinity → dividir por cero.
 */
 
+let producto = "Leche"
+let precio = 99.99
+let stock = 25
+let tieneDescuento = true
+let proveedor            // undefined
+let cupon = null
+
+console.log("hola" * 2)  // NaN
+console.log(10 / 0)      // Infinity
+
 
 // ==========================================================
-// 6. let: VARIABLE QUE PUEDE CAMBIAR
+// 7. typeof
 // ==========================================================
 /*
-  let declara una variable cuyo valor PUEDE CAMBIAR.
-
-    let edad = 20;
-    edad = 21;        // reasignación: NO se escribe "let" de nuevo
-    edad = 22;
-
-  let solo va la primera vez, al declarar.
-
-  Cuándo usarlo: cuando el valor cambia durante el programa
-    let puntos = 0;
-    puntos = puntos + 10;     // el jugador ganó puntos
-
-    let intentos = 0;
-    intentos++;               // atajo de intentos = intentos + 1
-
-  SCOPE DE BLOQUE: let solo existe dentro de las llaves {} donde se declaró
-    if (true) {
-      let mensaje = "Hola";
-      console.log(mensaje);   // "Hola" ✅
-    }
-    console.log(mensaje);     // ReferenceError ❌
+  typeof nos dice de qué tipo es un valor.
+  Ojo: typeof null da "object" → es un error histórico de JS.
 */
 
+console.log(typeof producto)        // "string"
+console.log(typeof precio)          // "number"
+console.log(typeof tieneDescuento)  // "boolean"
+console.log(typeof proveedor)       // "undefined"
+console.log(typeof cupon)           // "object" ← error histórico
+
 
 // ==========================================================
-// 7. const: VARIABLE QUE NO CAMBIA
+// 8. CONCATENACIÓN
 // ==========================================================
 /*
-  const declara una variable que NO PUEDE SER REASIGNADA.
-
-    const pais = "Argentina";
-    pais = "Chile";   // TypeError: Assignment to constant variable.
-
-  Cuándo usarlo: cuando el valor es fijo
-    const PI = 3.14159;
-    const EDAD_MINIMA = 18;
-    const NOMBRE_APP = "Mi Aplicación";
-
-  Convención: las constantes de configuración o valores matemáticos se
-  suelen escribir en MAYUSCULAS_CON_GUION_BAJO.
-
-  const NO significa "inmutable" en objetos y arrays: no podés reasignar
-  la variable, pero sí cambiar su contenido (lo vemos más adelante):
-
-    const persona = { nombre: "Ana", edad: 25 };
-    persona = { nombre: "Juan" };   // ❌ Error
-    persona.edad = 26;              // ✅ Esto sí funciona
+  El + tiene "doble personalidad":
+    - Dos números → SUMA.
+    - Si al menos uno es string → CONCATENA (pega uno al lado del otro).
+  Los espacios hay que ponerlos dentro de las comillas.
 */
 
+console.log(5 + 5)       // 10
+console.log("5" + 5)     // "55" ← ¡cuidado!
+console.log("El producto " + producto + " cuesta $" + precio)
+
 
 // ==========================================================
-// 8. var: LA FORMA ANTIGUA
+// 9. prompt(), parseInt() Y parseFloat()
 // ==========================================================
 /*
-  var es la forma original de declarar variables (1995). Todavía funciona,
-  pero tiene problemas que let y const vinieron a corregir. La vas a ver
-  en código viejo.
+  prompt() → ventana donde el usuario ESCRIBE un dato.
+  ⚠️ SIEMPRE devuelve TEXTO (string), aunque escriba un número.
 
-  PROBLEMA 1: scope de función, no de bloque (se "escapa" de las llaves)
-    if (true) { var x = 10; }
-    console.log(x);   // 10 → accesible afuera del bloque
-
-  PROBLEMA 2: se puede redeclarar sin error
-    var nombre = "Juan";
-    var nombre = "Pedro";        // no avisa nada, pisa el valor
-    let apellido = "García";
-    let apellido = "López";      // SyntaxError: ya fue declarada
-
-  PROBLEMA 3: hoisting (elevación)
-    console.log(nombre);   // undefined → no da error, pero confunde
-    var nombre = "Juan";
-
-    Con let/const eso SÍ da error (ReferenceError), que es más seguro.
-
-  RESUMEN
-
-    |              | var             | let            | const          |
-    |--------------|-----------------|----------------|----------------|
-    | Scope        | Función         | Bloque         | Bloque         |
-    | Reasignable  | Sí              | Sí             | No             |
-    | Redeclarable | Sí              | No             | No             |
-    | Hoisting     | Sí (undefined)  | Sí (da error)  | Sí (da error)  |
-    | Recomendado  | No              | Sí             | Sí             |
-
-  Conclusión: nunca uses var en código nuevo. Siempre let o const.
+  parseInt()   → texto a número ENTERO   "25"    → 25   (elimina decimales)
+  parseFloat() → texto a número DECIMAL  "19.99" → 19.99
+  Si el texto no es un número, devuelven NaN.
 */
 
-function ejemploVariables() {
-  limpiarSalida();
+// let nombreUsuario = prompt("Escribe tu nombre")
+// console.log("Hola " + nombreUsuario)
 
-  // let: el valor puede cambiar
-  let contador = 0;
-  mostrar("let contador = " + contador);
-  contador = contador + 1;
-  mostrar("Después de sumarle 1 → contador = " + contador);
+// let edad = prompt("Escribe tu edad")
+// console.log(typeof edad)        // "string"
+// edad = parseInt(edad)
+// console.log(typeof edad)        // "number"
 
-  // const: el valor NO puede cambiar
-  const nombre = "Ana";
-  mostrar("const nombre = " + nombre);
-  try {
-    nombre = "Juan"; // esto da error
-  } catch (error) {
-    mostrar("❌ Intentamos cambiar una const: " + error.message);
-  }
-
-  // var: se puede volver a declarar sin error (y eso trae problemas)
-  var ciudad = "Rosario";
-  var ciudad = "Córdoba";
-  mostrar("var ciudad (declarada dos veces) = " + ciudad);
-  mostrar("💡 Regla: usá const por defecto, let si va a cambiar, y evitá var.");
-}
+// let precioIngresado = parseFloat(prompt("Escribe el precio"))
+// console.log(precioIngresado)
 
 
 // ==========================================================
-// 9. TIPOS DE DATOS
+// 10. OPERADORES ARITMÉTICOS Y PRECEDENCIA
 // ==========================================================
 /*
-  Cada valor en JavaScript tiene un TIPO, que define qué clase de dato es
-  y qué operaciones le podés hacer.
+  +  suma            10 + 5  → 15
+  -  resta           10 - 5  → 5
+  *  multiplicación  10 * 2  → 20
+  /  división        10 / 2  → 5
+  %  resto           10 % 3  → 1  (lo que sobra de la división)
+  ** potencia        2 ** 3  → 8
 
-  STRING (texto) → entre comillas
-    let nombre = "María";            // comillas dobles
-    let ciudad = 'Buenos Aires';     // comillas simples
-    let saludo = `Hola, ${nombre}`;  // backticks (template literal)
-
-    Los backticks permiten meter variables con ${}:
-      "Hola, soy " + nombre + " y tengo " + edad + " años."   // concatenación
-      `Hola, soy ${nombre} y tengo ${edad} años.`              // template literal (más limpio)
-
-  NUMBER (número) → un solo tipo para enteros y decimales
-    let entero = 42;
-    let decimal = 3.14;
-    let negativo = -100;
-
-    Valores especiales:
-      10 / 0       // Infinity
-      "hola" * 2   // NaN (Not a Number): la operación no tiene sentido
-
-  BOOLEAN → solo true o false. Es la base de toda la lógica.
-    let esMayorDeEdad = true;
-    let tieneDeuda = false;
-    Son el resultado de comparaciones:
-      edad > 18     // true
-      edad === 18   // false
-
-  UNDEFINED → variable declarada sin valor (lo pone JS solo)
-    let variable;
-    console.log(variable);   // undefined
-
-  NULL → ausencia INTENCIONAL de valor (lo ponés vos)
-    let resultado = null;
-
-    Diferencia clave:
-      let a;          // undefined → nadie le asignó nada
-      let b = null;   // null → yo decidí que no tiene valor
-
-  BIGINT → enteros gigantes, terminan en n:   123456789012345678901234567890n
-  SYMBOL → identificadores únicos (avanzado): Symbol("id")
-
-  OBJECT → agrupa varios datos (no es primitivo, lo vemos más adelante)
-    const persona = { nombre: "Ana", edad: 25 };   // objeto
-    const frutas = ["manzana", "banana"];          // array (también es objeto)
-
-  VERIFICAR EL TIPO CON typeof
-    typeof "Hola"      // "string"
-    typeof 42          // "number"
-    typeof true        // "boolean"
-    typeof undefined   // "undefined"
-    typeof null        // "object"  ← bug histórico de JS
+  Precedencia (como en matemática):
+    1. ()   2. **   3. * / %   4. + -   (de izquierda a derecha)
 */
 
-function ejemploTipos() {
-  limpiarSalida();
-
-  const texto = "Hola mundo";
-  const numero = 42;
-  const decimal = 3.14;
-  const esEstudiante = true;
-  let sinValor;
-  const vacio = null;
-  const numeroGigante = 12345678901234567890n;
-  const identificador = Symbol("id");
-  const persona = { nombre: "Ana", edad: 25 };
-  const frutas = ["manzana", "banana", "pera"];
-
-  mostrar('"Hola mundo"          → ' + typeof texto);
-  mostrar("42                    → " + typeof numero);
-  mostrar("3.14                  → " + typeof decimal);
-  mostrar("true                  → " + typeof esEstudiante);
-  mostrar("let sinValor;         → " + typeof sinValor);
-  mostrar("null                  → " + typeof vacio + "  (⚠️ error histórico de JS, en realidad es null)");
-  mostrar("12345678901234567890n → " + typeof numeroGigante);
-  mostrar('Symbol("id")          → ' + typeof identificador);
-  mostrar("{ nombre, edad }      → " + typeof persona);
-  mostrar('["manzana", ...]      → ' + typeof frutas + "  (los arrays también son objetos)");
-
-  // Valores especiales de number
-  mostrar("\n10 / 0       → " + 10 / 0);
-  mostrar('"hola" * 2   → ' + "hola" * 2);
-
-  // Template literal: armar strings con variables adentro
-  mostrar(`\n${persona.nombre} tiene ${persona.edad} años y le gusta la ${frutas[0]}.`);
-}
+console.log(10 % 3)          // 1
+console.log(2 ** 3)          // 8
+console.log(10 + 5 * 2)      // 20 → primero multiplica
+console.log((10 + 5) * 2)    // 30 → primero el paréntesis
 
 
 // ==========================================================
-// 10. BUENAS PRÁCTICAS
+// 11. GIT Y GITHUB
 // ==========================================================
 /*
-  1) const por defecto, let solo si el valor tiene que cambiar.
-       const nombre = "Ana";
-       let intentos = 0;
-       intentos++;
+  Git    → guarda el historial de cambios del código en tu compu
+           (como "puntos de guardado").
+  GitHub → página web donde subís ese historial: nube, compartir, equipo.
 
-  2) Nombres descriptivos: que se entienda qué guarda.
-       let d = "2024-01-15";              ❌
-       let fechaRegistro = "2024-01-15";  ✅
-     Para booleanos, nombres tipo pregunta: esMayorDeEdad, tienePermiso, estaActivo.
-
-  3) Declarar antes de usar.
-
-  4) Nunca usar var.
-
-  5) Usar === en lugar de ==
-       5 == "5"    // true  ← JS convirtió el string a número
-       5 === "5"   // false ← compara valor Y tipo (más predecible)
-*/
-
-
-// ==========================================================
-// 11. ERRORES COMUNES
-// ==========================================================
-/*
-  ERROR 1: Reasignar una constante
-    const pais = "Argentina";
-    pais = "Chile";          // TypeError
-    Solución: si va a cambiar, usá let.
-
-  ERROR 2: Escribir let al reasignar
-    let nombre = "Ana";
-    let nombre = "María";    // SyntaxError: ya fue declarada
-    Solución: nombre = "María";  (sin let)
-
-  ERROR 3: Usar una variable antes de declararla
-    console.log(precio);     // ReferenceError
-    let precio = 100;
-
-  ERROR 4: Confundir = (asignación) con === (comparación)
-    if (edad = 18) { ... }   // ASIGNA 18, siempre entra al if
-    if (edad === 18) { ... } // COMPARA correctamente
-
-  ERROR 5: Mayúsculas y minúsculas
-    let nombre = "Ana";
-    console.log(Nombre);     // ReferenceError: Nombre is not defined
-    nombre, Nombre y NOMBRE son tres variables distintas.
-
-  ERROR 6: Olvidar los paréntesis en console.log
-    console.log              // no hace nada
-    console.log("Hola")      // ✅
-*/
-
-
-// ==========================================================
-// 12. GIT Y GITHUB
-// ==========================================================
-/*
-  GIT es un programa que guarda el HISTORIAL de cambios de tu código, como
-  "puntos de guardado" de un videojuego. Si rompés algo, podés volver atrás.
-
-  GITHUB es una página web donde subís ese historial para tenerlo en la nube,
-  compartirlo y trabajar en equipo.
-
-    Git    = historial en tu compu
-    GitHub = ese historial en internet
-
-  CONFIGURACIÓN INICIAL (una sola vez por compu)
+  Configuración (una sola vez):
     git config --global user.name "Tu Nombre"
     git config --global user.email "tu@email.com"
 
-  FLUJO DE TRABAJO BÁSICO
-    git init                  // 1. Crear un repositorio en la carpeta
-    git status                // 2. Ver qué archivos cambiaron
-    git add .                 // 3. Preparar los cambios (staging)
-    git commit -m "Clase 01"  // 4. Guardar un punto en el historial
-    git log --oneline         //    Ver el historial de commits
+  Flujo básico:
+    git init                  → crear el repositorio
+    git status                → ver qué cambió
+    git add .                 → preparar los cambios
+    git commit -m "mensaje"   → guardar un punto en el historial
+    git log --oneline         → ver el historial
 
-  SUBIR A GITHUB
-    1. Crear un repositorio nuevo en github.com (botón "New")
-    2. Conectar la carpeta y subir:
-         git remote add origin https://github.com/usuario/mi-repo.git
-         git branch -M main
-         git push -u origin main   // la primera vez
-         git push                  // las siguientes veces
+  Subir a GitHub (crear antes el repo en github.com → "New"):
+    git remote add origin https://github.com/usuario/repo.git
+    git branch -M main
+    git push -u origin main   → la primera vez
+    git push                  → las siguientes
 
-  OTROS COMANDOS ÚTILES
-    git clone URL   // Descargar un repositorio existente
-    git pull        // Traer los últimos cambios de GitHub
-*/
-
-function ejemploGit() {
-  limpiarSalida();
-  mostrar("📝 Flujo básico de Git:");
-  mostrar("1. git init                 → crear el repositorio");
-  mostrar("2. git status               → ver qué cambió");
-  mostrar("3. git add .                → preparar los cambios");
-  mostrar('4. git commit -m "mensaje"  → guardar un punto en el historial');
-  mostrar("5. git push                 → subir los commits a GitHub");
-  mostrar("");
-  mostrar("🌐 Git = historial en tu compu · GitHub = ese historial en la nube");
-}
-
-
-// ==========================================================
-// 13. QUIZ
-// ==========================================================
-/*
-  Respondé sin mirar las notas. Las respuestas están abajo.
-
-  1) ¿Cuál es la diferencia entre let y const?
-
-  2) ¿Qué imprime este código?
-       let x = 10;
-       x = x + 5;
-       console.log(x);
-
-  3) ¿Por qué este código da error?
-       const pais = "Argentina";
-       pais = "Chile";
-
-  4) ¿Cuál de estas declaraciones es incorrecta?
-       a) let nombre = "Juan";
-       b) const PI = 3.14;
-       c) let 1dato = "valor";
-       d) let _privado = true;
-
-  5) ¿Qué tipo de dato es cada uno?   "Hola"   42   true
-
-  6) ¿Qué diferencia hay entre undefined y null?
-
-  7) ¿Qué imprime esto y por qué?
-       let nombre;
-       console.log(nombre);
-
-  8) ¿Qué está mal en este código?
-       let puntos = 0;
-       let puntos = 10;
-
-  9) ¿Cuáles son las tres formas de usar JS en un HTML? ¿Cuál conviene?
-
-  10) ¿Qué diferencia hay entre Git y GitHub?
-
-  ----------------------------------------------------------
-  RESPUESTAS
-  ----------------------------------------------------------
-  1) Con let podés reasignar el valor; con const no (da TypeError).
-  2) 15. x empieza en 10 y luego x = 10 + 5.
-  3) Porque const no permite reasignación. Habría que usar let.
-  4) La c): los nombres no pueden empezar con un número.
-  5) "Hola" es string, 42 es number, true es boolean.
-  6) undefined lo pone JS cuando una variable nunca recibió valor;
-     null lo asignás vos para decir "existe, pero está vacía a propósito".
-  7) undefined: se declaró con let pero nunca se le asignó un valor.
-  8) Se declara dos veces con let. La segunda línea debería ser: puntos = 10;
-  9) Inline (en un atributo como onclick), con <script> dentro del HTML y en
-     un archivo aparte con <script src="script.js">. Conviene el archivo aparte.
-  10) Git guarda el historial en tu compu; GitHub lo guarda en la nube.
+  Otros:
+    git clone URL   → descargar un repositorio
+    git pull        → traer los últimos cambios
 */
